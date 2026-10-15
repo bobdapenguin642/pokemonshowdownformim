@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pokémon Showdown - 100+ Randomizer Engine</title>
+  <title>Pokémon Showdown - Live Multiplayer Engine</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -41,13 +41,6 @@
     .bg-animated { background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.15), transparent 40%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15), transparent 40%), radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1), transparent 60%); }
     .hp-bar-fill { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease; }
 
-    @keyframes attack-right { 0% { transform: translateX(0); } 30% { transform: translateX(35px) scale(1.1); } 100% { transform: translateX(0); } }
-    @keyframes attack-left { 0% { transform: translateX(0); } 30% { transform: translateX(-35px) scale(1.1); } 100% { transform: translateX(0); } }
-    @keyframes hit-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-8px, 6px); } 40% { transform: translate(8px, -6px); } 60% { transform: translate(-6px, -4px); } 80% { transform: translate(6px, 4px); } }
-
-    .anim-attack-right { animation: attack-right 0.4s ease-in-out; }
-    .anim-attack-left { animation: attack-left 0.4s ease-in-out; }
-    .anim-hit { animation: hit-shake 0.4s ease-in-out; }
     .arena-grass { background: linear-gradient(180deg, #1e293b 0%, #064e3b 60%, #022c22 100%); }
 
     .bg-type-normal { background-color: #A8A878; } .bg-type-fire { background-color: #F08030; }
@@ -75,7 +68,7 @@
             <h1 class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
               SHOWDOWN
             </h1>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">MULTIPLAYER ARENA</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">TYPE ENGINE & SPEED TURNS</span>
           </div>
           <p class="text-xs text-slate-400 hidden sm:block">100+ Pokémon Gen 1–9 Randomizer</p>
         </div>
@@ -122,10 +115,10 @@
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20 mb-2">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Live Cross-Device Multiplayer Enabled
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Type Effectiveness & Speed Turn Ordering Active
               </div>
               <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Full Gen 1–9 Random Battles</h2>
-              <p class="text-slate-400 text-sm mt-1">Battle AI, play local 2P, or host a real-time room to play with friends on another device!</p>
+              <p class="text-slate-400 text-sm mt-1">Both trainers lock in actions simultaneously. Swapping has top priority; faster Pokémon strike first!</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
@@ -163,7 +156,7 @@
           <div class="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400"><i data-lucide="bot" class="w-5 h-5"></i></div>
           <div>
             <div class="font-bold text-sm">VS Smart Bot</div>
-            <div class="text-xs text-slate-400">Play instant game against AI</div>
+            <div class="text-xs text-slate-400">Instant game against AI</div>
           </div>
         </button>
 
@@ -199,7 +192,6 @@
         </div>
 
         <div class="space-y-4">
-          <!-- Host Room Section -->
           <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
             <label class="block text-xs font-bold text-slate-300">Host a Battle (Your Room Code)</label>
             <div class="flex gap-2">
@@ -213,7 +205,6 @@
 
           <div class="text-center text-xs font-bold text-slate-500 uppercase">OR</div>
 
-          <!-- Join Room Section -->
           <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
             <label class="block text-xs font-bold text-slate-300">Join a Friend's Room</label>
             <div class="flex gap-2">
@@ -290,7 +281,7 @@
       
       <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <span id="battle-gen-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">100+ POKÉMON RANDOM BATTLE</span>
+          <span id="battle-gen-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">ACCURATE TURN & TYPE ENGINE</span>
           <div class="text-xs text-slate-400">Turn <span id="turn-counter" class="text-white font-bold text-sm">1</span></div>
         </div>
 
@@ -357,7 +348,10 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 glass-panel rounded-2xl p-5 border border-slate-800 space-y-4">
-          <div class="text-xs font-bold uppercase text-slate-400 tracking-wider pb-2 border-b border-slate-800">Move Selection</div>
+          <div id="turn-status-banner" class="text-xs font-bold text-amber-400 uppercase tracking-wider pb-2 border-b border-slate-800 flex items-center justify-between">
+            <span>Select Action for Turn</span>
+            <span id="waiting-status" class="hidden text-emerald-400 text-[10px] lowercase italic">Waiting for opponent...</span>
+          </div>
 
           <div class="grid grid-cols-2 gap-3" id="moves-container"></div>
 
@@ -380,148 +374,180 @@
   </main>
 
   <script>
-    /* 100+ POKEMON DATABASE (GEN 1 - 9) */
+    /* 18-TYPE EFFECTIVENESS MATRIX */
+    const TYPE_CHART = {
+      Normal: { Rock: 0.5, Ghost: 0, Steel: 0.5 },
+      Fire: { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 2, Bug: 2, Rock: 0.5, Dragon: 0.5, Steel: 2 },
+      Water: { Fire: 2, Water: 0.5, Grass: 0.5, Ground: 2, Rock: 2, Dragon: 0.5 },
+      Electric: { Water: 2, Electric: 0.5, Grass: 0.5, Ground: 0, Flying: 2, Dragon: 0.5 },
+      Grass: { Fire: 0.5, Water: 2, Grass: 0.5, Poison: 0.5, Ground: 2, Flying: 0.5, Bug: 0.5, Rock: 2, Dragon: 0.5, Steel: 0.5 },
+      Ice: { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 0.5, Ground: 2, Flying: 2, Dragon: 2, Steel: 0.5 },
+      Fighting: { Normal: 2, Ice: 2, Poison: 0.5, Flying: 0.5, Psychic: 0.5, Bug: 0.5, Rock: 2, Ghost: 0, Dark: 2, Steel: 2, Fairy: 0.5 },
+      Poison: { Grass: 2, Poison: 0.5, Ground: 0.5, Rock: 0.5, Ghost: 0.5, Steel: 0, Fairy: 2 },
+      Ground: { Fire: 2, Electric: 2, Grass: 0.5, Poison: 2, Flying: 0, Bug: 0.5, Rock: 2, Steel: 2 },
+      Flying: { Electric: 0.5, Grass: 2, Fighting: 2, Bug: 2, Rock: 0.5, Steel: 0.5 },
+      Psychic: { Fighting: 2, Poison: 2, Psychic: 0.5, Dark: 0, Steel: 0.5 },
+      Bug: { Fire: 0.5, Grass: 2, Fighting: 0.5, Poison: 0.5, Flying: 0.5, Psychic: 2, Ghost: 0.5, Dark: 2, Steel: 0.5, Fairy: 0.5 },
+      Rock: { Fire: 2, Ice: 2, Fighting: 0.5, Ground: 0.5, Flying: 2, Bug: 2, Steel: 0.5 },
+      Ghost: { Normal: 0, Psychic: 2, Ghost: 2, Dark: 0.5 },
+      Dragon: { Dragon: 2, Steel: 0.5, Fairy: 0 },
+      Dark: { Fighting: 0.5, Psychic: 2, Ghost: 2, Dark: 0.5, Fairy: 0.5 },
+      Steel: { Fire: 0.5, Water: 0.5, Electric: 0.5, Ice: 2, Rock: 2, Steel: 0.5, Fairy: 2 },
+      Fairy: { Fire: 0.5, Fighting: 2, Poison: 0.5, Dragon: 2, Dark: 2, Steel: 0.5 }
+    };
+
+    function getTypeMultiplier(moveType, targetTypes) {
+      let mult = 1.0;
+      targetTypes.forEach(t => {
+        if (TYPE_CHART[moveType] && TYPE_CHART[moveType][t] !== undefined) {
+          mult *= TYPE_CHART[moveType][t];
+        }
+      });
+      return mult;
+    }
+
+    /* 100+ POKEMON DATABASE WITH SPEED STATS */
     const POKEMON_POOL = [
       // GEN 1
-      { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
-      { num: 6, name: 'Charizard', types: ['Fire', 'Flying'], hp: 297, moves: [{ name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
-      { num: 9, name: 'Blastoise', types: ['Water'], hp: 299, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }] },
-      { num: 25, name: 'Pikachu', types: ['Electric'], hp: 211, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Volt Tackle', type: 'Electric', power: 120 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
-      { num: 36, name: 'Clefable', types: ['Fairy'], hp: 331, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
-      { num: 38, name: 'Ninetales', types: ['Fire'], hp: 287, moves: [{ name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Solar Beam', type: 'Grass', power: 120 }, { name: 'Extrasensory', type: 'Psychic', power: 80 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }] },
-      { num: 59, name: 'Arcanine', types: ['Fire'], hp: 321, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }] },
-      { num: 65, name: 'Alakazam', types: ['Psychic'], hp: 251, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }] },
-      { num: 68, name: 'Machamp', types: ['Fighting'], hp: 321, moves: [{ name: 'Dynamic Punch', type: 'Fighting', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Bullet Punch', type: 'Steel', power: 40 }] },
-      { num: 94, name: 'Gengar', types: ['Ghost', 'Poison'], hp: 261, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Sludge Wave', type: 'Poison', power: 95 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
-      { num: 103, name: 'Exeggutor', types: ['Grass', 'Psychic'], hp: 331, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
-      { num: 130, name: 'Gyarados', types: ['Water', 'Flying'], hp: 331, moves: [{ name: 'Waterfall', type: 'Water', power: 80 }, { name: 'Bounce', type: 'Flying', power: 85 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
-      { num: 131, name: 'Lapras', types: ['Water', 'Ice'], hp: 371, moves: [{ name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Surf', type: 'Water', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
-      { num: 134, name: 'Vaporeon', types: ['Water'], hp: 401, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Hyper Voice', type: 'Normal', power: 90 }] },
-      { num: 135, name: 'Jolteon', types: ['Electric'], hp: 271, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Volt Switch', type: 'Electric', power: 70 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Signal Beam', type: 'Bug', power: 75 }] },
-      { num: 136, name: 'Flareon', types: ['Fire'], hp: 271, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
-      { num: 142, name: 'Aerodactyl', types: ['Rock', 'Flying'], hp: 301, moves: [{ name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Dual Wingbeat', type: 'Flying', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
-      { num: 143, name: 'Snorlax', types: ['Normal'], hp: 431, moves: [{ name: 'Body Slam', type: 'Normal', power: 85 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
-      { num: 149, name: 'Dragonite', types: ['Dragon', 'Flying'], hp: 323, moves: [{ name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
-      { num: 150, name: 'Mewtwo', types: ['Psychic'], hp: 353, moves: [{ name: 'Psystrike', type: 'Psychic', power: 100 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, speed: 80, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
+      { num: 6, name: 'Charizard', types: ['Fire', 'Flying'], hp: 297, speed: 100, moves: [{ name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 9, name: 'Blastoise', types: ['Water'], hp: 299, speed: 78, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }] },
+      { num: 25, name: 'Pikachu', types: ['Electric'], hp: 211, speed: 90, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Volt Tackle', type: 'Electric', power: 120 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
+      { num: 36, name: 'Clefable', types: ['Fairy'], hp: 331, speed: 60, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 38, name: 'Ninetales', types: ['Fire'], hp: 287, speed: 100, moves: [{ name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Solar Beam', type: 'Grass', power: 120 }, { name: 'Extrasensory', type: 'Psychic', power: 80 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }] },
+      { num: 59, name: 'Arcanine', types: ['Fire'], hp: 321, speed: 95, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }] },
+      { num: 65, name: 'Alakazam', types: ['Psychic'], hp: 251, speed: 120, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }] },
+      { num: 68, name: 'Machamp', types: ['Fighting'], hp: 321, speed: 55, moves: [{ name: 'Dynamic Punch', type: 'Fighting', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Bullet Punch', type: 'Steel', power: 40 }] },
+      { num: 94, name: 'Gengar', types: ['Ghost', 'Poison'], hp: 261, speed: 110, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Sludge Wave', type: 'Poison', power: 95 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 103, name: 'Exeggutor', types: ['Grass', 'Psychic'], hp: 331, speed: 55, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
+      { num: 130, name: 'Gyarados', types: ['Water', 'Flying'], hp: 331, speed: 81, moves: [{ name: 'Waterfall', type: 'Water', power: 80 }, { name: 'Bounce', type: 'Flying', power: 85 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
+      { num: 131, name: 'Lapras', types: ['Water', 'Ice'], hp: 371, speed: 60, moves: [{ name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Surf', type: 'Water', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 134, name: 'Vaporeon', types: ['Water'], hp: 401, speed: 65, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Hyper Voice', type: 'Normal', power: 90 }] },
+      { num: 135, name: 'Jolteon', types: ['Electric'], hp: 271, speed: 130, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Volt Switch', type: 'Electric', power: 70 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Signal Beam', type: 'Bug', power: 75 }] },
+      { num: 136, name: 'Flareon', types: ['Fire'], hp: 271, speed: 65, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
+      { num: 142, name: 'Aerodactyl', types: ['Rock', 'Flying'], hp: 301, speed: 130, moves: [{ name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Dual Wingbeat', type: 'Flying', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 143, name: 'Snorlax', types: ['Normal'], hp: 431, speed: 30, moves: [{ name: 'Body Slam', type: 'Normal', power: 85 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 149, name: 'Dragonite', types: ['Dragon', 'Flying'], hp: 323, speed: 80, moves: [{ name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 150, name: 'Mewtwo', types: ['Psychic'], hp: 353, speed: 130, moves: [{ name: 'Psystrike', type: 'Psychic', power: 100 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
 
       // GEN 2
-      { num: 157, name: 'Typhlosion', types: ['Fire'], hp: 297, moves: [{ name: 'Eruption', type: 'Fire', power: 150 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Extrasensory', type: 'Psychic', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
-      { num: 160, name: 'Feraligatr', types: ['Water'], hp: 311, moves: [{ name: 'Liquidation', type: 'Water', power: 85 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
-      { num: 181, name: 'Ampharos', types: ['Electric'], hp: 321, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Power Gem', type: 'Rock', power: 80 }] },
-      { num: 196, name: 'Espeon', types: ['Psychic'], hp: 271, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Psyshock', type: 'Psychic', power: 80 }] },
-      { num: 197, name: 'Umbreon', types: ['Dark'], hp: 331, moves: [{ name: 'Foul Play', type: 'Dark', power: 95 }, { name: 'Body Slam', type: 'Normal', power: 85 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
-      { num: 208, name: 'Steelix', types: ['Steel', 'Ground'], hp: 291, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
-      { num: 212, name: 'Scizor', types: ['Bug', 'Steel'], hp: 281, moves: [{ name: 'Bullet Punch', type: 'Steel', power: 40 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }] },
-      { num: 214, name: 'Heracross', types: ['Bug', 'Fighting'], hp: 301, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Megahorn', type: 'Bug', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Night Slash', type: 'Dark', power: 70 }] },
-      { num: 229, name: 'Houndoom', types: ['Dark', 'Fire'], hp: 291, moves: [{ name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
-      { num: 230, name: 'Kingdra', types: ['Water', 'Dragon'], hp: 291, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }] },
-      { num: 248, name: 'Tyranitar', types: ['Rock', 'Dark'], hp: 341, moves: [{ name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
-      { num: 249, name: 'Lugia', types: ['Psychic', 'Flying'], hp: 353, moves: [{ name: 'Aeroblast', type: 'Flying', power: 100 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Ice Beam', type: 'Ice', power: 90 }] },
-      { num: 250, name: 'Ho-Oh', types: ['Fire', 'Flying'], hp: 353, moves: [{ name: 'Sacred Fire', type: 'Fire', power: 100 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
+      { num: 157, name: 'Typhlosion', types: ['Fire'], hp: 297, speed: 100, moves: [{ name: 'Eruption', type: 'Fire', power: 150 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Extrasensory', type: 'Psychic', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 160, name: 'Feraligatr', types: ['Water'], hp: 311, speed: 78, moves: [{ name: 'Liquidation', type: 'Water', power: 85 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 181, name: 'Ampharos', types: ['Electric'], hp: 321, speed: 55, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Power Gem', type: 'Rock', power: 80 }] },
+      { num: 196, name: 'Espeon', types: ['Psychic'], hp: 271, speed: 110, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Psyshock', type: 'Psychic', power: 80 }] },
+      { num: 197, name: 'Umbreon', types: ['Dark'], hp: 331, speed: 65, moves: [{ name: 'Foul Play', type: 'Dark', power: 95 }, { name: 'Body Slam', type: 'Normal', power: 85 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 208, name: 'Steelix', types: ['Steel', 'Ground'], hp: 291, speed: 30, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 212, name: 'Scizor', types: ['Bug', 'Steel'], hp: 281, speed: 65, moves: [{ name: 'Bullet Punch', type: 'Steel', power: 40 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }] },
+      { num: 214, name: 'Heracross', types: ['Bug', 'Fighting'], hp: 301, speed: 85, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Megahorn', type: 'Bug', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Night Slash', type: 'Dark', power: 70 }] },
+      { num: 229, name: 'Houndoom', types: ['Dark', 'Fire'], hp: 291, speed: 95, moves: [{ name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 230, name: 'Kingdra', types: ['Water', 'Dragon'], hp: 291, speed: 85, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }] },
+      { num: 248, name: 'Tyranitar', types: ['Rock', 'Dark'], hp: 341, speed: 61, moves: [{ name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 249, name: 'Lugia', types: ['Psychic', 'Flying'], hp: 353, speed: 110, moves: [{ name: 'Aeroblast', type: 'Flying', power: 100 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Ice Beam', type: 'Ice', power: 90 }] },
+      { num: 250, name: 'Ho-Oh', types: ['Fire', 'Flying'], hp: 353, speed: 90, moves: [{ name: 'Sacred Fire', type: 'Fire', power: 100 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
 
       // GEN 3
-      { num: 254, name: 'Sceptile', types: ['Grass'], hp: 281, moves: [{ name: 'Leaf Storm', type: 'Grass', power: 130 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
-      { num: 257, name: 'Blaziken', types: ['Fire', 'Fighting'], hp: 301, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'High Jump Kick', type: 'Fighting', power: 130 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }] },
-      { num: 260, name: 'Swampert', types: ['Water', 'Ground'], hp: 341, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Waterfall', type: 'Water', power: 80 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
-      { num: 282, name: 'Gardevoir', types: ['Psychic', 'Fairy'], hp: 277, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
-      { num: 286, name: 'Breloom', types: ['Grass', 'Fighting'], hp: 261, moves: [{ name: 'Bullet Seed', type: 'Grass', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }, { name: 'Rock Tomb', type: 'Rock', power: 60 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
-      { num: 306, name: 'Aggron', types: ['Steel', 'Rock'], hp: 281, moves: [{ name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
-      { num: 330, name: 'Flygon', types: ['Ground', 'Dragon'], hp: 301, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
-      { num: 350, name: 'Milotic', types: ['Water'], hp: 331, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Recover', type: 'Normal', power: 0 }] },
-      { num: 373, name: 'Salamence', types: ['Dragon', 'Flying'], hp: 331, moves: [{ name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Dual Wingbeat', type: 'Flying', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Blast', type: 'Fire', power: 110 }] },
-      { num: 376, name: 'Metagross', types: ['Steel', 'Psychic'], hp: 301, moves: [{ name: 'Meteor Mash', type: 'Steel', power: 90 }, { name: 'Zen Headbutt', type: 'Psychic', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
-      { num: 382, name: 'Kyogre', types: ['Water'], hp: 341, moves: [{ name: 'Origin Pulse', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Thunder', type: 'Electric', power: 110 }, { name: 'Surf', type: 'Water', power: 90 }] },
-      { num: 383, name: 'Groudon', types: ['Ground'], hp: 341, moves: [{ name: 'Precipice Blades', type: 'Ground', power: 120 }, { name: 'Fire Punch', type: 'Fire', power: 75 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Solar Beam', type: 'Grass', power: 120 }] },
-      { num: 384, name: 'Rayquaza', types: ['Dragon', 'Flying'], hp: 351, moves: [{ name: 'Dragon Ascent', type: 'Flying', power: 120 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'V-create', type: 'Fire', power: 180 }] },
+      { num: 254, name: 'Sceptile', types: ['Grass'], hp: 281, speed: 120, moves: [{ name: 'Leaf Storm', type: 'Grass', power: 130 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
+      { num: 257, name: 'Blaziken', types: ['Fire', 'Fighting'], hp: 301, speed: 80, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'High Jump Kick', type: 'Fighting', power: 130 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }] },
+      { num: 260, name: 'Swampert', types: ['Water', 'Ground'], hp: 341, speed: 60, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Waterfall', type: 'Water', power: 80 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 282, name: 'Gardevoir', types: ['Psychic', 'Fairy'], hp: 277, speed: 80, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 286, name: 'Breloom', types: ['Grass', 'Fighting'], hp: 261, speed: 70, moves: [{ name: 'Bullet Seed', type: 'Grass', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }, { name: 'Rock Tomb', type: 'Rock', power: 60 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 306, name: 'Aggron', types: ['Steel', 'Rock'], hp: 281, speed: 50, moves: [{ name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 330, name: 'Flygon', types: ['Ground', 'Dragon'], hp: 301, speed: 100, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 350, name: 'Milotic', types: ['Water'], hp: 331, speed: 81, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Recover', type: 'Normal', power: 0 }] },
+      { num: 373, name: 'Salamence', types: ['Dragon', 'Flying'], hp: 331, speed: 100, moves: [{ name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Dual Wingbeat', type: 'Flying', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Blast', type: 'Fire', power: 110 }] },
+      { num: 376, name: 'Metagross', types: ['Steel', 'Psychic'], hp: 301, speed: 70, moves: [{ name: 'Meteor Mash', type: 'Steel', power: 90 }, { name: 'Zen Headbutt', type: 'Psychic', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
+      { num: 382, name: 'Kyogre', types: ['Water'], hp: 341, speed: 90, moves: [{ name: 'Origin Pulse', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Thunder', type: 'Electric', power: 110 }, { name: 'Surf', type: 'Water', power: 90 }] },
+      { num: 383, name: 'Groudon', types: ['Ground'], hp: 341, speed: 90, moves: [{ name: 'Precipice Blades', type: 'Ground', power: 120 }, { name: 'Fire Punch', type: 'Fire', power: 75 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Solar Beam', type: 'Grass', power: 120 }] },
+      { num: 384, name: 'Rayquaza', types: ['Dragon', 'Flying'], hp: 351, speed: 95, moves: [{ name: 'Dragon Ascent', type: 'Flying', power: 120 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'V-create', type: 'Fire', power: 180 }] },
 
       // GEN 4
-      { num: 389, name: 'Torterra', types: ['Grass', 'Ground'], hp: 331, moves: [{ name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
-      { num: 392, name: 'Infernape', types: ['Fire', 'Fighting'], hp: 293, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }] },
-      { num: 395, name: 'Empoleon', types: ['Water', 'Steel'], hp: 309, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Grass Knot', type: 'Grass', power: 80 }] },
-      { num: 398, name: 'Staraptor', types: ['Normal', 'Flying'], hp: 311, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Double-Edge', type: 'Normal', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
-      { num: 405, name: 'Luxray', types: ['Electric'], hp: 301, moves: [{ name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
-      { num: 407, name: 'Roserade', types: ['Grass', 'Poison'], hp: 261, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
-      { num: 445, name: 'Garchomp', types: ['Dragon', 'Ground'], hp: 357, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Fire Fang', type: 'Fire', power: 65 }] },
-      { num: 448, name: 'Lucario', types: ['Fighting', 'Steel'], hp: 281, moves: [{ name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }] },
-      { num: 460, name: 'Abomasnow', types: ['Grass', 'Ice'], hp: 321, moves: [{ name: 'Blizzard', type: 'Ice', power: 110 }, { name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Shard', type: 'Ice', power: 40 }] },
-      { num: 461, name: 'Weavile', types: ['Dark', 'Ice'], hp: 281, moves: [{ name: 'Triple Axel', type: 'Ice', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Shard', type: 'Ice', power: 40 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
-      { num: 468, name: 'Togekiss', types: ['Fairy', 'Flying'], hp: 311, moves: [{ name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
-      { num: 470, name: 'Leafeon', types: ['Grass'], hp: 271, moves: [{ name: 'Leaf Blade', type: 'Grass', power: 90 }, { name: 'X-Scissor', type: 'Bug', power: 80 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
-      { num: 471, name: 'Glaceon', types: ['Ice'], hp: 271, moves: [{ name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Hyper Voice', type: 'Normal', power: 90 }] },
-      { num: 475, name: 'Gallade', types: ['Psychic', 'Fighting'], hp: 277, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Zen Headbutt', type: 'Psychic', power: 80 }, { name: 'Night Slash', type: 'Dark', power: 70 }, { name: 'Leaf Blade', type: 'Grass', power: 90 }] },
-      { num: 483, name: 'Dialga', types: ['Steel', 'Dragon'], hp: 341, moves: [{ name: 'Roar of Time', type: 'Dragon', power: 150 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Fire Blast', type: 'Fire', power: 110 }] },
-      { num: 484, name: 'Palkia', types: ['Water', 'Dragon'], hp: 321, moves: [{ name: 'Spacial Rend', type: 'Dragon', power: 100 }, { name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }] },
-      { num: 487, name: 'Giratina', types: ['Ghost', 'Dragon'], hp: 441, moves: [{ name: 'Shadow Force', type: 'Ghost', power: 120 }, { name: 'Dragon Claw', type: 'Dragon', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }] },
+      { num: 389, name: 'Torterra', types: ['Grass', 'Ground'], hp: 331, speed: 56, moves: [{ name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 392, name: 'Infernape', types: ['Fire', 'Fighting'], hp: 293, speed: 108, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }] },
+      { num: 395, name: 'Empoleon', types: ['Water', 'Steel'], hp: 309, speed: 60, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Grass Knot', type: 'Grass', power: 80 }] },
+      { num: 398, name: 'Staraptor', types: ['Normal', 'Flying'], hp: 311, speed: 100, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Double-Edge', type: 'Normal', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 405, name: 'Luxray', types: ['Electric'], hp: 301, speed: 70, moves: [{ name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
+      { num: 407, name: 'Roserade', types: ['Grass', 'Poison'], hp: 261, speed: 90, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 445, name: 'Garchomp', types: ['Dragon', 'Ground'], hp: 357, speed: 102, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Fire Fang', type: 'Fire', power: 65 }] },
+      { num: 448, name: 'Lucario', types: ['Fighting', 'Steel'], hp: 281, speed: 90, moves: [{ name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }] },
+      { num: 460, name: 'Abomasnow', types: ['Grass', 'Ice'], hp: 321, speed: 60, moves: [{ name: 'Blizzard', type: 'Ice', power: 110 }, { name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Shard', type: 'Ice', power: 40 }] },
+      { num: 461, name: 'Weavile', types: ['Dark', 'Ice'], hp: 281, speed: 125, moves: [{ name: 'Triple Axel', type: 'Ice', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Shard', type: 'Ice', power: 40 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
+      { num: 468, name: 'Togekiss', types: ['Fairy', 'Flying'], hp: 311, speed: 80, moves: [{ name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 470, name: 'Leafeon', types: ['Grass'], hp: 271, speed: 95, moves: [{ name: 'Leaf Blade', type: 'Grass', power: 90 }, { name: 'X-Scissor', type: 'Bug', power: 80 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
+      { num: 471, name: 'Glaceon', types: ['Ice'], hp: 271, speed: 65, moves: [{ name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Hyper Voice', type: 'Normal', power: 90 }] },
+      { num: 475, name: 'Gallade', types: ['Psychic', 'Fighting'], hp: 277, speed: 80, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Zen Headbutt', type: 'Psychic', power: 80 }, { name: 'Night Slash', type: 'Dark', power: 70 }, { name: 'Leaf Blade', type: 'Grass', power: 90 }] },
+      { num: 483, name: 'Dialga', types: ['Steel', 'Dragon'], hp: 341, speed: 90, moves: [{ name: 'Roar of Time', type: 'Dragon', power: 150 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Fire Blast', type: 'Fire', power: 110 }] },
+      { num: 484, name: 'Palkia', types: ['Water', 'Dragon'], hp: 321, speed: 100, moves: [{ name: 'Spacial Rend', type: 'Dragon', power: 100 }, { name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }] },
+      { num: 487, name: 'Giratina', types: ['Ghost', 'Dragon'], hp: 441, speed: 90, moves: [{ name: 'Shadow Force', type: 'Ghost', power: 120 }, { name: 'Dragon Claw', type: 'Dragon', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }] },
 
       // GEN 5
-      { num: 497, name: 'Serperior', types: ['Grass'], hp: 291, moves: [{ name: 'Leaf Storm', type: 'Grass', power: 130 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Substituted Slash', type: 'Normal', power: 70 }] },
-      { num: 500, name: 'Emboar', types: ['Fire', 'Fighting'], hp: 361, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Head Smash', type: 'Rock', power: 150 }] },
-      { num: 503, name: 'Samurott', types: ['Water'], hp: 331, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Megahorn', type: 'Bug', power: 120 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }] },
-      { num: 534, name: 'Conkeldurr', types: ['Fighting'], hp: 351, moves: [{ name: 'Drain Punch', type: 'Fighting', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
-      { num: 553, name: 'Krookodile', types: ['Ground', 'Dark'], hp: 331, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }] },
-      { num: 555, name: 'Darmanitan', types: ['Fire'], hp: 351, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Rock Slide', type: 'Rock', power: 75 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
-      { num: 571, name: 'Zoroark', types: ['Dark'], hp: 261, moves: [{ name: 'Night Daze', type: 'Dark', power: 85 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
-      { num: 598, name: 'Ferrothorn', types: ['Grass', 'Steel'], hp: 289, moves: [{ name: 'Power Whip', type: 'Grass', power: 120 }, { name: 'Gyro Ball', type: 'Steel', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Body Press', type: 'Fighting', power: 80 }] },
-      { num: 609, name: 'Chandelure', types: ['Ghost', 'Fire'], hp: 261, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
-      { num: 612, name: 'Haxorus', types: ['Dragon'], hp: 293, moves: [{ name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poison Jab', type: 'Poison', power: 80 }] },
-      { num: 635, name: 'Hydreigon', types: ['Dark', 'Dragon'], hp: 325, moves: [{ name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
-      { num: 637, name: 'Volcarona', types: ['Bug', 'Fire'], hp: 311, moves: [{ name: 'Fiery Dance', type: 'Fire', power: 80 }, { name: 'Bug Buzz', type: 'Bug', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
-      { num: 643, name: 'Reshiram', types: ['Dragon', 'Fire'], hp: 341, moves: [{ name: 'Blue Flare', type: 'Fire', power: 130 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
-      { num: 644, name: 'Zekrom', types: ['Dragon', 'Electric'], hp: 341, moves: [{ name: 'Bolt Strike', type: 'Electric', power: 130 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Dragon Claw', type: 'Dragon', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 497, name: 'Serperior', types: ['Grass'], hp: 291, speed: 113, moves: [{ name: 'Leaf Storm', type: 'Grass', power: 130 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Substituted Slash', type: 'Normal', power: 70 }] },
+      { num: 500, name: 'Emboar', types: ['Fire', 'Fighting'], hp: 361, speed: 65, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Head Smash', type: 'Rock', power: 150 }] },
+      { num: 503, name: 'Samurott', types: ['Water'], hp: 331, speed: 70, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Megahorn', type: 'Bug', power: 120 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }] },
+      { num: 534, name: 'Conkeldurr', types: ['Fighting'], hp: 351, speed: 45, moves: [{ name: 'Drain Punch', type: 'Fighting', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
+      { num: 553, name: 'Krookodile', types: ['Ground', 'Dark'], hp: 331, speed: 92, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }] },
+      { num: 555, name: 'Darmanitan', types: ['Fire'], hp: 351, speed: 95, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Rock Slide', type: 'Rock', power: 75 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 571, name: 'Zoroark', types: ['Dark'], hp: 261, speed: 105, moves: [{ name: 'Night Daze', type: 'Dark', power: 85 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 598, name: 'Ferrothorn', types: ['Grass', 'Steel'], hp: 289, speed: 20, moves: [{ name: 'Power Whip', type: 'Grass', power: 120 }, { name: 'Gyro Ball', type: 'Steel', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Body Press', type: 'Fighting', power: 80 }] },
+      { num: 609, name: 'Chandelure', types: ['Ghost', 'Fire'], hp: 261, speed: 80, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 612, name: 'Haxorus', types: ['Dragon'], hp: 293, speed: 97, moves: [{ name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poison Jab', type: 'Poison', power: 80 }] },
+      { num: 635, name: 'Hydreigon', types: ['Dark', 'Dragon'], hp: 325, speed: 98, moves: [{ name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 637, name: 'Volcarona', types: ['Bug', 'Fire'], hp: 311, speed: 100, moves: [{ name: 'Fiery Dance', type: 'Fire', power: 80 }, { name: 'Bug Buzz', type: 'Bug', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 643, name: 'Reshiram', types: ['Dragon', 'Fire'], hp: 341, speed: 90, moves: [{ name: 'Blue Flare', type: 'Fire', power: 130 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 644, name: 'Zekrom', types: ['Dragon', 'Electric'], hp: 341, speed: 90, moves: [{ name: 'Bolt Strike', type: 'Electric', power: 130 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Dragon Claw', type: 'Dragon', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
 
       // GEN 6
-      { num: 652, name: 'Chesnaught', types: ['Grass', 'Fighting'], hp: 317, moves: [{ name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Drain Punch', type: 'Fighting', power: 75 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Hammer Arm', type: 'Fighting', power: 100 }] },
-      { num: 655, name: 'Delphox', types: ['Fire', 'Psychic'], hp: 291, moves: [{ name: 'Mystical Fire', type: 'Fire', power: 75 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }] },
-      { num: 658, name: 'Greninja', types: ['Water', 'Dark'], hp: 285, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Water Shuriken', type: 'Water', power: 40 }] },
-      { num: 663, name: 'Talonflame', types: ['Fire', 'Flying'], hp: 297, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Steel Wing', type: 'Steel', power: 70 }] },
-      { num: 681, name: 'Aegislash', types: ['Steel', 'Ghost'], hp: 261, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }] },
-      { num: 697, name: 'Tyrantrum', types: ['Rock', 'Dragon'], hp: 305, moves: [{ name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
-      { num: 700, name: 'Sylveon', types: ['Fairy'], hp: 331, moves: [{ name: 'Hyper Voice', type: 'Fairy', power: 90 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Mystical Fire', type: 'Fire', power: 75 }] },
-      { num: 706, name: 'Goodra', types: ['Dragon'], hp: 321, moves: [{ name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }] },
-      { num: 715, name: 'Noivern', types: ['Dragon', 'Flying'], hp: 311, moves: [{ name: 'Boomburst', type: 'Normal', power: 140 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 652, name: 'Chesnaught', types: ['Grass', 'Fighting'], hp: 317, speed: 64, moves: [{ name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Drain Punch', type: 'Fighting', power: 75 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Hammer Arm', type: 'Fighting', power: 100 }] },
+      { num: 655, name: 'Delphox', types: ['Fire', 'Psychic'], hp: 291, speed: 104, moves: [{ name: 'Mystical Fire', type: 'Fire', power: 75 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }] },
+      { num: 658, name: 'Greninja', types: ['Water', 'Dark'], hp: 285, speed: 122, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Water Shuriken', type: 'Water', power: 40 }] },
+      { num: 663, name: 'Talonflame', types: ['Fire', 'Flying'], hp: 297, speed: 126, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Steel Wing', type: 'Steel', power: 70 }] },
+      { num: 681, name: 'Aegislash', types: ['Steel', 'Ghost'], hp: 261, speed: 60, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }] },
+      { num: 697, name: 'Tyrantrum', types: ['Rock', 'Dragon'], hp: 305, speed: 71, moves: [{ name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
+      { num: 700, name: 'Sylveon', types: ['Fairy'], hp: 331, speed: 60, moves: [{ name: 'Hyper Voice', type: 'Fairy', power: 90 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Mystical Fire', type: 'Fire', power: 75 }] },
+      { num: 706, name: 'Goodra', types: ['Dragon'], hp: 321, speed: 80, moves: [{ name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }] },
+      { num: 715, name: 'Noivern', types: ['Dragon', 'Flying'], hp: 311, speed: 123, moves: [{ name: 'Boomburst', type: 'Normal', power: 140 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
 
       // GEN 7
-      { num: 724, name: 'Decidueye', types: ['Grass', 'Ghost'], hp: 297, moves: [{ name: 'Spirit Shackling', type: 'Ghost', power: 80 }, { name: 'Leaf Blade', type: 'Grass', power: 90 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }] },
-      { num: 727, name: 'Incineroar', types: ['Fire', 'Dark'], hp: 331, moves: [{ name: 'Darkest Lariat', type: 'Dark', power: 85 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
-      { num: 730, name: 'Primarina', types: ['Water', 'Fairy'], hp: 301, moves: [{ name: 'Sparkling Aria', type: 'Water', power: 90 }, { name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
-      { num: 745, name: 'Lycanroc', types: ['Rock'], hp: 291, moves: [{ name: 'Accelerock', type: 'Rock', power: 40 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
-      { num: 748, name: 'Toxapex', types: ['Poison', 'Water'], hp: 241, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Infestation', type: 'Bug', power: 20 }] },
-      { num: 778, name: 'Mimikyu', types: ['Ghost', 'Fairy'], hp: 251, moves: [{ name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }, { name: 'Shadow Claw', type: 'Ghost', power: 70 }, { name: 'Drain Punch', type: 'Fighting', power: 75 }] },
-      { num: 784, name: 'Kommo-o', types: ['Dragon', 'Fighting'], hp: 291, moves: [{ name: 'Clanging Scales', type: 'Dragon', power: 110 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poison Jab', type: 'Poison', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
-      { num: 785, name: 'Tapu Koko', types: ['Electric', 'Fairy'], hp: 281, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Brave Bird', type: 'Flying', power: 120 }] },
-      { num: 786, name: 'Tapu Lele', types: ['Psychic', 'Fairy'], hp: 281, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
-      { num: 800, name: 'Necrozma', types: ['Psychic'], hp: 335, moves: [{ name: 'Prismatic Laser', type: 'Psychic', power: 160 }, { name: 'Photon Geyser', type: 'Psychic', power: 100 }, { name: 'Heat Wave', type: 'Fire', power: 95 }, { name: 'Earth Power', type: 'Ground', power: 90 }] },
+      { num: 724, name: 'Decidueye', types: ['Grass', 'Ghost'], hp: 297, speed: 70, moves: [{ name: 'Spirit Shackling', type: 'Ghost', power: 80 }, { name: 'Leaf Blade', type: 'Grass', power: 90 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }] },
+      { num: 727, name: 'Incineroar', types: ['Fire', 'Dark'], hp: 331, speed: 60, moves: [{ name: 'Darkest Lariat', type: 'Dark', power: 85 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 730, name: 'Primarina', types: ['Water', 'Fairy'], hp: 301, speed: 60, moves: [{ name: 'Sparkling Aria', type: 'Water', power: 90 }, { name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
+      { num: 745, name: 'Lycanroc', types: ['Rock'], hp: 291, speed: 112, moves: [{ name: 'Accelerock', type: 'Rock', power: 40 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 748, name: 'Toxapex', types: ['Poison', 'Water'], hp: 241, speed: 35, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Infestation', type: 'Bug', power: 20 }] },
+      { num: 778, name: 'Mimikyu', types: ['Ghost', 'Fairy'], hp: 251, speed: 96, moves: [{ name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }, { name: 'Shadow Claw', type: 'Ghost', power: 70 }, { name: 'Drain Punch', type: 'Fighting', power: 75 }] },
+      { num: 784, name: 'Kommo-o', types: ['Dragon', 'Fighting'], hp: 291, speed: 85, moves: [{ name: 'Clanging Scales', type: 'Dragon', power: 110 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poison Jab', type: 'Poison', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 785, name: 'Tapu Koko', types: ['Electric', 'Fairy'], hp: 281, speed: 130, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Brave Bird', type: 'Flying', power: 120 }] },
+      { num: 786, name: 'Tapu Lele', types: ['Psychic', 'Fairy'], hp: 281, speed: 95, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 800, name: 'Necrozma', types: ['Psychic'], hp: 335, speed: 97, moves: [{ name: 'Prismatic Laser', type: 'Psychic', power: 160 }, { name: 'Photon Geyser', type: 'Psychic', power: 100 }, { name: 'Heat Wave', type: 'Fire', power: 95 }, { name: 'Earth Power', type: 'Ground', power: 90 }] },
 
       // GEN 8
-      { num: 812, name: 'Rillaboom', types: ['Grass'], hp: 341, moves: [{ name: 'Drum Beating', type: 'Grass', power: 80 }, { name: 'Grassy Glide', type: 'Grass', power: 60 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
-      { num: 815, name: 'Cinderace', types: ['Fire'], hp: 301, moves: [{ name: 'Pyro Ball', type: 'Fire', power: 120 }, { name: 'High Jump Kick', type: 'Fighting', power: 130 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }] },
-      { num: 818, name: 'Inteleon', types: ['Water'], hp: 281, moves: [{ name: 'Snipe Shot', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
-      { num: 823, name: 'Corviknight', types: ['Flying', 'Steel'], hp: 337, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Body Press', type: 'Fighting', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
-      { num: 834, name: 'Drednaw', types: ['Water', 'Rock'], hp: 321, moves: [{ name: 'Liquidation', type: 'Water', power: 85 }, { name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }] },
-      { num: 839, name: 'Coalossal', types: ['Rock', 'Fire'], hp: 361, moves: [{ name: 'Heat Wave', type: 'Fire', power: 95 }, { name: 'Power Gem', type: 'Rock', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Overheat', type: 'Fire', power: 130 }] },
-      { num: 849, name: 'Toxtricity', types: ['Electric', 'Poison'], hp: 291, moves: [{ name: 'Overdrive', type: 'Electric', power: 80 }, { name: 'Sludge Wave', type: 'Poison', power: 95 }, { name: 'Boomburst', type: 'Normal', power: 140 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] },
-      { num: 861, name: 'Grimmsnarl', types: ['Dark', 'Fairy'], hp: 331, moves: [{ name: 'Spirit Break', type: 'Fairy', power: 75 }, { name: 'Darkest Lariat', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Hammer Arm', type: 'Fighting', power: 100 }] },
-      { num: 887, name: 'Dragapult', types: ['Dragon', 'Ghost'], hp: 317, moves: [{ name: 'Dragon Darts', type: 'Dragon', power: 100 }, { name: 'Phantom Force', type: 'Ghost', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
-      { num: 888, name: 'Zacian', types: ['Fairy', 'Steel'], hp: 325, moves: [{ name: 'Behemoth Blade', type: 'Steel', power: 100 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }] },
-      { num: 889, name: 'Zamazenta', types: ['Fighting', 'Steel'], hp: 325, moves: [{ name: 'Behemoth Bash', type: 'Steel', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
-      { num: 890, name: 'Eternatus', types: ['Poison', 'Dragon'], hp: 421, moves: [{ name: 'Dynamax Cannon', type: 'Dragon', power: 100 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 812, name: 'Rillaboom', types: ['Grass'], hp: 341, speed: 85, moves: [{ name: 'Drum Beating', type: 'Grass', power: 80 }, { name: 'Grassy Glide', type: 'Grass', power: 60 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 815, name: 'Cinderace', types: ['Fire'], hp: 301, speed: 119, moves: [{ name: 'Pyro Ball', type: 'Fire', power: 120 }, { name: 'High Jump Kick', type: 'Fighting', power: 130 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }] },
+      { num: 818, name: 'Inteleon', types: ['Water'], hp: 281, speed: 120, moves: [{ name: 'Snipe Shot', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 823, name: 'Corviknight', types: ['Flying', 'Steel'], hp: 337, speed: 67, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Body Press', type: 'Fighting', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 834, name: 'Drednaw', types: ['Water', 'Rock'], hp: 321, speed: 74, moves: [{ name: 'Liquidation', type: 'Water', power: 85 }, { name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }] },
+      { num: 839, name: 'Coalossal', types: ['Rock', 'Fire'], hp: 361, speed: 30, moves: [{ name: 'Heat Wave', type: 'Fire', power: 95 }, { name: 'Power Gem', type: 'Rock', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Overheat', type: 'Fire', power: 130 }] },
+      { num: 849, name: 'Toxtricity', types: ['Electric', 'Poison'], hp: 291, speed: 75, moves: [{ name: 'Overdrive', type: 'Electric', power: 80 }, { name: 'Sludge Wave', type: 'Poison', power: 95 }, { name: 'Boomburst', type: 'Normal', power: 140 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] },
+      { num: 861, name: 'Grimmsnarl', types: ['Dark', 'Fairy'], hp: 331, speed: 60, moves: [{ name: 'Spirit Break', type: 'Fairy', power: 75 }, { name: 'Darkest Lariat', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Hammer Arm', type: 'Fighting', power: 100 }] },
+      { num: 887, name: 'Dragapult', types: ['Dragon', 'Ghost'], hp: 317, speed: 142, moves: [{ name: 'Dragon Darts', type: 'Dragon', power: 100 }, { name: 'Phantom Force', type: 'Ghost', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 888, name: 'Zacian', types: ['Fairy', 'Steel'], hp: 325, speed: 138, moves: [{ name: 'Behemoth Blade', type: 'Steel', power: 100 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }] },
+      { num: 889, name: 'Zamazenta', types: ['Fighting', 'Steel'], hp: 325, speed: 128, moves: [{ name: 'Behemoth Bash', type: 'Steel', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 890, name: 'Eternatus', types: ['Poison', 'Dragon'], hp: 421, speed: 130, moves: [{ name: 'Dynamax Cannon', type: 'Dragon', power: 100 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
 
       // GEN 9
-      { num: 908, name: 'Meowscarada', types: ['Grass', 'Dark'], hp: 293, moves: [{ name: 'Flower Trick', type: 'Grass', power: 70 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Play Rough', type: 'Fairy', power: 90 }] },
-      { num: 911, name: 'Skeledirge', types: ['Fire', 'Ghost'], hp: 351, moves: [{ name: 'Torch Song', type: 'Fire', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Alluring Voice', type: 'Fairy', power: 80 }] },
-      { num: 914, name: 'Quaquaval', types: ['Water', 'Fighting'], hp: 311, moves: [{ name: 'Aqua Step', type: 'Water', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }, { name: 'Brave Bird', type: 'Flying', power: 120 }] },
-      { num: 923, name: 'Pawmot', types: ['Electric', 'Fighting'], hp: 291, moves: [{ name: 'Double Shock', type: 'Electric', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }] },
-      { num: 936, name: 'Armarouge', types: ['Fire', 'Psychic'], hp: 311, moves: [{ name: 'Armor Cannon', type: 'Fire', power: 120 }, { name: 'Expanding Force', type: 'Psychic', power: 80 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
-      { num: 937, name: 'Ceruledge', types: ['Fire', 'Ghost'], hp: 291, moves: [{ name: 'Bitter Blade', type: 'Fire', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poltergeist', type: 'Ghost', power: 110 }] },
-      { num: 959, name: 'Tinkaton', types: ['Fairy', 'Steel'], hp: 311, moves: [{ name: 'Gigaton Hammer', type: 'Steel', power: 160 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Stone Edge', type: 'Rock', power: 100 }] },
-      { num: 964, name: 'Palafin', types: ['Water'], hp: 341, moves: [{ name: 'Jet Punch', type: 'Water', power: 60 }, { name: 'Wave Crash', type: 'Water', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
-      { num: 983, name: 'Kingambit', types: ['Dark', 'Steel'], hp: 341, moves: [{ name: 'Kowtow Cleave', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
-      { num: 984, name: 'Great Tusk', types: ['Ground', 'Fighting'], hp: 371, moves: [{ name: 'Headlong Rush', type: 'Ground', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
-      { num: 990, name: 'Iron Treads', types: ['Ground', 'Steel'], hp: 321, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
-      { num: 999, name: 'Gholdengo', types: ['Steel', 'Ghost'], hp: 315, moves: [{ name: 'Make It Rain', type: 'Steel', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
-      { num: 1006, name: 'Iron Valiant', types: ['Fairy', 'Fighting'], hp: 289, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
-      { num: 1007, name: 'Koraidon', types: ['Fighting', 'Dragon'], hp: 341, moves: [{ name: 'Collision Course', type: 'Fighting', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
-      { num: 1008, name: 'Miraidon', types: ['Electric', 'Dragon'], hp: 341, moves: [{ name: 'Electro Drift', type: 'Electric', power: 100 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] }
+      { num: 908, name: 'Meowscarada', types: ['Grass', 'Dark'], hp: 293, speed: 123, moves: [{ name: 'Flower Trick', type: 'Grass', power: 70 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Play Rough', type: 'Fairy', power: 90 }] },
+      { num: 911, name: 'Skeledirge', types: ['Fire', 'Ghost'], hp: 351, speed: 66, moves: [{ name: 'Torch Song', type: 'Fire', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Alluring Voice', type: 'Fairy', power: 80 }] },
+      { num: 914, name: 'Quaquaval', types: ['Water', 'Fighting'], hp: 311, speed: 85, moves: [{ name: 'Aqua Step', type: 'Water', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }, { name: 'Brave Bird', type: 'Flying', power: 120 }] },
+      { num: 923, name: 'Pawmot', types: ['Electric', 'Fighting'], hp: 291, speed: 105, moves: [{ name: 'Double Shock', type: 'Electric', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }] },
+      { num: 936, name: 'Armarouge', types: ['Fire', 'Psychic'], hp: 311, speed: 75, moves: [{ name: 'Armor Cannon', type: 'Fire', power: 120 }, { name: 'Expanding Force', type: 'Psychic', power: 80 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
+      { num: 937, name: 'Ceruledge', types: ['Fire', 'Ghost'], hp: 291, speed: 85, moves: [{ name: 'Bitter Blade', type: 'Fire', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poltergeist', type: 'Ghost', power: 110 }] },
+      { num: 959, name: 'Tinkaton', types: ['Fairy', 'Steel'], hp: 311, speed: 94, moves: [{ name: 'Gigaton Hammer', type: 'Steel', power: 160 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Stone Edge', type: 'Rock', power: 100 }] },
+      { num: 964, name: 'Palafin', types: ['Water'], hp: 341, speed: 100, moves: [{ name: 'Jet Punch', type: 'Water', power: 60 }, { name: 'Wave Crash', type: 'Water', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
+      { num: 983, name: 'Kingambit', types: ['Dark', 'Steel'], hp: 341, speed: 50, moves: [{ name: 'Kowtow Cleave', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
+      { num: 984, name: 'Great Tusk', types: ['Ground', 'Fighting'], hp: 371, speed: 87, moves: [{ name: 'Headlong Rush', type: 'Ground', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
+      { num: 990, name: 'Iron Treads', types: ['Ground', 'Steel'], hp: 321, speed: 106, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
+      { num: 999, name: 'Gholdengo', types: ['Steel', 'Ghost'], hp: 315, speed: 84, moves: [{ name: 'Make It Rain', type: 'Steel', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 1006, name: 'Iron Valiant', types: ['Fairy', 'Fighting'], hp: 289, speed: 116, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 1007, name: 'Koraidon', types: ['Fighting', 'Dragon'], hp: 341, speed: 135, moves: [{ name: 'Collision Course', type: 'Fighting', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 1008, name: 'Miraidon', types: ['Electric', 'Dragon'], hp: 341, speed: 135, moves: [{ name: 'Electro Drift', type: 'Electric', power: 100 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] }
     ];
 
     function getRandomPokemonFromPool() {
@@ -555,7 +581,17 @@
       user: { name: 'Red_Master_01', elo: 1785 },
       previewTeam: [],
       queue: { inProgress: false, timer: 0, intervalId: null },
-      battle: { active: false, turn: 1, p1: null, p2: null, isAI: true, isMultiplayer: false, isHost: false },
+      battle: {
+        active: false,
+        turn: 1,
+        p1: null,
+        p2: null,
+        isAI: true,
+        isMultiplayer: false,
+        isHost: false,
+        p1Action: null,
+        p2Action: null
+      },
       net: { peer: null, conn: null, peerId: null }
     };
 
@@ -629,7 +665,6 @@
         state.battle.isHost = true;
         setupNetworkListeners();
         
-        // Host creates both randomized teams and sends start payload
         const p1Team = generateRandomTeam();
         const p2Team = generateRandomTeam();
         conn.send({ type: 'START_GAME', p1Team: p2Team, p2Team: p1Team });
@@ -653,8 +688,8 @@
       state.net.conn.on('data', (data) => {
         if (data.type === 'START_GAME') {
           initBattleSession(false, 'Room Host', data.p1Team, data.p2Team, true);
-        } else if (data.type === 'MOVE') {
-          receiveOpponentAction(data.actionType, data.actionVal);
+        } else if (data.type === 'SUBMIT_ACTION') {
+          receiveOpponentAction(data.action);
         }
       });
     }
@@ -666,13 +701,8 @@
       alert('Room ID copied! Send this code to your friend.');
     }
 
-    function openCustomRoomModal() {
-      document.getElementById('custom-room-modal').classList.remove('hidden');
-    }
-
-    function closeCustomRoomModal() {
-      document.getElementById('custom-room-modal').classList.add('hidden');
-    }
+    function openCustomRoomModal() { document.getElementById('custom-room-modal').classList.remove('hidden'); }
+    function closeCustomRoomModal() { document.getElementById('custom-room-modal').classList.add('hidden'); }
 
     function startMatchmaking(formatId, isRanked) {
       playSynthSound('click');
@@ -705,6 +735,8 @@
         turn: 1,
         isAI: isAI,
         isMultiplayer: isMultiplayer,
+        p1Action: null,
+        p2Action: null,
         p1: { name: state.user.name, team: team1 || generateRandomTeam(), activeIdx: 0 },
         p2: { name: opponentName, team: team2 || generateRandomTeam(), activeIdx: 0 }
       };
@@ -712,7 +744,7 @@
       switchTab('battle');
       updateBattleUI();
       document.getElementById('battle-log').innerHTML = '';
-      appendBattleLog(`100+ Pokémon Battle Started!`);
+      appendBattleLog(`Battle Started! (Speed turns & Type effectiveness active)`);
       appendBattleLog(`Go! ${state.battle.p1.team[0].name} vs ${state.battle.p2.team[0].name}!`);
     }
 
@@ -776,107 +808,117 @@
       }).join('');
     }
 
+    /* ACCURATE TWO-PHASE TURN RESOLUTION ENGINE */
     function executeTurn(actionType, actionVal) {
       if (!state.battle.active) return;
-      const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
-      const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
 
-      // Broadcast move if online
-      if (state.battle.isMultiplayer && state.net.conn) {
-        state.net.conn.send({ type: 'MOVE', actionType, actionVal });
-      }
+      state.battle.p1Action = { type: actionType, val: actionVal };
 
-      if (actionType === 'switch') {
-        state.battle.p1.activeIdx = actionVal;
-        appendBattleLog(`Switched out ${p1Mon.name} for ${state.battle.p1.team[actionVal].name}!`);
-      } else if (actionType === 'move') {
-        const move = p1Mon.moves[actionVal];
-        playSynthSound('hit');
-        const dmg = Math.floor(move.power * 0.85 + Math.random() * 20);
-        p2Mon.currentHp = Math.max(0, p2Mon.currentHp - dmg);
-        appendBattleLog(`${p1Mon.name} used ${move.name}! Dealt ${dmg} HP damage.`);
-
-        if (p2Mon.currentHp <= 0) {
-          p2Mon.fainted = true;
-          playSynthSound('faint');
-          appendBattleLog(`Opposing ${p2Mon.name} fainted!`);
-
-          const nextIdx = state.battle.p2.team.findIndex(m => !m.fainted);
-          if (nextIdx !== -1) {
-            state.battle.p2.activeIdx = nextIdx;
-            appendBattleLog(`Opponent sent out ${state.battle.p2.team[nextIdx].name}!`);
-          } else {
-            appendBattleLog(`🏆 You won the match!`);
-            state.battle.active = false;
-            updateBattleUI();
-            setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
-            return;
-          }
+      if (state.battle.isAI) {
+        // AI chooses action
+        const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
+        const randomMoveIdx = Math.floor(Math.random() * p2Mon.moves.length);
+        state.battle.p2Action = { type: 'move', val: randomMoveIdx };
+        resolveTurnPhase();
+      } else if (state.battle.isMultiplayer) {
+        document.getElementById('waiting-status').classList.remove('hidden');
+        if (state.net.conn) {
+          state.net.conn.send({ type: 'SUBMIT_ACTION', action: state.battle.p1Action });
         }
-      }
-
-      if (state.battle.isAI && p2Mon.currentHp > 0) {
-        setTimeout(() => {
-          const aiMove = p2Mon.moves[Math.floor(Math.random() * p2Mon.moves.length)];
-          playSynthSound('hit');
-          const aiDmg = Math.floor(aiMove.power * 0.75 + Math.random() * 15);
-          p1Mon.currentHp = Math.max(0, p1Mon.currentHp - aiDmg);
-          appendBattleLog(`Opposing ${p2Mon.name} used ${aiMove.name}! Dealt ${aiDmg} HP damage.`);
-
-          if (p1Mon.currentHp <= 0) {
-            p1Mon.fainted = true;
-            playSynthSound('faint');
-            appendBattleLog(`${p1Mon.name} fainted!`);
-            const nextP1 = state.battle.p1.team.findIndex(m => !m.fainted);
-            if (nextP1 !== -1) {
-              state.battle.p1.activeIdx = nextP1;
-              appendBattleLog(`Go! ${state.battle.p1.team[nextP1].name}!`);
-            } else {
-              appendBattleLog(`💀 Defeated!`);
-              state.battle.active = false;
-              setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
-            }
-          }
-          state.battle.turn++;
-          updateBattleUI();
-        }, 500);
+        if (state.battle.p2Action) resolveTurnPhase();
       } else {
-        state.battle.turn++;
-        updateBattleUI();
+        // Local pass & play
+        const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
+        state.battle.p2Action = { type: 'move', val: Math.floor(Math.random() * p2Mon.moves.length) };
+        resolveTurnPhase();
       }
     }
 
-    function receiveOpponentAction(actionType, actionVal) {
+    function receiveOpponentAction(action) {
+      state.battle.p2Action = action;
+      if (state.battle.p1Action) resolveTurnPhase();
+    }
+
+    function resolveTurnPhase() {
+      document.getElementById('waiting-status').classList.add('hidden');
+      const act1 = state.battle.p1Action;
+      const act2 = state.battle.p2Action;
       const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
       const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
 
-      if (actionType === 'switch') {
-        state.battle.p2.activeIdx = actionVal;
-        appendBattleLog(`Opponent switched out ${p2Mon.name} for ${state.battle.p2.team[actionVal].name}!`);
-      } else if (actionType === 'move') {
-        const move = p2Mon.moves[actionVal];
-        playSynthSound('hit');
-        const dmg = Math.floor(move.power * 0.85 + Math.random() * 20);
-        p1Mon.currentHp = Math.max(0, p1Mon.currentHp - dmg);
-        appendBattleLog(`Opposing ${p2Mon.name} used ${move.name}! Dealt ${dmg} HP damage.`);
+      // Determine order: Switches happen first. If both attack, speed determines who goes first.
+      let first = 'p1';
+      if (act1.type === 'switch' && act2.type !== 'switch') first = 'p1';
+      else if (act2.type === 'switch' && act1.type !== 'switch') first = 'p2';
+      else if (p2Mon.speed > p1Mon.speed) first = 'p2';
+      else if (p1Mon.speed === p2Mon.speed && Math.random() < 0.5) first = 'p2';
 
-        if (p1Mon.currentHp <= 0) {
-          p1Mon.fainted = true;
-          playSynthSound('faint');
-          appendBattleLog(`${p1Mon.name} fainted!`);
-
-          const nextP1 = state.battle.p1.team.findIndex(m => !m.fainted);
-          if (nextP1 !== -1) {
-            state.battle.p1.activeIdx = nextP1;
-            appendBattleLog(`Go! ${state.battle.p1.team[nextP1].name}!`);
-          } else {
-            appendBattleLog(`💀 You were defeated!`);
-            state.battle.active = false;
-            setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
-          }
+      if (first === 'p1') {
+        performSingleAction('p1', act1);
+        if (state.battle.active && state.battle.p2.team[state.battle.p2.activeIdx].currentHp > 0) {
+          setTimeout(() => performSingleAction('p2', act2), 400);
+        }
+      } else {
+        performSingleAction('p2', act2);
+        if (state.battle.active && state.battle.p1.team[state.battle.p1.activeIdx].currentHp > 0) {
+          setTimeout(() => performSingleAction('p1', act1), 400);
         }
       }
-      updateBattleUI();
+
+      state.battle.p1Action = null;
+      state.battle.p2Action = null;
+      state.battle.turn++;
+      setTimeout(updateBattleUI, 500);
+    }
+
+    function performSingleAction(playerKey, action) {
+      const isP1 = playerKey === 'p1';
+      const attackerOwner = isP1 ? state.battle.p1 : state.battle.p2;
+      const defenderOwner = isP1 ? state.battle.p2 : state.battle.p1;
+      const attackerMon = attackerOwner.team[attackerOwner.activeIdx];
+      const defenderMon = defenderOwner.team[defenderOwner.activeIdx];
+
+      if (action.type === 'switch') {
+        attackerOwner.activeIdx = action.val;
+        appendBattleLog(`${attackerOwner.name} switched out to ${attackerOwner.team[action.val].name}!`);
+        return;
+      }
+
+      if (attackerMon.currentHp <= 0) return;
+
+      const move = attackerMon.moves[action.val];
+      playSynthSound('hit');
+
+      // Calculate damage with type effectiveness
+      const typeMult = getTypeMultiplier(move.type, defenderMon.types);
+      const baseDmg = Math.floor(move.power * 0.85 + Math.random() * 20);
+      const finalDmg = Math.floor(baseDmg * typeMult);
+
+      defenderMon.currentHp = Math.max(0, defenderMon.currentHp - finalDmg);
+
+      let logMsg = `${attackerMon.name} used ${move.name}! Dealt ${finalDmg} HP damage.`;
+      if (typeMult >= 2) logMsg += ' (Super effective!)';
+      else if (typeMult > 0 && typeMult < 1) logMsg += ' (It\'s not very effective...)';
+      else if (typeMult === 0) logMsg += ' (It had no effect!)';
+
+      appendBattleLog(logMsg);
+
+      if (defenderMon.currentHp <= 0) {
+        defenderMon.fainted = true;
+        playSynthSound('faint');
+        appendBattleLog(`${defenderMon.name} fainted!`);
+
+        const nextIdx = defenderOwner.team.findIndex(m => !m.fainted);
+        if (nextIdx !== -1) {
+          defenderOwner.activeIdx = nextIdx;
+          appendBattleLog(`${defenderOwner.name} sent out ${defenderOwner.team[nextIdx].name}!`);
+        } else {
+          state.battle.active = false;
+          const winnerName = attackerOwner.name;
+          appendBattleLog(`🏆 ${winnerName} won the match!`);
+          setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
+        }
+      }
     }
 
     function appendBattleLog(txt) {
