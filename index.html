@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en" class="dark h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokémon Showdown - 100+ Randomizer Engine</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#f0f7ff', 100: '#e0effe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f172a' }
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- PeerJS for Real-Time Peer-to-Peer Online Multiplayer -->
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #090d16; color: #f1f5f9; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+    ::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 9999px; }
+
+    .glass-panel { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-panel-hover:hover { background: rgba(30, 41, 59, 0.85); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+
+    .bg-animated { background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.15), transparent 40%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15), transparent 40%), radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1), transparent 60%); }
+    .hp-bar-fill { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease; }
+
+    @keyframes attack-right { 0% { transform: translateX(0); } 30% { transform: translateX(35px) scale(1.1); } 100% { transform: translateX(0); } }
+    @keyframes attack-left { 0% { transform: translateX(0); } 30% { transform: translateX(-35px) scale(1.1); } 100% { transform: translateX(0); } }
+    @keyframes hit-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-8px, 6px); } 40% { transform: translate(8px, -6px); } 60% { transform: translate(-6px, -4px); } 80% { transform: translate(6px, 4px); } }
+
+    .anim-attack-right { animation: attack-right 0.4s ease-in-out; }
+    .anim-attack-left { animation: attack-left 0.4s ease-in-out; }
+    .anim-hit { animation: hit-shake 0.4s ease-in-out; }
+    .arena-grass { background: linear-gradient(180deg, #1e293b 0%, #064e3b 60%, #022c22 100%); }
+
+    .bg-type-normal { background-color: #A8A878; } .bg-type-fire { background-color: #F08030; }
+    .bg-type-water { background-color: #6890F0; } .bg-type-electric { background-color: #F8D030; color: #000 !important; }
+    .bg-type-grass { background-color: #78C850; } .bg-type-ice { background-color: #98D8D8; color: #000 !important; }
+    .bg-type-fighting { background-color: #C03028; } .bg-type-poison { background-color: #A040A0; }
+    .bg-type-ground { background-color: #E0C068; color: #000 !important; } .bg-type-flying { background-color: #A890F0; }
+    .bg-type-psychic { background-color: #F85888; } .bg-type-bug { background-color: #A8B820; }
+    .bg-type-rock { background-color: #B8A038; } .bg-type-ghost { background-color: #705898; }
+    .bg-type-dragon { background-color: #7038F8; } .bg-type-dark { background-color: #705848; }
+    .bg-type-steel { background-color: #B8B8D0; color: #000 !important; } .bg-type-fairy { background-color: #EE99AC; color: #000 !important; }
+  </style>
+</head>
+<body class="min-h-screen bg-animated flex flex-col justify-between text-slate-100">
+
+  <!-- TOP HEADER NAV -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('lobby')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
+          <i data-lucide="swords" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
+              SHOWDOWN
+            </h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">MULTIPLAYER ARENA</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">100+ Pokémon Gen 1–9 Randomizer</p>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800">
+        <button id="nav-lobby" onclick="switchTab('lobby')" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i> Lobby
+        </button>
+        <button id="nav-battle" onclick="switchTab('battle')" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
+          <i data-lucide="swords" class="w-4 h-4"></i> Battle Arena
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="audio-toggle-btn" onclick="toggleAudio()" class="p-2.5 rounded-xl glass-panel text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all" title="Toggle Sound">
+          <i id="audio-icon" data-lucide="volume-2" class="w-5 h-5 text-emerald-400"></i>
+        </button>
+
+        <div class="flex items-center gap-3 glass-panel px-3 py-1.5 rounded-xl border border-slate-700/60">
+          <div class="relative">
+            <div id="user-tier-badge" class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center font-bold text-slate-900 text-xs shadow-inner">
+              MASTER
+            </div>
+            <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+          </div>
+          <div class="hidden lg:block text-left">
+            <div class="text-xs font-bold text-slate-200">Red_Master_01</div>
+            <div class="text-[10px] text-emerald-400 font-medium">Rank #14 • <span id="user-elo-display">1785</span> ELO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT WRAPPER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 space-y-8">
+
+    <!-- LOBBY HUB -->
+    <div id="view-lobby" class="space-y-8 animate-fadeIn">
+      
+      <div class="relative rounded-2xl glass-panel p-6 lg:p-8 border border-slate-700/60 overflow-hidden">
+        <div class="relative z-10 space-y-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20 mb-2">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Live Cross-Device Multiplayer Enabled
+              </div>
+              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Full Gen 1–9 Random Battles</h2>
+              <p class="text-slate-400 text-sm mt-1">Battle AI, play local 2P, or host a real-time room to play with friends on another device!</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <button onclick="startMatchmaking('gen9randombattle', true)" class="flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-slate-950 font-black text-sm shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.02] transition-all">
+                <i data-lucide="trophy" class="w-4 h-4"></i>
+                <span>Queue Ranked Match</span>
+              </button>
+              <button onclick="openCustomRoomModal()" class="flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-sm shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all">
+                <i data-lucide="wifi" class="w-4 h-4"></i>
+                <span>Play Online Friend</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW TEAM -->
+      <div class="glass-panel rounded-2xl p-5 border border-slate-800">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shuffle" class="w-5 h-5 text-indigo-400"></i>
+            <h3 class="font-bold text-slate-200 text-sm tracking-wide uppercase">Your Current Preview Team</h3>
+          </div>
+          <button onclick="rollRandomLobbyPreview()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-600/80 hover:bg-blue-500 text-white flex items-center gap-1 transition-colors">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Reroll Preview
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="lobby-team-preview"></div>
+      </div>
+
+      <!-- GAME MODES -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button onclick="startAIMatch()" class="glass-panel glass-panel-hover p-4 rounded-xl flex items-center gap-3 border-l-4 border-l-cyan-500 text-left">
+          <div class="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400"><i data-lucide="bot" class="w-5 h-5"></i></div>
+          <div>
+            <div class="font-bold text-sm">VS Smart Bot</div>
+            <div class="text-xs text-slate-400">Play instant game against AI</div>
+          </div>
+        </button>
+
+        <button onclick="startPassAndPlay()" class="glass-panel glass-panel-hover p-4 rounded-xl flex items-center gap-3 border-l-4 border-l-purple-500 text-left">
+          <div class="p-2.5 rounded-lg bg-purple-500/10 text-purple-400"><i data-lucide="users" class="w-5 h-5"></i></div>
+          <div>
+            <div class="font-bold text-sm">Pass & Play</div>
+            <div class="text-xs text-slate-400">2 Players on 1 Screen</div>
+          </div>
+        </button>
+
+        <button onclick="openCustomRoomModal()" class="glass-panel glass-panel-hover p-4 rounded-xl flex items-center gap-3 border-l-4 border-l-emerald-500 text-left">
+          <div class="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400"><i data-lucide="globe" class="w-5 h-5"></i></div>
+          <div>
+            <div class="font-bold text-sm">Host / Join Online</div>
+            <div class="text-xs text-slate-400">Connect across devices via Room ID</div>
+          </div>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- MULTIPLAYER ROOM MODAL -->
+    <div id="custom-room-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 shadow-2xl space-y-5">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-lg text-slate-100 flex items-center gap-2">
+            <i data-lucide="wifi" class="w-5 h-5 text-emerald-400"></i> Online Multiplayer Room
+          </h3>
+          <button onclick="closeCustomRoomModal()" class="text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Host Room Section -->
+          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+            <label class="block text-xs font-bold text-slate-300">Host a Battle (Your Room Code)</label>
+            <div class="flex gap-2">
+              <input type="text" id="my-peer-id" readonly value="Generating ID..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-emerald-400 font-bold focus:outline-none" />
+              <button onclick="copyPeerId()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition-all">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-400">Share this code with your friend so they can join you.</p>
+          </div>
+
+          <div class="text-center text-xs font-bold text-slate-500 uppercase">OR</div>
+
+          <!-- Join Room Section -->
+          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
+            <label class="block text-xs font-bold text-slate-300">Join a Friend's Room</label>
+            <div class="flex gap-2">
+              <input type="text" id="join-peer-id" placeholder="Paste friend's Room ID..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-blue-400 focus:outline-none focus:border-blue-500" />
+              <button onclick="connectToPeer()" class="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all">
+                Join Game
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATCHMAKING MODAL -->
+    <div id="matchmaking-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="glass-panel rounded-2xl max-w-md w-full p-8 border border-slate-700 shadow-2xl text-center space-y-6 relative overflow-hidden">
+        <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
+          <div class="absolute inset-0 rounded-full border-2 border-blue-500/40 animate-ping"></div>
+          <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/50">
+            <i data-lucide="swords" class="w-8 h-8 text-white animate-bounce"></i>
+          </div>
+        </div>
+
+        <div>
+          <span id="queue-mode-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            RANDOMIZED BATTLE QUEUE
+          </span>
+          <h3 id="queue-title" class="font-black text-xl text-slate-100 mt-2">Generating Random Team...</h3>
+          <p id="queue-subtext" class="text-xs text-slate-400 mt-1">Drawing 6 random Pokémon from 100+ choices</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-xs">
+          <div>
+            <div class="text-slate-500">Elapsed Time</div>
+            <div id="queue-timer" class="font-mono font-bold text-slate-200 text-sm mt-0.5">00:02</div>
+          </div>
+          <div>
+            <div class="text-slate-500">Status</div>
+            <div class="font-mono font-bold text-emerald-400 text-sm mt-0.5">Readying...</div>
+          </div>
+        </div>
+
+        <button onclick="cancelMatchmaking()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 border border-slate-700 transition-all">
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- POST-MATCH RESULTS MODAL -->
+    <div id="results-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 shadow-2xl text-center space-y-6">
+        <div id="result-header-icon" class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl font-black">
+          🏆
+        </div>
+
+        <div>
+          <h3 id="result-title" class="font-extrabold text-2xl">VICTORY!</h3>
+          <p id="result-subtext" class="text-xs text-slate-400 mt-1">Match ended</p>
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="closeResultsModal(); switchTab('lobby');" class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition-all">
+            Return to Lobby
+          </button>
+          <button onclick="closeResultsModal(); startMatchmaking('gen9randombattle', true);" class="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white shadow-lg shadow-blue-600/30 transition-all">
+            Next Random Match
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BATTLE ARENA -->
+    <div id="view-battle" class="hidden space-y-6 animate-fadeIn">
+      
+      <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span id="battle-gen-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">100+ POKÉMON RANDOM BATTLE</span>
+          <div class="text-xs text-slate-400">Turn <span id="turn-counter" class="text-white font-bold text-sm">1</span></div>
+        </div>
+
+        <button onclick="forfeitBattle()" class="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold transition-all">
+          Forfeit Match
+        </button>
+      </div>
+
+      <div id="battle-stage" class="relative rounded-2xl arena-grass border-2 border-slate-800 shadow-2xl overflow-hidden min-h-[380px] md:min-h-[460px] flex flex-col justify-between p-6">
+        
+        <!-- TOP: OPPONENT MON -->
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-4 z-10">
+          <div class="glass-panel rounded-xl p-3 border border-slate-700/80 w-full sm:w-72 shadow-xl">
+            <div class="flex justify-between items-baseline mb-1">
+              <span id="p2-name" class="font-extrabold text-sm text-slate-100">Opponent</span>
+              <span id="p2-level" class="text-xs text-slate-400">Lv. 85</span>
+            </div>
+            
+            <div class="flex items-center gap-2 mb-1.5">
+              <div id="p2-types" class="flex gap-1"></div>
+            </div>
+
+            <div class="w-full bg-slate-900 rounded-full h-3 border border-slate-700 overflow-hidden relative">
+              <div id="p2-hp-bar" class="hp-bar-fill h-full bg-emerald-500 w-full"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+              <span id="p2-hp-text">100%</span>
+              <div id="p2-bench-dots" class="flex gap-1"></div>
+            </div>
+          </div>
+
+          <div class="self-end sm:self-center mr-8 sm:mr-16 relative">
+            <img id="p2-sprite" src="" alt="Opponent Pokemon" class="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10 filter drop-shadow-xl" />
+          </div>
+        </div>
+
+        <!-- BOTTOM: PLAYER MON -->
+        <div class="flex flex-col-reverse sm:flex-row justify-between items-end gap-4 z-10 mt-8">
+          <div class="ml-8 sm:ml-16 relative">
+            <img id="p1-sprite" src="" alt="Player Pokemon" class="w-40 h-40 md:w-48 md:h-48 object-contain relative z-10 filter drop-shadow-xl" />
+          </div>
+
+          <div class="glass-panel rounded-xl p-3 border border-slate-700/80 w-full sm:w-72 shadow-xl">
+            <div class="flex justify-between items-baseline mb-1">
+              <span id="p1-name" class="font-extrabold text-sm text-slate-100">Player</span>
+              <span id="p1-level" class="text-xs text-slate-400">Lv. 85</span>
+            </div>
+
+            <div class="flex items-center gap-2 mb-1.5">
+              <div id="p1-types" class="flex gap-1"></div>
+            </div>
+
+            <div class="w-full bg-slate-900 rounded-full h-3 border border-slate-700 overflow-hidden relative">
+              <div id="p1-hp-bar" class="hp-bar-fill h-full bg-emerald-500 w-full"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+              <span id="p1-hp-text">100%</span>
+              <div id="p1-bench-dots" class="flex gap-1"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 glass-panel rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="text-xs font-bold uppercase text-slate-400 tracking-wider pb-2 border-b border-slate-800">Move Selection</div>
+
+          <div class="grid grid-cols-2 gap-3" id="moves-container"></div>
+
+          <div class="pt-2">
+            <div class="text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-wide">Switch Pokémon</div>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="switch-team-container"></div>
+          </div>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col h-[280px] lg:h-auto">
+          <div class="text-xs font-bold uppercase text-slate-400 pb-2 border-b border-slate-800 flex items-center gap-2">
+            <i data-lucide="scroll-text" class="w-4 h-4 text-blue-400"></i> Battle Transcript
+          </div>
+          <div id="battle-log" class="flex-1 overflow-y-auto space-y-1.5 text-xs font-mono py-2 pr-1 text-slate-300"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    /* 100+ POKEMON DATABASE (GEN 1 - 9) */
+    const POKEMON_POOL = [
+      // GEN 1
+      { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
+      { num: 6, name: 'Charizard', types: ['Fire', 'Flying'], hp: 297, moves: [{ name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 9, name: 'Blastoise', types: ['Water'], hp: 299, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }] },
+      { num: 25, name: 'Pikachu', types: ['Electric'], hp: 211, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Volt Tackle', type: 'Electric', power: 120 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
+      { num: 36, name: 'Clefable', types: ['Fairy'], hp: 331, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 38, name: 'Ninetales', types: ['Fire'], hp: 287, moves: [{ name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Solar Beam', type: 'Grass', power: 120 }, { name: 'Extrasensory', type: 'Psychic', power: 80 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }] },
+      { num: 59, name: 'Arcanine', types: ['Fire'], hp: 321, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }] },
+      { num: 65, name: 'Alakazam', types: ['Psychic'], hp: 251, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }] },
+      { num: 68, name: 'Machamp', types: ['Fighting'], hp: 321, moves: [{ name: 'Dynamic Punch', type: 'Fighting', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Bullet Punch', type: 'Steel', power: 40 }] },
+      { num: 94, name: 'Gengar', types: ['Ghost', 'Poison'], hp: 261, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Sludge Wave', type: 'Poison', power: 95 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 103, name: 'Exeggutor', types: ['Grass', 'Psychic'], hp: 331, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
+      { num: 130, name: 'Gyarados', types: ['Water', 'Flying'], hp: 331, moves: [{ name: 'Waterfall', type: 'Water', power: 80 }, { name: 'Bounce', type: 'Flying', power: 85 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
+      { num: 131, name: 'Lapras', types: ['Water', 'Ice'], hp: 371, moves: [{ name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Surf', type: 'Water', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 134, name: 'Vaporeon', types: ['Water'], hp: 401, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Hyper Voice', type: 'Normal', power: 90 }] },
+      { num: 135, name: 'Jolteon', types: ['Electric'], hp: 271, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Volt Switch', type: 'Electric', power: 70 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Signal Beam', type: 'Bug', power: 75 }] },
+      { num: 136, name: 'Flareon', types: ['Fire'], hp: 271, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
+      { num: 142, name: 'Aerodactyl', types: ['Rock', 'Flying'], hp: 301, moves: [{ name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Dual Wingbeat', type: 'Flying', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 143, name: 'Snorlax', types: ['Normal'], hp: 431, moves: [{ name: 'Body Slam', type: 'Normal', power: 85 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 149, name: 'Dragonite', types: ['Dragon', 'Flying'], hp: 323, moves: [{ name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 150, name: 'Mewtwo', types: ['Psychic'], hp: 353, moves: [{ name: 'Psystrike', type: 'Psychic', power: 100 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+
+      // GEN 2
+      { num: 157, name: 'Typhlosion', types: ['Fire'], hp: 297, moves: [{ name: 'Eruption', type: 'Fire', power: 150 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Extrasensory', type: 'Psychic', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 160, name: 'Feraligatr', types: ['Water'], hp: 311, moves: [{ name: 'Liquidation', type: 'Water', power: 85 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 181, name: 'Ampharos', types: ['Electric'], hp: 321, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Power Gem', type: 'Rock', power: 80 }] },
+      { num: 196, name: 'Espeon', types: ['Psychic'], hp: 271, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Psyshock', type: 'Psychic', power: 80 }] },
+      { num: 197, name: 'Umbreon', types: ['Dark'], hp: 331, moves: [{ name: 'Foul Play', type: 'Dark', power: 95 }, { name: 'Body Slam', type: 'Normal', power: 85 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 208, name: 'Steelix', types: ['Steel', 'Ground'], hp: 291, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 212, name: 'Scizor', types: ['Bug', 'Steel'], hp: 281, moves: [{ name: 'Bullet Punch', type: 'Steel', power: 40 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }] },
+      { num: 214, name: 'Heracross', types: ['Bug', 'Fighting'], hp: 301, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Megahorn', type: 'Bug', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Night Slash', type: 'Dark', power: 70 }] },
+      { num: 229, name: 'Houndoom', types: ['Dark', 'Fire'], hp: 291, moves: [{ name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 230, name: 'Kingdra', types: ['Water', 'Dragon'], hp: 291, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }] },
+      { num: 248, name: 'Tyranitar', types: ['Rock', 'Dark'], hp: 341, moves: [{ name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 249, name: 'Lugia', types: ['Psychic', 'Flying'], hp: 353, moves: [{ name: 'Aeroblast', type: 'Flying', power: 100 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Ice Beam', type: 'Ice', power: 90 }] },
+      { num: 250, name: 'Ho-Oh', types: ['Fire', 'Flying'], hp: 353, moves: [{ name: 'Sacred Fire', type: 'Fire', power: 100 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
+
+      // GEN 3
+      { num: 254, name: 'Sceptile', types: ['Grass'], hp: 281, moves: [{ name: 'Leaf Storm', type: 'Grass', power: 130 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
+      { num: 257, name: 'Blaziken', types: ['Fire', 'Fighting'], hp: 301, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'High Jump Kick', type: 'Fighting', power: 130 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }] },
+      { num: 260, name: 'Swampert', types: ['Water', 'Ground'], hp: 341, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Waterfall', type: 'Water', power: 80 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 282, name: 'Gardevoir', types: ['Psychic', 'Fairy'], hp: 277, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 286, name: 'Breloom', types: ['Grass', 'Fighting'], hp: 261, moves: [{ name: 'Bullet Seed', type: 'Grass', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }, { name: 'Rock Tomb', type: 'Rock', power: 60 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 306, name: 'Aggron', types: ['Steel', 'Rock'], hp: 281, moves: [{ name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Heavy Slam', type: 'Steel', power: 100 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 330, name: 'Flygon', types: ['Ground', 'Dragon'], hp: 301, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Fire Punch', type: 'Fire', power: 75 }] },
+      { num: 350, name: 'Milotic', types: ['Water'], hp: 331, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Recover', type: 'Normal', power: 0 }] },
+      { num: 373, name: 'Salamence', types: ['Dragon', 'Flying'], hp: 331, moves: [{ name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Dual Wingbeat', type: 'Flying', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Fire Blast', type: 'Fire', power: 110 }] },
+      { num: 376, name: 'Metagross', types: ['Steel', 'Psychic'], hp: 301, moves: [{ name: 'Meteor Mash', type: 'Steel', power: 90 }, { name: 'Zen Headbutt', type: 'Psychic', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
+      { num: 382, name: 'Kyogre', types: ['Water'], hp: 341, moves: [{ name: 'Origin Pulse', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Thunder', type: 'Electric', power: 110 }, { name: 'Surf', type: 'Water', power: 90 }] },
+      { num: 383, name: 'Groudon', types: ['Ground'], hp: 341, moves: [{ name: 'Precipice Blades', type: 'Ground', power: 120 }, { name: 'Fire Punch', type: 'Fire', power: 75 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Solar Beam', type: 'Grass', power: 120 }] },
+      { num: 384, name: 'Rayquaza', types: ['Dragon', 'Flying'], hp: 351, moves: [{ name: 'Dragon Ascent', type: 'Flying', power: 120 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }, { name: 'V-create', type: 'Fire', power: 180 }] },
+
+      // GEN 4
+      { num: 389, name: 'Torterra', types: ['Grass', 'Ground'], hp: 331, moves: [{ name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 392, name: 'Infernape', types: ['Fire', 'Fighting'], hp: 293, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }] },
+      { num: 395, name: 'Empoleon', types: ['Water', 'Steel'], hp: 309, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Grass Knot', type: 'Grass', power: 80 }] },
+      { num: 398, name: 'Staraptor', types: ['Normal', 'Flying'], hp: 311, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Double-Edge', type: 'Normal', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 405, name: 'Luxray', types: ['Electric'], hp: 301, moves: [{ name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Crunch', type: 'Dark', power: 80 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
+      { num: 407, name: 'Roserade', types: ['Grass', 'Poison'], hp: 261, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 445, name: 'Garchomp', types: ['Dragon', 'Ground'], hp: 357, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Fire Fang', type: 'Fire', power: 65 }] },
+      { num: 448, name: 'Lucario', types: ['Fighting', 'Steel'], hp: 281, moves: [{ name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Extreme Speed', type: 'Normal', power: 80 }] },
+      { num: 460, name: 'Abomasnow', types: ['Grass', 'Ice'], hp: 321, moves: [{ name: 'Blizzard', type: 'Ice', power: 110 }, { name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Ice Shard', type: 'Ice', power: 40 }] },
+      { num: 461, name: 'Weavile', types: ['Dark', 'Ice'], hp: 281, moves: [{ name: 'Triple Axel', type: 'Ice', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Shard', type: 'Ice', power: 40 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
+      { num: 468, name: 'Togekiss', types: ['Fairy', 'Flying'], hp: 311, moves: [{ name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 470, name: 'Leafeon', types: ['Grass'], hp: 271, moves: [{ name: 'Leaf Blade', type: 'Grass', power: 90 }, { name: 'X-Scissor', type: 'Bug', power: 80 }, { name: 'Iron Tail', type: 'Steel', power: 100 }, { name: 'Quick Attack', type: 'Normal', power: 40 }] },
+      { num: 471, name: 'Glaceon', types: ['Ice'], hp: 271, moves: [{ name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Hyper Voice', type: 'Normal', power: 90 }] },
+      { num: 475, name: 'Gallade', types: ['Psychic', 'Fighting'], hp: 277, moves: [{ name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Zen Headbutt', type: 'Psychic', power: 80 }, { name: 'Night Slash', type: 'Dark', power: 70 }, { name: 'Leaf Blade', type: 'Grass', power: 90 }] },
+      { num: 483, name: 'Dialga', types: ['Steel', 'Dragon'], hp: 341, moves: [{ name: 'Roar of Time', type: 'Dragon', power: 150 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Fire Blast', type: 'Fire', power: 110 }] },
+      { num: 484, name: 'Palkia', types: ['Water', 'Dragon'], hp: 321, moves: [{ name: 'Spacial Rend', type: 'Dragon', power: 100 }, { name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }] },
+      { num: 487, name: 'Giratina', types: ['Ghost', 'Dragon'], hp: 441, moves: [{ name: 'Shadow Force', type: 'Ghost', power: 120 }, { name: 'Dragon Claw', type: 'Dragon', power: 80 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }] },
+
+      // GEN 5
+      { num: 497, name: 'Serperior', types: ['Grass'], hp: 291, moves: [{ name: 'Leaf Storm', type: 'Grass', power: 130 }, { name: 'Dragon Pulse', type: 'Dragon', power: 85 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Substituted Slash', type: 'Normal', power: 70 }] },
+      { num: 500, name: 'Emboar', types: ['Fire', 'Fighting'], hp: 361, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Head Smash', type: 'Rock', power: 150 }] },
+      { num: 503, name: 'Samurott', types: ['Water'], hp: 331, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Megahorn', type: 'Bug', power: 120 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }] },
+      { num: 534, name: 'Conkeldurr', types: ['Fighting'], hp: 351, moves: [{ name: 'Drain Punch', type: 'Fighting', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
+      { num: 553, name: 'Krookodile', types: ['Ground', 'Dark'], hp: 331, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Stone Edge', type: 'Rock', power: 100 }] },
+      { num: 555, name: 'Darmanitan', types: ['Fire'], hp: 351, moves: [{ name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Rock Slide', type: 'Rock', power: 75 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 571, name: 'Zoroark', types: ['Dark'], hp: 261, moves: [{ name: 'Night Daze', type: 'Dark', power: 85 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 598, name: 'Ferrothorn', types: ['Grass', 'Steel'], hp: 289, moves: [{ name: 'Power Whip', type: 'Grass', power: 120 }, { name: 'Gyro Ball', type: 'Steel', power: 100 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Body Press', type: 'Fighting', power: 80 }] },
+      { num: 609, name: 'Chandelure', types: ['Ghost', 'Fire'], hp: 261, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 612, name: 'Haxorus', types: ['Dragon'], hp: 293, moves: [{ name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poison Jab', type: 'Poison', power: 80 }] },
+      { num: 635, name: 'Hydreigon', types: ['Dark', 'Dragon'], hp: 325, moves: [{ name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 637, name: 'Volcarona', types: ['Bug', 'Fire'], hp: 311, moves: [{ name: 'Fiery Dance', type: 'Fire', power: 80 }, { name: 'Bug Buzz', type: 'Bug', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
+      { num: 643, name: 'Reshiram', types: ['Dragon', 'Fire'], hp: 341, moves: [{ name: 'Blue Flare', type: 'Fire', power: 130 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 644, name: 'Zekrom', types: ['Dragon', 'Electric'], hp: 341, moves: [{ name: 'Bolt Strike', type: 'Electric', power: 130 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Dragon Claw', type: 'Dragon', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+
+      // GEN 6
+      { num: 652, name: 'Chesnaught', types: ['Grass', 'Fighting'], hp: 317, moves: [{ name: 'Wood Hammer', type: 'Grass', power: 120 }, { name: 'Drain Punch', type: 'Fighting', power: 75 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Hammer Arm', type: 'Fighting', power: 100 }] },
+      { num: 655, name: 'Delphox', types: ['Fire', 'Psychic'], hp: 291, moves: [{ name: 'Mystical Fire', type: 'Fire', power: 75 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }] },
+      { num: 658, name: 'Greninja', types: ['Water', 'Dark'], hp: 285, moves: [{ name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Water Shuriken', type: 'Water', power: 40 }] },
+      { num: 663, name: 'Talonflame', types: ['Fire', 'Flying'], hp: 297, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Steel Wing', type: 'Steel', power: 70 }] },
+      { num: 681, name: 'Aegislash', types: ['Steel', 'Ghost'], hp: 261, moves: [{ name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Flash Cannon', type: 'Steel', power: 80 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }] },
+      { num: 697, name: 'Tyrantrum', types: ['Rock', 'Dragon'], hp: 305, moves: [{ name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Fang', type: 'Ice', power: 65 }] },
+      { num: 700, name: 'Sylveon', types: ['Fairy'], hp: 331, moves: [{ name: 'Hyper Voice', type: 'Fairy', power: 90 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Mystical Fire', type: 'Fire', power: 75 }] },
+      { num: 706, name: 'Goodra', types: ['Dragon'], hp: 321, moves: [{ name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }] },
+      { num: 715, name: 'Noivern', types: ['Dragon', 'Flying'], hp: 311, moves: [{ name: 'Boomburst', type: 'Normal', power: 140 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Air Slash', type: 'Flying', power: 75 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+
+      // GEN 7
+      { num: 724, name: 'Decidueye', types: ['Grass', 'Ghost'], hp: 297, moves: [{ name: 'Spirit Shackling', type: 'Ghost', power: 80 }, { name: 'Leaf Blade', type: 'Grass', power: 90 }, { name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }] },
+      { num: 727, name: 'Incineroar', types: ['Fire', 'Dark'], hp: 331, moves: [{ name: 'Darkest Lariat', type: 'Dark', power: 85 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 730, name: 'Primarina', types: ['Water', 'Fairy'], hp: 301, moves: [{ name: 'Sparkling Aria', type: 'Water', power: 90 }, { name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
+      { num: 745, name: 'Lycanroc', types: ['Rock'], hp: 291, moves: [{ name: 'Accelerock', type: 'Rock', power: 40 }, { name: 'Stone Edge', type: 'Rock', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 748, name: 'Toxapex', types: ['Poison', 'Water'], hp: 241, moves: [{ name: 'Scald', type: 'Water', power: 80 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Infestation', type: 'Bug', power: 20 }] },
+      { num: 778, name: 'Mimikyu', types: ['Ghost', 'Fairy'], hp: 251, moves: [{ name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }, { name: 'Shadow Claw', type: 'Ghost', power: 70 }, { name: 'Drain Punch', type: 'Fighting', power: 75 }] },
+      { num: 784, name: 'Kommo-o', types: ['Dragon', 'Fighting'], hp: 291, moves: [{ name: 'Clanging Scales', type: 'Dragon', power: 110 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poison Jab', type: 'Poison', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 785, name: 'Tapu Koko', types: ['Electric', 'Fairy'], hp: 281, moves: [{ name: 'Thunderbolt', type: 'Electric', power: 90 }, { name: 'Dazzling Gleam', type: 'Fairy', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Brave Bird', type: 'Flying', power: 120 }] },
+      { num: 786, name: 'Tapu Lele', types: ['Psychic', 'Fairy'], hp: 281, moves: [{ name: 'Psychic', type: 'Psychic', power: 90 }, { name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }] },
+      { num: 800, name: 'Necrozma', types: ['Psychic'], hp: 335, moves: [{ name: 'Prismatic Laser', type: 'Psychic', power: 160 }, { name: 'Photon Geyser', type: 'Psychic', power: 100 }, { name: 'Heat Wave', type: 'Fire', power: 95 }, { name: 'Earth Power', type: 'Ground', power: 90 }] },
+
+      // GEN 8
+      { num: 812, name: 'Rillaboom', types: ['Grass'], hp: 341, moves: [{ name: 'Drum Beating', type: 'Grass', power: 80 }, { name: 'Grassy Glide', type: 'Grass', power: 60 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Superpower', type: 'Fighting', power: 120 }] },
+      { num: 815, name: 'Cinderace', types: ['Fire'], hp: 301, moves: [{ name: 'Pyro Ball', type: 'Fire', power: 120 }, { name: 'High Jump Kick', type: 'Fighting', power: 130 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }] },
+      { num: 818, name: 'Inteleon', types: ['Water'], hp: 281, moves: [{ name: 'Snipe Shot', type: 'Water', power: 80 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 823, name: 'Corviknight', types: ['Flying', 'Steel'], hp: 337, moves: [{ name: 'Brave Bird', type: 'Flying', power: 120 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Body Press', type: 'Fighting', power: 80 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 834, name: 'Drednaw', types: ['Water', 'Rock'], hp: 321, moves: [{ name: 'Liquidation', type: 'Water', power: 85 }, { name: 'Head Smash', type: 'Rock', power: 150 }, { name: 'Superpower', type: 'Fighting', power: 120 }, { name: 'Earthquake', type: 'Ground', power: 100 }] },
+      { num: 839, name: 'Coalossal', types: ['Rock', 'Fire'], hp: 361, moves: [{ name: 'Heat Wave', type: 'Fire', power: 95 }, { name: 'Power Gem', type: 'Rock', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Overheat', type: 'Fire', power: 130 }] },
+      { num: 849, name: 'Toxtricity', types: ['Electric', 'Poison'], hp: 291, moves: [{ name: 'Overdrive', type: 'Electric', power: 80 }, { name: 'Sludge Wave', type: 'Poison', power: 95 }, { name: 'Boomburst', type: 'Normal', power: 140 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] },
+      { num: 861, name: 'Grimmsnarl', types: ['Dark', 'Fairy'], hp: 331, moves: [{ name: 'Spirit Break', type: 'Fairy', power: 75 }, { name: 'Darkest Lariat', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Hammer Arm', type: 'Fighting', power: 100 }] },
+      { num: 887, name: 'Dragapult', types: ['Dragon', 'Ghost'], hp: 317, moves: [{ name: 'Dragon Darts', type: 'Dragon', power: 100 }, { name: 'Phantom Force', type: 'Ghost', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Flamethrower', type: 'Fire', power: 90 }] },
+      { num: 888, name: 'Zacian', types: ['Fairy', 'Steel'], hp: 325, moves: [{ name: 'Behemoth Blade', type: 'Steel', power: 100 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }] },
+      { num: 889, name: 'Zamazenta', types: ['Fighting', 'Steel'], hp: 325, moves: [{ name: 'Behemoth Bash', type: 'Steel', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
+      { num: 890, name: 'Eternatus', types: ['Poison', 'Dragon'], hp: 421, moves: [{ name: 'Dynamax Cannon', type: 'Dragon', power: 100 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+
+      // GEN 9
+      { num: 908, name: 'Meowscarada', types: ['Grass', 'Dark'], hp: 293, moves: [{ name: 'Flower Trick', type: 'Grass', power: 70 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Play Rough', type: 'Fairy', power: 90 }] },
+      { num: 911, name: 'Skeledirge', types: ['Fire', 'Ghost'], hp: 351, moves: [{ name: 'Torch Song', type: 'Fire', power: 80 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Alluring Voice', type: 'Fairy', power: 80 }] },
+      { num: 914, name: 'Quaquaval', types: ['Water', 'Fighting'], hp: 311, moves: [{ name: 'Aqua Step', type: 'Water', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }, { name: 'Brave Bird', type: 'Flying', power: 120 }] },
+      { num: 923, name: 'Pawmot', types: ['Electric', 'Fighting'], hp: 291, moves: [{ name: 'Double Shock', type: 'Electric', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Punch', type: 'Ice', power: 75 }, { name: 'Mach Punch', type: 'Fighting', power: 40 }] },
+      { num: 936, name: 'Armarouge', types: ['Fire', 'Psychic'], hp: 311, moves: [{ name: 'Armor Cannon', type: 'Fire', power: 120 }, { name: 'Expanding Force', type: 'Psychic', power: 80 }, { name: 'Aura Sphere', type: 'Fighting', power: 80 }, { name: 'Energy Ball', type: 'Grass', power: 90 }] },
+      { num: 937, name: 'Ceruledge', types: ['Fire', 'Ghost'], hp: 291, moves: [{ name: 'Bitter Blade', type: 'Fire', power: 90 }, { name: 'Shadow Sneak', type: 'Ghost', power: 40 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Poltergeist', type: 'Ghost', power: 110 }] },
+      { num: 959, name: 'Tinkaton', types: ['Fairy', 'Steel'], hp: 311, moves: [{ name: 'Gigaton Hammer', type: 'Steel', power: 160 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Stone Edge', type: 'Rock', power: 100 }] },
+      { num: 964, name: 'Palafin', types: ['Water'], hp: 341, moves: [{ name: 'Jet Punch', type: 'Water', power: 60 }, { name: 'Wave Crash', type: 'Water', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Ice Punch', type: 'Ice', power: 75 }] },
+      { num: 983, name: 'Kingambit', types: ['Dark', 'Steel'], hp: 341, moves: [{ name: 'Kowtow Cleave', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
+      { num: 984, name: 'Great Tusk', types: ['Ground', 'Fighting'], hp: 371, moves: [{ name: 'Headlong Rush', type: 'Ground', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
+      { num: 990, name: 'Iron Treads', types: ['Ground', 'Steel'], hp: 321, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
+      { num: 999, name: 'Gholdengo', types: ['Steel', 'Ghost'], hp: 315, moves: [{ name: 'Make It Rain', type: 'Steel', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 1006, name: 'Iron Valiant', types: ['Fairy', 'Fighting'], hp: 289, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 1007, name: 'Koraidon', types: ['Fighting', 'Dragon'], hp: 341, moves: [{ name: 'Collision Course', type: 'Fighting', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 1008, name: 'Miraidon', types: ['Electric', 'Dragon'], hp: 341, moves: [{ name: 'Electro Drift', type: 'Electric', power: 100 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] }
+    ];
+
+    function getRandomPokemonFromPool() {
+      const template = POKEMON_POOL[Math.floor(Math.random() * POKEMON_POOL.length)];
+      return {
+        ...JSON.parse(JSON.stringify(template)),
+        spriteFront: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${template.num}.gif`,
+        spriteBack: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/${template.num}.gif`
+      };
+    }
+
+    function generateRandomTeam() {
+      const team = [];
+      const usedNums = new Set();
+      while (team.length < 6) {
+        const mon = getRandomPokemonFromPool();
+        if (!usedNums.has(mon.num)) {
+          usedNums.add(mon.num);
+          mon.currentHp = mon.hp;
+          mon.maxHp = mon.hp;
+          mon.fainted = false;
+          team.push(mon);
+        }
+      }
+      return team;
+    }
+
+    const state = {
+      activeTab: 'lobby',
+      soundEnabled: true,
+      user: { name: 'Red_Master_01', elo: 1785 },
+      previewTeam: [],
+      queue: { inProgress: false, timer: 0, intervalId: null },
+      battle: { active: false, turn: 1, p1: null, p2: null, isAI: true, isMultiplayer: false, isHost: false },
+      net: { peer: null, conn: null, peerId: null }
+    };
+
+    let audioCtx = null;
+    function playSynthSound(type) {
+      if (!state.soundEnabled) return;
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'hit') {
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(30, now + 0.2);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      } else if (type === 'click') {
+        osc.type = 'sine'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now); osc.stop(now + 0.08);
+      } else if (type === 'faint') {
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(80, now + 0.5);
+        gain.gain.setValueAtTime(0.25, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now); osc.stop(now + 0.5);
+      }
+    }
+
+    function toggleAudio() {
+      state.soundEnabled = !state.soundEnabled;
+      const icon = document.getElementById('audio-icon');
+      icon.className = state.soundEnabled ? 'w-5 h-5 text-emerald-400' : 'w-5 h-5 text-slate-500';
+    }
+
+    function switchTab(tabId) {
+      playSynthSound('click');
+      state.activeTab = tabId;
+      ['lobby', 'battle'].forEach(id => {
+        const viewEl = document.getElementById(`view-${id}`);
+        if (id === tabId) viewEl.classList.remove('hidden');
+        else viewEl.classList.add('hidden');
+      });
+    }
+
+    function rollRandomLobbyPreview() {
+      state.previewTeam = generateRandomTeam();
+      const container = document.getElementById('lobby-team-preview');
+      container.innerHTML = state.previewTeam.map(mon => `
+        <div class="glass-panel glass-panel-hover p-2.5 rounded-xl border border-slate-800 flex flex-col items-center text-center">
+          <img src="${mon.spriteFront}" class="w-16 h-16 object-contain filter drop-shadow-md" />
+          <div class="font-bold text-xs text-slate-200 mt-1">${mon.name}</div>
+          <div class="flex gap-1 mt-1">
+            ${mon.types.map(t => `<span class="text-[8px] px-1 py-0.2 rounded font-extrabold bg-type-${t.toLowerCase()} text-slate-900 uppercase">${t}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* PEERJS REAL-TIME MULTIPLAYER */
+    function initPeerNetwork() {
+      state.net.peer = new Peer();
+      state.net.peer.on('open', (id) => {
+        state.net.peerId = id;
+        document.getElementById('my-peer-id').value = id;
+      });
+
+      state.net.peer.on('connection', (conn) => {
+        state.net.conn = conn;
+        state.battle.isHost = true;
+        setupNetworkListeners();
+        
+        // Host creates both randomized teams and sends start payload
+        const p1Team = generateRandomTeam();
+        const p2Team = generateRandomTeam();
+        conn.send({ type: 'START_GAME', p1Team: p2Team, p2Team: p1Team });
+        initBattleSession(false, 'Online Challenger', p1Team, p2Team, true);
+        closeCustomRoomModal();
+      });
+    }
+
+    function connectToPeer() {
+      const targetId = document.getElementById('join-peer-id').value.trim();
+      if (!targetId) return alert('Please enter a valid Room ID!');
+
+      const conn = state.net.peer.connect(targetId);
+      state.net.conn = conn;
+      state.battle.isHost = false;
+      setupNetworkListeners();
+      closeCustomRoomModal();
+    }
+
+    function setupNetworkListeners() {
+      state.net.conn.on('data', (data) => {
+        if (data.type === 'START_GAME') {
+          initBattleSession(false, 'Room Host', data.p1Team, data.p2Team, true);
+        } else if (data.type === 'MOVE') {
+          receiveOpponentAction(data.actionType, data.actionVal);
+        }
+      });
+    }
+
+    function copyPeerId() {
+      const input = document.getElementById('my-peer-id');
+      input.select();
+      document.execCommand('copy');
+      alert('Room ID copied! Send this code to your friend.');
+    }
+
+    function openCustomRoomModal() {
+      document.getElementById('custom-room-modal').classList.remove('hidden');
+    }
+
+    function closeCustomRoomModal() {
+      document.getElementById('custom-room-modal').classList.add('hidden');
+    }
+
+    function startMatchmaking(formatId, isRanked) {
+      playSynthSound('click');
+      state.queue.timer = 0;
+      document.getElementById('matchmaking-modal').classList.remove('hidden');
+
+      state.queue.intervalId = setInterval(() => {
+        state.queue.timer++;
+        document.getElementById('queue-timer').innerText = `00:0${state.queue.timer}`;
+        if (state.queue.timer >= 2) {
+          cancelMatchmaking();
+          initBattleSession(true, 'Rival Trainer');
+        }
+      }, 1000);
+    }
+
+    function cancelMatchmaking() {
+      if (state.queue.intervalId) clearInterval(state.queue.intervalId);
+      document.getElementById('matchmaking-modal').classList.add('hidden');
+    }
+
+    function startAIMatch() { initBattleSession(true, 'Smart Bot AI'); }
+    function startPassAndPlay() { initBattleSession(false, 'Player 2 (Local)'); }
+
+    function initBattleSession(isAI, opponentName, team1 = null, team2 = null, isMultiplayer = false) {
+      playSynthSound('click');
+
+      state.battle = {
+        active: true,
+        turn: 1,
+        isAI: isAI,
+        isMultiplayer: isMultiplayer,
+        p1: { name: state.user.name, team: team1 || generateRandomTeam(), activeIdx: 0 },
+        p2: { name: opponentName, team: team2 || generateRandomTeam(), activeIdx: 0 }
+      };
+
+      switchTab('battle');
+      updateBattleUI();
+      document.getElementById('battle-log').innerHTML = '';
+      appendBattleLog(`100+ Pokémon Battle Started!`);
+      appendBattleLog(`Go! ${state.battle.p1.team[0].name} vs ${state.battle.p2.team[0].name}!`);
+    }
+
+    function updateBattleUI() {
+      const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
+      const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
+
+      document.getElementById('turn-counter').innerText = state.battle.turn;
+
+      // Player 1
+      document.getElementById('p1-name').innerText = p1Mon.name;
+      document.getElementById('p1-sprite').src = p1Mon.spriteBack;
+      const p1Pct = Math.max(0, Math.round((p1Mon.currentHp / p1Mon.maxHp) * 100));
+      document.getElementById('p1-hp-text').innerText = `${p1Mon.currentHp} / ${p1Mon.maxHp} HP (${p1Pct}%)`;
+      const p1Bar = document.getElementById('p1-hp-bar');
+      p1Bar.style.width = `${p1Pct}%`;
+      p1Bar.className = `hp-bar-fill h-full ${p1Pct > 50 ? 'bg-emerald-500' : p1Pct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
+      document.getElementById('p1-types').innerHTML = p1Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-extrabold bg-type-${t.toLowerCase()} text-slate-900">${t.toUpperCase()}</span>`).join('');
+
+      // Player 2
+      document.getElementById('p2-name').innerText = p2Mon.name;
+      document.getElementById('p2-sprite').src = p2Mon.spriteFront;
+      const p2Pct = Math.max(0, Math.round((p2Mon.currentHp / p2Mon.maxHp) * 100));
+      document.getElementById('p2-hp-text').innerText = `${p2Pct}%`;
+      const p2Bar = document.getElementById('p2-hp-bar');
+      p2Bar.style.width = `${p2Pct}%`;
+      p2Bar.className = `hp-bar-fill h-full ${p2Pct > 50 ? 'bg-emerald-500' : p2Pct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
+      document.getElementById('p2-types').innerHTML = p2Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-extrabold bg-type-${t.toLowerCase()} text-slate-900">${t.toUpperCase()}</span>`).join('');
+
+      renderBenchDots('p1-bench-dots', state.battle.p1.team);
+      renderBenchDots('p2-bench-dots', state.battle.p2.team);
+      renderMoveButtons(p1Mon);
+      renderSwitchButtons();
+    }
+
+    function renderBenchDots(elemId, team) {
+      document.getElementById(elemId).innerHTML = team.map(m => `<span class="w-2.5 h-2.5 rounded-full ${m.fainted ? 'bg-slate-700' : 'bg-emerald-400'} border border-slate-900 inline-block"></span>`).join('');
+    }
+
+    function renderMoveButtons(mon) {
+      document.getElementById('moves-container').innerHTML = mon.moves.map((m, idx) => `
+        <button onclick="executeTurn('move', ${idx})" class="glass-panel glass-panel-hover p-3 rounded-xl border border-slate-700/80 flex flex-col justify-between text-left relative overflow-hidden">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-extrabold text-sm text-slate-100">${m.name}</span>
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-type-${m.type.toLowerCase()} text-slate-900 uppercase">${m.type}</span>
+          </div>
+          <div class="text-[10px] text-slate-400 font-mono">Power: ${m.power}</div>
+        </button>
+      `).join('');
+    }
+
+    function renderSwitchButtons() {
+      document.getElementById('switch-team-container').innerHTML = state.battle.p1.team.map((m, idx) => {
+        const isCurrent = idx === state.battle.p1.activeIdx;
+        return `
+          <button onclick="executeTurn('switch', ${idx})" ${isCurrent || m.fainted ? 'disabled' : ''} class="glass-panel p-2 rounded-xl border border-slate-800 flex flex-col items-center text-center ${isCurrent ? 'border-blue-500 bg-blue-500/10' : 'hover:border-slate-700'} ${m.fainted ? 'opacity-40 cursor-not-allowed' : ''}">
+            <img src="${m.spriteFront}" class="w-10 h-10 object-contain" />
+            <span class="text-[10px] font-bold truncate w-full mt-1 text-slate-200">${m.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function executeTurn(actionType, actionVal) {
+      if (!state.battle.active) return;
+      const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
+      const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
+
+      // Broadcast move if online
+      if (state.battle.isMultiplayer && state.net.conn) {
+        state.net.conn.send({ type: 'MOVE', actionType, actionVal });
+      }
+
+      if (actionType === 'switch') {
+        state.battle.p1.activeIdx = actionVal;
+        appendBattleLog(`Switched out ${p1Mon.name} for ${state.battle.p1.team[actionVal].name}!`);
+      } else if (actionType === 'move') {
+        const move = p1Mon.moves[actionVal];
+        playSynthSound('hit');
+        const dmg = Math.floor(move.power * 0.85 + Math.random() * 20);
+        p2Mon.currentHp = Math.max(0, p2Mon.currentHp - dmg);
+        appendBattleLog(`${p1Mon.name} used ${move.name}! Dealt ${dmg} HP damage.`);
+
+        if (p2Mon.currentHp <= 0) {
+          p2Mon.fainted = true;
+          playSynthSound('faint');
+          appendBattleLog(`Opposing ${p2Mon.name} fainted!`);
+
+          const nextIdx = state.battle.p2.team.findIndex(m => !m.fainted);
+          if (nextIdx !== -1) {
+            state.battle.p2.activeIdx = nextIdx;
+            appendBattleLog(`Opponent sent out ${state.battle.p2.team[nextIdx].name}!`);
+          } else {
+            appendBattleLog(`🏆 You won the match!`);
+            state.battle.active = false;
+            updateBattleUI();
+            setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
+            return;
+          }
+        }
+      }
+
+      if (state.battle.isAI && p2Mon.currentHp > 0) {
+        setTimeout(() => {
+          const aiMove = p2Mon.moves[Math.floor(Math.random() * p2Mon.moves.length)];
+          playSynthSound('hit');
+          const aiDmg = Math.floor(aiMove.power * 0.75 + Math.random() * 15);
+          p1Mon.currentHp = Math.max(0, p1Mon.currentHp - aiDmg);
+          appendBattleLog(`Opposing ${p2Mon.name} used ${aiMove.name}! Dealt ${aiDmg} HP damage.`);
+
+          if (p1Mon.currentHp <= 0) {
+            p1Mon.fainted = true;
+            playSynthSound('faint');
+            appendBattleLog(`${p1Mon.name} fainted!`);
+            const nextP1 = state.battle.p1.team.findIndex(m => !m.fainted);
+            if (nextP1 !== -1) {
+              state.battle.p1.activeIdx = nextP1;
+              appendBattleLog(`Go! ${state.battle.p1.team[nextP1].name}!`);
+            } else {
+              appendBattleLog(`💀 Defeated!`);
+              state.battle.active = false;
+              setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
+            }
+          }
+          state.battle.turn++;
+          updateBattleUI();
+        }, 500);
+      } else {
+        state.battle.turn++;
+        updateBattleUI();
+      }
+    }
+
+    function receiveOpponentAction(actionType, actionVal) {
+      const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
+      const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
+
+      if (actionType === 'switch') {
+        state.battle.p2.activeIdx = actionVal;
+        appendBattleLog(`Opponent switched out ${p2Mon.name} for ${state.battle.p2.team[actionVal].name}!`);
+      } else if (actionType === 'move') {
+        const move = p2Mon.moves[actionVal];
+        playSynthSound('hit');
+        const dmg = Math.floor(move.power * 0.85 + Math.random() * 20);
+        p1Mon.currentHp = Math.max(0, p1Mon.currentHp - dmg);
+        appendBattleLog(`Opposing ${p2Mon.name} used ${move.name}! Dealt ${dmg} HP damage.`);
+
+        if (p1Mon.currentHp <= 0) {
+          p1Mon.fainted = true;
+          playSynthSound('faint');
+          appendBattleLog(`${p1Mon.name} fainted!`);
+
+          const nextP1 = state.battle.p1.team.findIndex(m => !m.fainted);
+          if (nextP1 !== -1) {
+            state.battle.p1.activeIdx = nextP1;
+            appendBattleLog(`Go! ${state.battle.p1.team[nextP1].name}!`);
+          } else {
+            appendBattleLog(`💀 You were defeated!`);
+            state.battle.active = false;
+            setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
+          }
+        }
+      }
+      updateBattleUI();
+    }
+
+    function appendBattleLog(txt) {
+      const log = document.getElementById('battle-log');
+      const div = document.createElement('div');
+      div.className = 'py-0.5 border-b border-slate-800/40';
+      div.innerText = txt;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function forfeitBattle() {
+      state.battle.active = false;
+      switchTab('lobby');
+    }
+
+    function closeResultsModal() {
+      document.getElementById('results-modal').classList.add('hidden');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      rollRandomLobbyPreview();
+      initPeerNetwork();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
