@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pokémon Showdown - Live Multiplayer Engine</title>
+  <title>Pokémon Showdown - Ultra Multiplayer Arena</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -21,7 +21,7 @@
       }
     }
   </script>
-  <!-- PeerJS for Real-Time Peer-to-Peer Online Multiplayer -->
+  <!-- PeerJS for Real-Time Online Multiplayer -->
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -39,9 +39,29 @@
     .glass-panel-hover:hover { background: rgba(30, 41, 59, 0.85); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
 
     .bg-animated { background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.15), transparent 40%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15), transparent 40%), radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1), transparent 60%); }
-    .hp-bar-fill { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease; }
+    .hp-bar-fill { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease; }
 
     .arena-grass { background: linear-gradient(180deg, #1e293b 0%, #064e3b 60%, #022c22 100%); }
+
+    /* MOVE ANIMATION KEYFRAMES */
+    @keyframes anim-lunge-right { 0% { transform: translateX(0); } 40% { transform: translateX(60px) scale(1.15); } 100% { transform: translateX(0); } }
+    @keyframes anim-lunge-left { 0% { transform: translateX(0); } 40% { transform: translateX(-60px) scale(1.15); } 100% { transform: translateX(0); } }
+    @keyframes anim-hit-shake { 0%, 100% { transform: translate(0, 0); } 15% { transform: translate(-12px, 8px) rotate(-3deg); } 30% { transform: translate(12px, -8px) rotate(3deg); } 45% { transform: translate(-8px, -6px); } 60% { transform: translate(8px, 6px); } }
+    @keyframes anim-fx-flash { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 0.95; transform: scale(1.2); } 100% { opacity: 0; transform: scale(1.5); } }
+
+    .fx-lunge-p1 { animation: anim-lunge-right 0.3s ease-out; }
+    .fx-lunge-p2 { animation: anim-lunge-left 0.3s ease-out; }
+    .fx-hit { animation: anim-hit-shake 0.3s ease-in-out; }
+
+    /* TYPE FX OVERLAYS */
+    .fx-overlay-Fire { background: radial-gradient(circle, rgba(239,68,68,0.85) 0%, rgba(249,115,22,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Water { background: radial-gradient(circle, rgba(59,130,246,0.85) 0%, rgba(6,182,212,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Electric { background: radial-gradient(circle, rgba(234,179,8,0.9) 0%, rgba(250,204,21,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Grass { background: radial-gradient(circle, rgba(34,197,94,0.85) 0%, rgba(16,185,129,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Ice { background: radial-gradient(circle, rgba(165,243,252,0.9) 0%, rgba(56,189,248,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Psychic { background: radial-gradient(circle, rgba(236,72,153,0.85) 0%, rgba(168,85,247,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Fighting { background: radial-gradient(circle, rgba(220,38,38,0.85) 0%, rgba(180,83,9,0.5) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
+    .fx-overlay-Dark { background: radial-gradient(circle, rgba(30,41,59,0.95) 0%, rgba(15,23,42,0.8) 60%, transparent 100%); animation: anim-fx-flash 0.35s forwards; }
 
     .bg-type-normal { background-color: #A8A878; } .bg-type-fire { background-color: #F08030; }
     .bg-type-water { background-color: #6890F0; } .bg-type-electric { background-color: #F8D030; color: #000 !important; }
@@ -68,9 +88,9 @@
             <h1 class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
               SHOWDOWN
             </h1>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">TYPE ENGINE & SPEED TURNS</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">10X TYPE MULTIPLIERS & FX</span>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">100+ Pokémon Gen 1–9 Randomizer</p>
+          <p class="text-xs text-slate-400 hidden sm:block">110+ Pokémon Gen 1–9 Roster</p>
         </div>
       </div>
 
@@ -115,10 +135,10 @@
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20 mb-2">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Type Effectiveness & Speed Turn Ordering Active
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 10x Type Effectiveness & Ultra FX Active
               </div>
               <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Full Gen 1–9 Random Battles</h2>
-              <p class="text-slate-400 text-sm mt-1">Both trainers lock in actions simultaneously. Swapping has top priority; faster Pokémon strike first!</p>
+              <p class="text-slate-400 text-sm mt-1">Super-effective moves now deal 20x damage! Instant turn engine with full attack FX overlays.</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
@@ -233,7 +253,7 @@
             RANDOMIZED BATTLE QUEUE
           </span>
           <h3 id="queue-title" class="font-black text-xl text-slate-100 mt-2">Generating Random Team...</h3>
-          <p id="queue-subtext" class="text-xs text-slate-400 mt-1">Drawing 6 random Pokémon from 100+ choices</p>
+          <p id="queue-subtext" class="text-xs text-slate-400 mt-1">Drawing 6 random Pokémon from 110+ choices</p>
         </div>
 
         <div class="grid grid-cols-2 gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-xs">
@@ -281,7 +301,7 @@
       
       <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <span id="battle-gen-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">ACCURATE TURN & TYPE ENGINE</span>
+          <span id="battle-gen-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">10X TYPE MULTIPLIERS & VISUAL FX</span>
           <div class="text-xs text-slate-400">Turn <span id="turn-counter" class="text-white font-bold text-sm">1</span></div>
         </div>
 
@@ -292,6 +312,9 @@
 
       <div id="battle-stage" class="relative rounded-2xl arena-grass border-2 border-slate-800 shadow-2xl overflow-hidden min-h-[380px] md:min-h-[460px] flex flex-col justify-between p-6">
         
+        <!-- ATTACK FX OVERLAY DIV -->
+        <div id="move-fx-overlay" class="absolute inset-0 z-30 pointer-events-none"></div>
+
         <!-- TOP: OPPONENT MON -->
         <div class="flex flex-col sm:flex-row justify-between items-start gap-4 z-10">
           <div class="glass-panel rounded-xl p-3 border border-slate-700/80 w-full sm:w-72 shadow-xl">
@@ -374,8 +397,8 @@
   </main>
 
   <script>
-    /* 18-TYPE EFFECTIVENESS MATRIX */
-    const TYPE_CHART = {
+    /* 10X ENHANCED TYPE EFFECTIVENESS MATRIX */
+    const TYPE_CHART_BASE = {
       Normal: { Rock: 0.5, Ghost: 0, Steel: 0.5 },
       Fire: { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 2, Bug: 2, Rock: 0.5, Dragon: 0.5, Steel: 2 },
       Water: { Fire: 2, Water: 0.5, Grass: 0.5, Ground: 2, Rock: 2, Dragon: 0.5 },
@@ -399,14 +422,17 @@
     function getTypeMultiplier(moveType, targetTypes) {
       let mult = 1.0;
       targetTypes.forEach(t => {
-        if (TYPE_CHART[moveType] && TYPE_CHART[moveType][t] !== undefined) {
-          mult *= TYPE_CHART[moveType][t];
+        if (TYPE_CHART_BASE[moveType] && TYPE_CHART_BASE[moveType][t] !== undefined) {
+          const raw = TYPE_CHART_BASE[moveType][t];
+          if (raw === 2) mult *= 20.0;       // 10x Enhanced Super-Effective Damage
+          else if (raw === 0.5) mult *= 0.05; // 10x Enhanced Resistance
+          else if (raw === 0) mult *= 0.0;
         }
       });
       return mult;
     }
 
-    /* 100+ POKEMON DATABASE WITH SPEED STATS */
+    /* 110+ POKEMON DATABASE WITH SPEEDS & MEGAS */
     const POKEMON_POOL = [
       // GEN 1
       { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, speed: 80, moves: [{ name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Energy Ball', type: 'Grass', power: 90 }, { name: 'Earth Power', type: 'Ground', power: 90 }, { name: 'Giga Drain', type: 'Grass', power: 75 }] },
@@ -531,6 +557,7 @@
       { num: 888, name: 'Zacian', types: ['Fairy', 'Steel'], hp: 325, speed: 138, moves: [{ name: 'Behemoth Blade', type: 'Steel', power: 100 }, { name: 'Play Rough', type: 'Fairy', power: 90 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }] },
       { num: 889, name: 'Zamazenta', types: ['Fighting', 'Steel'], hp: 325, speed: 128, moves: [{ name: 'Behemoth Bash', type: 'Steel', power: 100 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Wild Charge', type: 'Electric', power: 90 }, { name: 'Crunch', type: 'Dark', power: 80 }] },
       { num: 890, name: 'Eternatus', types: ['Poison', 'Dragon'], hp: 421, speed: 130, moves: [{ name: 'Dynamax Cannon', type: 'Dragon', power: 100 }, { name: 'Sludge Bomb', type: 'Poison', power: 90 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }] },
+      { num: 892, name: 'Urshifu', types: ['Fighting', 'Dark'], hp: 311, speed: 97, moves: [{ name: 'Wicked Blow', type: 'Dark', power: 80 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Iron Head', type: 'Steel', power: 80 }] },
 
       // GEN 9
       { num: 908, name: 'Meowscarada', types: ['Grass', 'Dark'], hp: 293, speed: 123, moves: [{ name: 'Flower Trick', type: 'Grass', power: 70 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'U-turn', type: 'Bug', power: 70 }, { name: 'Play Rough', type: 'Fairy', power: 90 }] },
@@ -544,7 +571,11 @@
       { num: 983, name: 'Kingambit', types: ['Dark', 'Steel'], hp: 341, speed: 50, moves: [{ name: 'Kowtow Cleave', type: 'Dark', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Low Kick', type: 'Fighting', power: 80 }] },
       { num: 984, name: 'Great Tusk', types: ['Ground', 'Fighting'], hp: 371, speed: 87, moves: [{ name: 'Headlong Rush', type: 'Ground', power: 120 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
       { num: 990, name: 'Iron Treads', types: ['Ground', 'Steel'], hp: 321, speed: 106, moves: [{ name: 'Earthquake', type: 'Ground', power: 100 }, { name: 'Iron Head', type: 'Steel', power: 80 }, { name: 'Knock Off', type: 'Dark', power: 65 }, { name: 'Ice Spinner', type: 'Ice', power: 80 }] },
+      { num: 991, name: 'Iron Bundle', types: ['Ice', 'Water'], hp: 253, speed: 136, moves: [{ name: 'Freeze-Dry', type: 'Ice', power: 70 }, { name: 'Hydro Pump', type: 'Water', power: 110 }, { name: 'Ice Beam', type: 'Ice', power: 90 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
+      { num: 987, name: 'Flutter Mane', types: ['Ghost', 'Fairy'], hp: 251, speed: 135, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Psyshock', type: 'Psychic', power: 80 }, { name: 'Mystical Fire', type: 'Fire', power: 75 }] },
       { num: 999, name: 'Gholdengo', types: ['Steel', 'Ghost'], hp: 315, speed: 84, moves: [{ name: 'Make It Rain', type: 'Steel', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Focus Blast', type: 'Fighting', power: 120 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
+      { num: 1002, name: 'Chien-Pao', types: ['Dark', 'Ice'], hp: 271, speed: 135, moves: [{ name: 'Icicle Crash', type: 'Ice', power: 85 }, { name: 'Sucker Punch', type: 'Dark', power: 70 }, { name: 'Sacred Sword', type: 'Fighting', power: 90 }, { name: 'Ice Shard', type: 'Ice', power: 40 }] },
+      { num: 1004, name: 'Chi-Yu', types: ['Dark', 'Fire'], hp: 251, speed: 100, moves: [{ name: 'Overheat', type: 'Fire', power: 130 }, { name: 'Dark Pulse', type: 'Dark', power: 80 }, { name: 'Flamethrower', type: 'Fire', power: 90 }, { name: 'Psychic', type: 'Psychic', power: 90 }] },
       { num: 1006, name: 'Iron Valiant', types: ['Fairy', 'Fighting'], hp: 289, speed: 116, moves: [{ name: 'Moonblast', type: 'Fairy', power: 95 }, { name: 'Close Combat', type: 'Fighting', power: 120 }, { name: 'Shadow Ball', type: 'Ghost', power: 80 }, { name: 'Thunderbolt', type: 'Electric', power: 90 }] },
       { num: 1007, name: 'Koraidon', types: ['Fighting', 'Dragon'], hp: 341, speed: 135, moves: [{ name: 'Collision Course', type: 'Fighting', power: 100 }, { name: 'Outrage', type: 'Dragon', power: 120 }, { name: 'Flare Blitz', type: 'Fire', power: 120 }, { name: 'U-turn', type: 'Bug', power: 70 }] },
       { num: 1008, name: 'Miraidon', types: ['Electric', 'Dragon'], hp: 341, speed: 135, moves: [{ name: 'Electro Drift', type: 'Electric', power: 100 }, { name: 'Draco Meteor', type: 'Dragon', power: 130 }, { name: 'Overheat', type: 'Fire', power: 130 }, { name: 'Volt Switch', type: 'Electric', power: 70 }] }
@@ -608,17 +639,17 @@
       gain.connect(audioCtx.destination);
 
       if (type === 'hit') {
-        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(30, now + 0.2);
-        gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(30, now + 0.15);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        osc.start(now); osc.stop(now + 0.15);
       } else if (type === 'click') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
-        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-        osc.start(now); osc.stop(now + 0.08);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(600, now); osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now); osc.stop(now + 0.05);
       } else if (type === 'faint') {
-        osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(80, now + 0.5);
-        gain.gain.setValueAtTime(0.25, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
-        osc.start(now); osc.stop(now + 0.5);
+        osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.linearRampToValueAtTime(80, now + 0.4);
+        gain.gain.setValueAtTime(0.25, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now); osc.stop(now + 0.4);
       }
     }
 
@@ -744,7 +775,7 @@
       switchTab('battle');
       updateBattleUI();
       document.getElementById('battle-log').innerHTML = '';
-      appendBattleLog(`Battle Started! (Speed turns & Type effectiveness active)`);
+      appendBattleLog(`Battle Started! (10x Type effectiveness & Move FX active)`);
       appendBattleLog(`Go! ${state.battle.p1.team[0].name} vs ${state.battle.p2.team[0].name}!`);
     }
 
@@ -808,17 +839,15 @@
       }).join('');
     }
 
-    /* ACCURATE TWO-PHASE TURN RESOLUTION ENGINE */
+    /* INSTANT TURN RESOLUTION & MOVE FX ANIMATION ENGINE */
     function executeTurn(actionType, actionVal) {
       if (!state.battle.active) return;
 
       state.battle.p1Action = { type: actionType, val: actionVal };
 
       if (state.battle.isAI) {
-        // AI chooses action
         const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
-        const randomMoveIdx = Math.floor(Math.random() * p2Mon.moves.length);
-        state.battle.p2Action = { type: 'move', val: randomMoveIdx };
+        state.battle.p2Action = { type: 'move', val: Math.floor(Math.random() * p2Mon.moves.length) };
         resolveTurnPhase();
       } else if (state.battle.isMultiplayer) {
         document.getElementById('waiting-status').classList.remove('hidden');
@@ -827,7 +856,6 @@
         }
         if (state.battle.p2Action) resolveTurnPhase();
       } else {
-        // Local pass & play
         const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
         state.battle.p2Action = { type: 'move', val: Math.floor(Math.random() * p2Mon.moves.length) };
         resolveTurnPhase();
@@ -839,6 +867,25 @@
       if (state.battle.p1Action) resolveTurnPhase();
     }
 
+    function triggerMoveVisualFX(attackerKey, moveType) {
+      const attackerSprite = document.getElementById(attackerKey === 'p1' ? 'p1-sprite' : 'p2-sprite');
+      const defenderSprite = document.getElementById(attackerKey === 'p1' ? 'p2-sprite' : 'p1-sprite');
+      const fxOverlay = document.getElementById('move-fx-overlay');
+
+      attackerSprite.classList.add(attackerKey === 'p1' ? 'fx-lunge-p1' : 'fx-lunge-p2');
+      
+      setTimeout(() => {
+        defenderSprite.classList.add('fx-hit');
+        fxOverlay.className = `absolute inset-0 z-30 pointer-events-none fx-overlay-${moveType || 'Fire'}`;
+        
+        setTimeout(() => {
+          attackerSprite.classList.remove('fx-lunge-p1', 'fx-lunge-p2');
+          defenderSprite.classList.remove('fx-hit');
+          fxOverlay.className = 'absolute inset-0 z-30 pointer-events-none';
+        }, 300);
+      }, 150);
+    }
+
     function resolveTurnPhase() {
       document.getElementById('waiting-status').classList.add('hidden');
       const act1 = state.battle.p1Action;
@@ -846,29 +893,27 @@
       const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
       const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
 
-      // Determine order: Switches happen first. If both attack, speed determines who goes first.
       let first = 'p1';
       if (act1.type === 'switch' && act2.type !== 'switch') first = 'p1';
       else if (act2.type === 'switch' && act1.type !== 'switch') first = 'p2';
       else if (p2Mon.speed > p1Mon.speed) first = 'p2';
-      else if (p1Mon.speed === p2Mon.speed && Math.random() < 0.5) first = 'p2';
 
       if (first === 'p1') {
         performSingleAction('p1', act1);
         if (state.battle.active && state.battle.p2.team[state.battle.p2.activeIdx].currentHp > 0) {
-          setTimeout(() => performSingleAction('p2', act2), 400);
+          setTimeout(() => performSingleAction('p2', act2), 350);
         }
       } else {
         performSingleAction('p2', act2);
         if (state.battle.active && state.battle.p1.team[state.battle.p1.activeIdx].currentHp > 0) {
-          setTimeout(() => performSingleAction('p1', act1), 400);
+          setTimeout(() => performSingleAction('p1', act1), 350);
         }
       }
 
       state.battle.p1Action = null;
       state.battle.p2Action = null;
       state.battle.turn++;
-      setTimeout(updateBattleUI, 500);
+      setTimeout(updateBattleUI, 400);
     }
 
     function performSingleAction(playerKey, action) {
@@ -887,9 +932,10 @@
       if (attackerMon.currentHp <= 0) return;
 
       const move = attackerMon.moves[action.val];
+      triggerMoveVisualFX(playerKey, move.type);
       playSynthSound('hit');
 
-      // Calculate damage with type effectiveness
+      // 10x Enhanced damage multiplier calculation
       const typeMult = getTypeMultiplier(move.type, defenderMon.types);
       const baseDmg = Math.floor(move.power * 0.85 + Math.random() * 20);
       const finalDmg = Math.floor(baseDmg * typeMult);
@@ -897,9 +943,9 @@
       defenderMon.currentHp = Math.max(0, defenderMon.currentHp - finalDmg);
 
       let logMsg = `${attackerMon.name} used ${move.name}! Dealt ${finalDmg} HP damage.`;
-      if (typeMult >= 2) logMsg += ' (Super effective!)';
-      else if (typeMult > 0 && typeMult < 1) logMsg += ' (It\'s not very effective...)';
-      else if (typeMult === 0) logMsg += ' (It had no effect!)';
+      if (typeMult >= 20) logMsg += ' (ULTRA SUPER EFFECTIVE! 20X)';
+      else if (typeMult > 0 && typeMult < 1) logMsg += ' (HEAVILY RESISTED! 0.05X)';
+      else if (typeMult === 0) logMsg += ' (NO EFFECT!)';
 
       appendBattleLog(logMsg);
 
@@ -914,9 +960,8 @@
           appendBattleLog(`${defenderOwner.name} sent out ${defenderOwner.team[nextIdx].name}!`);
         } else {
           state.battle.active = false;
-          const winnerName = attackerOwner.name;
-          appendBattleLog(`🏆 ${winnerName} won the match!`);
-          setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
+          appendBattleLog(`🏆 ${attackerOwner.name} won the match!`);
+          setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 500);
         }
       }
     }
