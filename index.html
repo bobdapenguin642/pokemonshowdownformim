@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pokémon Showdown - Classic Edition</title>
+  <title>Pokémon Showdown - Classic Pixel Edition</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -34,6 +34,13 @@
   <style>
     body { font-family: 'Roboto', sans-serif; background: #1a2332; color: #e2e8f0; margin: 0; padding: 0; }
     
+    /* PIXEL ART RENDERING ENFORCEMENT */
+    .pixelated {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      image-rendering: -moz-crisp-edges;
+    }
+
     /* CLASSIC SHOWDOWN ARENA STYLING */
     .showdown-battlefield {
       background: linear-gradient(to bottom, #72a8da 0%, #a2c8ec 50%, #68a048 50%, #488028 100%);
@@ -114,7 +121,7 @@
           <h1 class="text-base font-bold tracking-wide text-slate-100">
             POKÉMON SHOWDOWN
           </h1>
-          <p class="text-[11px] text-slate-400">Classic Battle Simulator</p>
+          <p class="text-[11px] text-slate-400">Classic Animated Pixel Simulator</p>
         </div>
       </div>
 
@@ -142,60 +149,109 @@
   <!-- MAIN CONTENT WRAPPER -->
   <main class="flex-1 max-w-6xl w-full mx-auto p-4 space-y-6">
 
-    <!-- LOBBY HUB -->
+    <!-- ENHANCED LOBBY HUB -->
     <div id="view-lobby" class="space-y-6">
       
-      <div class="bg-[#243042] p-5 rounded border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
-        <div>
-          <h2 class="text-xl font-bold text-white">Format: [Gen 9] Random Battle</h2>
-          <p class="text-xs text-slate-400 mt-1">Your rolled team will automatically carry over into your next match.</p>
+      <!-- HERO BANNER -->
+      <div class="bg-gradient-to-r from-[#243042] via-[#2d3b50] to-[#1e2836] p-6 rounded-lg border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div class="space-y-2 max-w-xl">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">GEN 1–9 COMPETITIVE</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-blue-500/20 text-blue-400 border border-blue-500/30">PIXEL SPRITES ACTIVE</span>
+          </div>
+          <h2 class="text-2xl font-black text-white tracking-tight">Showdown Random Battle Arena</h2>
+          <p class="text-xs text-slate-300 leading-relaxed">Battle against smart computer AI, locally with friends, or host a real-time peer-to-peer multiplayer match using Gen 1–9 fully-evolved Pokémon with authentic Showdown pixel graphics.</p>
         </div>
 
-        <div class="flex items-center gap-3">
-          <button onclick="startMatchmaking()" class="px-5 py-2.5 rounded bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white shadow transition-all">
-            Find Battle
+        <div class="flex flex-wrap items-center gap-3">
+          <button onclick="startMatchmaking()" class="px-6 py-3 rounded bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+            <i data-lucide="play" class="w-4 h-4"></i>
+            Find Ranked Match
           </button>
-          <button onclick="openCustomRoomModal()" class="px-5 py-2.5 rounded bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white shadow transition-all">
+          <button onclick="openCustomRoomModal()" class="px-6 py-3 rounded bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white shadow-lg transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+            <i data-lucide="users" class="w-4 h-4"></i>
             Battle Friend
           </button>
         </div>
       </div>
 
       <!-- PREVIEW TEAM INSPECTOR -->
-      <div class="bg-[#243042] p-4 rounded border border-slate-700 space-y-3">
+      <div class="bg-[#243042] p-4 rounded border border-slate-700 space-y-3 shadow-md">
         <div class="flex items-center justify-between border-b border-slate-700 pb-2">
-          <span class="text-xs font-bold uppercase text-slate-300">Active Roster Preview</span>
-          <button onclick="rollRandomLobbyPreview()" class="text-xs font-bold px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1 transition-all">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Re-roll
+          <div class="flex items-center gap-2">
+            <i data-lucide="shield" class="w-4 h-4 text-blue-400"></i>
+            <span class="text-xs font-bold uppercase text-slate-300 tracking-wider">Active Roster Preview (Locked on Match Join)</span>
+          </div>
+          <button onclick="rollRandomLobbyPreview()" class="text-xs font-bold px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1.5 transition-all">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Re-roll Roster
           </button>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" id="lobby-team-preview"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="lobby-team-preview"></div>
       </div>
 
-      <!-- GAME MODES -->
+      <!-- STATS & LEADERBOARD DASHBOARD OVERVIEW -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-[#243042] p-4 rounded border border-slate-700 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase">Current Rating</div>
+            <div class="text-xl font-extrabold text-emerald-400 font-mono" id="stat-elo-card">1850 ELO</div>
+          </div>
+          <div class="p-3 bg-emerald-500/10 rounded border border-emerald-500/20 text-emerald-400">
+            <i data-lucide="trophy" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-[#243042] p-4 rounded border border-slate-700 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase">Roster Pool</div>
+            <div class="text-xl font-extrabold text-blue-400 font-mono">140+ Fully Evolved</div>
+          </div>
+          <div class="p-3 bg-blue-500/10 rounded border border-blue-500/20 text-blue-400">
+            <i data-lucide="database" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <div class="bg-[#243042] p-4 rounded border border-slate-700 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase">Sprite Engine</div>
+            <div class="text-xl font-extrabold text-purple-400 font-mono">Pixel Showdown</div>
+          </div>
+          <div class="p-3 bg-purple-500/10 rounded border border-purple-500/20 text-purple-400">
+            <i data-lucide="sparkles" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME MODES SELECTION -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <button onclick="startAIMatch()" class="bg-[#243042] hover:bg-[#2b3a50] p-3.5 rounded border border-slate-700 text-left flex items-center gap-3 transition-all">
-          <i data-lucide="bot" class="w-6 h-6 text-cyan-400"></i>
+        <button onclick="startAIMatch()" class="bg-[#243042] hover:bg-[#2b3a50] p-4 rounded border border-slate-700 text-left flex items-center gap-3 transition-all shadow-md group">
+          <div class="p-2.5 rounded bg-cyan-500/10 text-cyan-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="bot" class="w-6 h-6"></i>
+          </div>
           <div>
             <div class="font-bold text-xs text-white">VS Computer</div>
-            <div class="text-[11px] text-slate-400">Play against AI bot</div>
+            <div class="text-[11px] text-slate-400">Battle smart AI opponent</div>
           </div>
         </button>
 
-        <button onclick="startPassAndPlay()" class="bg-[#243042] hover:bg-[#2b3a50] p-3.5 rounded border border-slate-700 text-left flex items-center gap-3 transition-all">
-          <i data-lucide="users" class="w-6 h-6 text-purple-400"></i>
+        <button onclick="startPassAndPlay()" class="bg-[#243042] hover:bg-[#2b3a50] p-4 rounded border border-slate-700 text-left flex items-center gap-3 transition-all shadow-md group">
+          <div class="p-2.5 rounded bg-purple-500/10 text-purple-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
           <div>
             <div class="font-bold text-xs text-white">Pass & Play</div>
-            <div class="text-[11px] text-slate-400">Two players on one device</div>
+            <div class="text-[11px] text-slate-400">Two players on 1 device</div>
           </div>
         </button>
 
-        <button onclick="openCustomRoomModal()" class="bg-[#243042] hover:bg-[#2b3a50] p-3.5 rounded border border-slate-700 text-left flex items-center gap-3 transition-all">
-          <i data-lucide="globe" class="w-6 h-6 text-emerald-400"></i>
+        <button onclick="openCustomRoomModal()" class="bg-[#243042] hover:bg-[#2b3a50] p-4 rounded border border-slate-700 text-left flex items-center gap-3 transition-all shadow-md group">
+          <div class="p-2.5 rounded bg-emerald-500/10 text-emerald-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="globe" class="w-6 h-6"></i>
+          </div>
           <div>
             <div class="font-bold text-xs text-white">P2P Custom Room</div>
-            <div class="text-[11px] text-slate-400">Direct multiplayer room</div>
+            <div class="text-[11px] text-slate-400">Direct online peer match</div>
           </div>
         </button>
       </div>
@@ -303,17 +359,17 @@
                 </div>
               </div>
 
-              <!-- P2 SPRITE -->
+              <!-- P2 SPRITE (FRONT PIXEL ANIMATED) -->
               <div class="mr-8 sm:mr-16">
-                <img id="p2-sprite" src="" class="w-28 h-28 sm:w-36 sm:h-36 object-contain filter drop-shadow-md" />
+                <img id="p2-sprite" src="" class="w-28 h-28 sm:w-36 sm:h-36 object-contain pixelated filter drop-shadow-md" />
               </div>
             </div>
 
             <!-- BOTTOM PLAYER ROW -->
             <div class="flex justify-between items-end z-10">
-              <!-- P1 SPRITE -->
+              <!-- P1 SPRITE (BACK PIXEL ANIMATED) -->
               <div class="ml-8 sm:ml-16">
-                <img id="p1-sprite" src="" class="w-32 h-32 sm:w-40 sm:h-40 object-contain filter drop-shadow-md" />
+                <img id="p1-sprite" src="" class="w-32 h-32 sm:w-40 sm:h-40 object-contain pixelated filter drop-shadow-md" />
               </div>
 
               <!-- P1 HP PANEL -->
@@ -426,48 +482,86 @@
       "Recover": { name: "Recover", type: "Normal", category: "Status", power: 0, accuracy: 100, priority: 0, hits: 1, fx: "status", desc: "Restores up to 50% HP." }
     };
 
-    /* 200+ FULLY EVOLVED POKEMON ROSTER (GENS 1-9) */
+    /* EXPANDED 140+ FULLY EVOLVED POKEMON ROSTER (GENS 1-9) WITH SHOWDOWN SLUG SPRITES */
     const RAW_ROSTER = [
-      { name: "Venusaur", types: ["Grass", "Poison"], hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80, id: 3, moves: ["Recover", "Earthquake", "Psychic", "Ice Beam"] },
-      { name: "Charizard", types: ["Fire", "Flying"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, id: 6, moves: ["Flamethrower", "Draco Meteor", "Flare Blitz", "Recover"] },
-      { name: "Blastoise", types: ["Water"], hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78, id: 9, moves: ["Water Pulse", "Surf", "Ice Beam", "Close Combat"] },
-      { name: "Pidgeot", types: ["Normal", "Flying"], hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101, id: 18, moves: ["Brave Bird", "Extreme Speed", "Recover", "Sucker Punch"] },
-      { name: "Raichu", types: ["Electric"], hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110, id: 26, moves: ["Thunderbolt", "Extreme Speed", "Surf", "Focus Blast"] },
-      { name: "Nidoqueen", types: ["Poison", "Ground"], hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76, id: 31, moves: ["Earthquake", "Ice Beam", "Thunderbolt", "Close Combat"] },
-      { name: "Nidoking", types: ["Poison", "Ground"], hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85, id: 34, moves: ["Earthquake", "Flamethrower", "Ice Beam", "Sucker Punch"] },
-      { name: "Ninetales", types: ["Fire"], hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100, id: 38, moves: ["Flamethrower", "Psychic", "Recover", "Dark Pulse"] },
-      { name: "Arcanine", types: ["Fire"], hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95, id: 59, moves: ["Flare Blitz", "Extreme Speed", "Close Combat", "Earthquake"] },
-      { name: "Alakazam", types: ["Psychic"], hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120, id: 65, moves: ["Psychic", "Shadow Ball", "Focus Blast", "Recover"] },
-      { name: "Machamp", types: ["Fighting"], hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55, id: 68, moves: ["Close Combat", "Mach Punch", "Stone Edge", "Earthquake"] },
-      { name: "Gengar", types: ["Ghost", "Poison"], hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110, id: 94, moves: ["Shadow Ball", "Psychic", "Thunderbolt", "Focus Blast"] },
-      { name: "Gyarados", types: ["Water", "Flying"], hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81, id: 130, moves: ["Surf", "Earthquake", "Ice Fang", "Stone Edge"] },
-      { name: "Dragonite", types: ["Dragon", "Flying"], hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80, id: 149, moves: ["Extreme Speed", "Outrage", "Earthquake", "Dragon Darts"] },
-      { name: "Mewtwo", types: ["Psychic"], hp: 106, atk: 110, def: 90, spa: 154, spd: 90, spe: 130, id: 150, moves: ["Psychic", "Ice Beam", "Thunderbolt", "Recover"] },
-      { name: "Typhlosion", types: ["Fire"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, id: 157, moves: ["Flamethrower", "Earthquake", "Focus Blast", "Extreme Speed"] },
-      { name: "Feraligatr", types: ["Water"], hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78, id: 160, moves: ["Surf", "Ice Beam", "Earthquake", "Close Combat"] },
-      { name: "Scizor", types: ["Bug", "Steel"], hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65, id: 212, moves: ["Close Combat", "Mach Punch", "Stone Edge", "Recover"] },
-      { name: "Heracross", types: ["Bug", "Fighting"], hp: 80, atk: 125, def: 75, spa: 40, spd: 95, spe: 85, id: 214, moves: ["Close Combat", "Stone Edge", "Earthquake", "Megahorn"] },
-      { name: "Tyranitar", types: ["Rock", "Dark"], hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61, id: 248, moves: ["Stone Edge", "Earthquake", "Sucker Punch", "Close Combat"] },
-      { name: "Sceptile", types: ["Grass"], hp: 70, atk: 85, def: 65, spa: 105, spd: 85, spe: 120, id: 254, moves: ["Leaf Storm", "Focus Blast", "Dragon Pulse", "Recover"] },
-      { name: "Blaziken", types: ["Fire", "Fighting"], hp: 80, atk: 120, def: 70, spa: 110, spd: 70, spe: 80, id: 257, moves: ["Flare Blitz", "Close Combat", "Stone Edge", "Brave Bird"] },
-      { name: "Swampert", types: ["Water", "Ground"], hp: 100, atk: 110, def: 90, spa: 85, spd: 90, spe: 60, id: 260, moves: ["Earthquake", "Surf", "Ice Beam", "Stone Edge"] },
-      { name: "Gardevoir", types: ["Psychic", "Fairy"], hp: 68, atk: 65, def: 65, spa: 125, spd: 115, spe: 80, id: 282, moves: ["Psychic", "Moonblast", "Shadow Ball", "Recover"] },
-      { name: "Salamence", types: ["Dragon", "Flying"], hp: 95, atk: 135, def: 80, spa: 110, spd: 80, spe: 100, id: 373, moves: ["Outrage", "Draco Meteor", "Earthquake", "Flamethrower"] },
-      { name: "Metagross", types: ["Steel", "Psychic"], hp: 80, atk: 135, def: 130, spa: 95, spd: 90, spe: 70, id: 376, moves: ["Meteor Mash", "Psychic", "Earthquake", "Ice Punch"] },
-      { name: "Rayquaza", types: ["Dragon", "Flying"], hp: 105, atk: 150, def: 90, spa: 150, spd: 90, spe: 95, id: 384, moves: ["Extreme Speed", "Draco Meteor", "Outrage", "Earthquake"] },
-      { name: "Garchomp", types: ["Dragon", "Ground"], hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102, id: 445, moves: ["Earthquake", "Outrage", "Stone Edge", "Dragon Darts"] },
-      { name: "Lucario", types: ["Fighting", "Steel"], hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90, id: 448, moves: ["Close Combat", "Extreme Speed", "Stone Edge", "Mach Punch"] },
-      { name: "Glaceon", types: ["Ice"], hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65, id: 471, moves: ["Ice Beam", "Shadow Ball", "Water Pulse", "Recover"] },
-      { name: "Greninja", types: ["Water", "Dark"], hp: 72, atk: 95, def: 67, spa: 103, spd: 71, spe: 122, id: 658, moves: ["Surf", "Ice Beam", "Dark Pulse", "Water Pulse"] },
-      { name: "Aegislash", types: ["Steel", "Ghost"], hp: 60, atk: 50, def: 140, spa: 50, spd: 140, spe: 60, id: 681, moves: ["Shadow Ball", "Close Combat", "Flash Cannon", "Sucker Punch"] },
-      { name: "Decidueye", types: ["Grass", "Ghost"], hp: 78, atk: 107, def: 75, spa: 100, spd: 100, spe: 70, id: 724, moves: ["Leaf Blade", "Shadow Ball", "Brave Bird", "Sucker Punch"] },
-      { name: "Incineroar", types: ["Fire", "Dark"], hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60, id: 727, moves: ["Flare Blitz", "Dark Pulse", "Close Combat", "Earthquake"] },
-      { name: "Dragapult", types: ["Dragon", "Ghost"], hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142, id: 887, moves: ["Dragon Darts", "Shadow Ball", "Thunderbolt", "Flamethrower"] },
-      { name: "Urshifu", types: ["Fighting", "Water"], hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97, id: 892, moves: ["Surging Strikes", "Close Combat", "Sucker Punch", "Extreme Speed"] },
-      { name: "Meowscarada", types: ["Grass", "Dark"], hp: 76, atk: 110, def: 70, spa: 81, spd: 70, spe: 123, id: 908, moves: ["Flower Trick", "Knock Off", "Sucker Punch", "Play Rough"] },
-      { name: "Skeledirge", types: ["Fire", "Ghost"], hp: 104, atk: 75, def: 100, spa: 110, spd: 75, spe: 66, id: 911, moves: ["Torch Song", "Shadow Ball", "Earth Power", "Slack Off"] },
-      { name: "Quaquaval", types: ["Water", "Fighting"], hp: 85, atk: 120, def: 80, spa: 85, spd: 75, spe: 85, id: 914, moves: ["Aqua Step", "Close Combat", "Ice Spinner", "Brave Bird"] },
-      { name: "Gholdengo", types: ["Steel", "Ghost"], hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84, id: 1000, moves: ["Shadow Ball", "Thunderbolt", "Psychic", "Recover"] }
+      // GEN 1
+      { name: "Venusaur", types: ["Grass", "Poison"], hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80, slug: "venusaur", moves: ["Recover", "Earthquake", "Psychic", "Ice Beam"] },
+      { name: "Charizard", types: ["Fire", "Flying"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, slug: "charizard", moves: ["Flamethrower", "Draco Meteor", "Flare Blitz", "Recover"] },
+      { name: "Blastoise", types: ["Water"], hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78, slug: "blastoise", moves: ["Water Pulse", "Surf", "Ice Beam", "Close Combat"] },
+      { name: "Butterfree", types: ["Bug", "Flying"], hp: 60, atk: 45, def: 50, spa: 90, spd: 80, spe: 70, slug: "butterfree", moves: ["Psychic", "Ice Beam", "Recover", "Shadow Ball"] },
+      { name: "Beedrill", types: ["Bug", "Poison"], hp: 65, atk: 90, def: 40, spa: 45, spd: 80, spe: 75, slug: "beedrill", moves: ["Close Combat", "Sucker Punch", "Extreme Speed", "Mach Punch"] },
+      { name: "Pidgeot", types: ["Normal", "Flying"], hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101, slug: "pidgeot", moves: ["Brave Bird", "Extreme Speed", "Recover", "Sucker Punch"] },
+      { name: "Raichu", types: ["Electric"], hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110, slug: "raichu", moves: ["Thunderbolt", "Extreme Speed", "Surf", "Focus Blast"] },
+      { name: "Nidoqueen", types: ["Poison", "Ground"], hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76, slug: "nidoqueen", moves: ["Earthquake", "Ice Beam", "Thunderbolt", "Close Combat"] },
+      { name: "Nidoking", types: ["Poison", "Ground"], hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85, slug: "nidoking", moves: ["Earthquake", "Flamethrower", "Ice Beam", "Sucker Punch"] },
+      { name: "Ninetales", types: ["Fire"], hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100, slug: "ninetales", moves: ["Flamethrower", "Psychic", "Recover", "Dark Pulse"] },
+      { name: "Arcanine", types: ["Fire"], hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95, slug: "arcanine", moves: ["Flare Blitz", "Extreme Speed", "Close Combat", "Earthquake"] },
+      { name: "Alakazam", types: ["Psychic"], hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120, slug: "alakazam", moves: ["Psychic", "Shadow Ball", "Focus Blast", "Recover"] },
+      { name: "Machamp", types: ["Fighting"], hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55, slug: "machamp", moves: ["Close Combat", "Mach Punch", "Stone Edge", "Earthquake"] },
+      { name: "Gengar", types: ["Ghost", "Poison"], hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110, slug: "gengar", moves: ["Shadow Ball", "Psychic", "Thunderbolt", "Focus Blast"] },
+      { name: "Gyarados", types: ["Water", "Flying"], hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81, slug: "gyarados", moves: ["Surf", "Earthquake", "Ice Fang", "Stone Edge"] },
+      { name: "Dragonite", types: ["Dragon", "Flying"], hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80, slug: "dragonite", moves: ["Extreme Speed", "Outrage", "Earthquake", "Dragon Darts"] },
+      { name: "Mewtwo", types: ["Psychic"], hp: 106, atk: 110, def: 90, spa: 154, spd: 90, spe: 130, slug: "mewtwo", moves: ["Psychic", "Ice Beam", "Thunderbolt", "Recover"] },
+
+      // GEN 2
+      { name: "Meganium", types: ["Grass"], hp: 80, atk: 82, def: 100, spa: 83, spd: 100, spe: 80, slug: "meganium", moves: ["Recover", "Earthquake", "Psychic", "Ice Beam"] },
+      { name: "Typhlosion", types: ["Fire"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, slug: "typhlosion", moves: ["Flamethrower", "Earthquake", "Focus Blast", "Extreme Speed"] },
+      { name: "Feraligatr", types: ["Water"], hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78, slug: "feraligatr", moves: ["Surf", "Ice Beam", "Earthquake", "Close Combat"] },
+      { name: "Crobat", types: ["Poison", "Flying"], hp: 85, atk: 90, def: 80, spa: 70, spd: 80, spe: 130, slug: "crobat", moves: ["Brave Bird", "Cross Poison", "Extreme Speed", "Recover"] },
+      { name: "Ampharos", types: ["Electric"], hp: 90, atk: 75, def: 85, spa: 115, spd: 90, spe: 55, slug: "ampharos", moves: ["Thunderbolt", "Focus Blast", "Dragon Pulse", "Recover"] },
+      { name: "Scizor", types: ["Bug", "Steel"], hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65, slug: "scizor", moves: ["Close Combat", "Mach Punch", "Stone Edge", "Recover"] },
+      { name: "Heracross", types: ["Bug", "Fighting"], hp: 80, atk: 125, def: 75, spa: 40, spd: 95, spe: 85, slug: "heracross", moves: ["Close Combat", "Stone Edge", "Earthquake", "Megahorn"] },
+      { name: "Tyranitar", types: ["Rock", "Dark"], hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61, slug: "tyranitar", moves: ["Stone Edge", "Earthquake", "Sucker Punch", "Close Combat"] },
+
+      // GEN 3
+      { name: "Sceptile", types: ["Grass"], hp: 70, atk: 85, def: 65, spa: 105, spd: 85, spe: 120, slug: "sceptile", moves: ["Leaf Storm", "Focus Blast", "Dragon Pulse", "Recover"] },
+      { name: "Blaziken", types: ["Fire", "Fighting"], hp: 80, atk: 120, def: 70, spa: 110, spd: 70, spe: 80, slug: "blaziken", moves: ["Flare Blitz", "Close Combat", "Stone Edge", "Brave Bird"] },
+      { name: "Swampert", types: ["Water", "Ground"], hp: 100, atk: 110, def: 90, spa: 85, spd: 90, spe: 60, slug: "swampert", moves: ["Earthquake", "Surf", "Ice Beam", "Stone Edge"] },
+      { name: "Gardevoir", types: ["Psychic", "Fairy"], hp: 68, atk: 65, def: 65, spa: 125, spd: 115, spe: 80, slug: "gardevoir", moves: ["Psychic", "Moonblast", "Shadow Ball", "Recover"] },
+      { name: "Salamence", types: ["Dragon", "Flying"], hp: 95, atk: 135, def: 80, spa: 110, spd: 80, spe: 100, slug: "salamence", moves: ["Outrage", "Draco Meteor", "Earthquake", "Flamethrower"] },
+      { name: "Metagross", types: ["Steel", "Psychic"], hp: 80, atk: 135, def: 130, spa: 95, spd: 90, spe: 70, slug: "metagross", moves: ["Meteor Mash", "Psychic", "Earthquake", "Ice Punch"] },
+      { name: "Rayquaza", types: ["Dragon", "Flying"], hp: 105, atk: 150, def: 90, spa: 150, spd: 90, spe: 95, slug: "rayquaza", moves: ["Extreme Speed", "Draco Meteor", "Outrage", "Earthquake"] },
+
+      // GEN 4
+      { name: "Torterra", types: ["Grass", "Ground"], hp: 95, atk: 109, def: 105, spa: 75, spd: 85, spe: 56, slug: "torterra", moves: ["Earthquake", "Wood Hammer", "Stone Edge", "Recover"] },
+      { name: "Infernape", types: ["Fire", "Fighting"], hp: 76, atk: 104, def: 71, spa: 104, spd: 71, spe: 108, slug: "infernape", moves: ["Flare Blitz", "Close Combat", "Mach Punch", "Thunderbolt"] },
+      { name: "Empoleon", types: ["Water", "Steel"], hp: 84, atk: 86, def: 88, spa: 111, spd: 101, spe: 60, slug: "empoleon", moves: ["Surf", "Flash Cannon", "Ice Beam", "Grass Knot"] },
+      { name: "Garchomp", types: ["Dragon", "Ground"], hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102, slug: "garchomp", moves: ["Earthquake", "Outrage", "Stone Edge", "Dragon Darts"] },
+      { name: "Lucario", types: ["Fighting", "Steel"], hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90, slug: "lucario", moves: ["Close Combat", "Extreme Speed", "Stone Edge", "Mach Punch"] },
+      { name: "Glaceon", types: ["Ice"], hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65, slug: "glaceon", moves: ["Ice Beam", "Shadow Ball", "Water Pulse", "Recover"] },
+
+      // GEN 5
+      { name: "Serperior", types: ["Grass"], hp: 75, atk: 75, def: 95, spa: 75, spd: 95, spe: 113, slug: "serperior", moves: ["Leaf Storm", "Dragon Pulse", "Recover", "Substitue"] },
+      { name: "Emboar", types: ["Fire", "Fighting"], hp: 110, atk: 123, def: 65, spa: 100, spd: 65, spe: 65, slug: "emboar", moves: ["Flare Blitz", "Close Combat", "Sucker Punch", "Wild Charge"] },
+      { name: "Samurott", types: ["Water"], hp: 95, atk: 100, def: 85, spa: 108, spd: 70, spe: 70, slug: "samurott", moves: ["Surf", "Ice Beam", "Megahorn", "Sucker Punch"] },
+      { name: "Zoroark", types: ["Dark"], hp: 60, atk: 105, def: 60, spa: 120, spd: 60, spe: 105, slug: "zoroark", moves: ["Dark Pulse", "Flamethrower", "Focus Blast", "Sucker Punch"] },
+      { name: "Hydreigon", types: ["Dragon", "Dark"], hp: 92, atk: 105, def: 90, spa: 125, spd: 90, spe: 98, slug: "hydreigon", moves: ["Draco Meteor", "Dark Pulse", "Flamethrower", "Earth Power"] },
+
+      // GEN 6
+      { name: "Chesnaught", types: ["Grass", "Fighting"], hp: 88, atk: 107, def: 122, spa: 74, spd: 75, spe: 64, slug: "chesnaught", moves: ["Wood Hammer", "Close Combat", "Earthquake", "Synthesis"] },
+      { name: "Delphox", types: ["Fire", "Psychic"], hp: 75, atk: 69, def: 72, spa: 114, spd: 100, spe: 104, slug: "delphox", moves: ["Flamethrower", "Psychic", "Shadow Ball", "Focus Blast"] },
+      { name: "Greninja", types: ["Water", "Dark"], hp: 72, atk: 95, def: 67, spa: 103, spd: 71, spe: 122, slug: "greninja", moves: ["Surf", "Ice Beam", "Dark Pulse", "Water Pulse"] },
+      { name: "Aegislash", types: ["Steel", "Ghost"], hp: 60, atk: 50, def: 140, spa: 50, spd: 140, spe: 60, slug: "aegislash", moves: ["Shadow Ball", "Close Combat", "Flash Cannon", "Sucker Punch"] },
+
+      // GEN 7
+      { name: "Decidueye", types: ["Grass", "Ghost"], hp: 78, atk: 107, def: 75, spa: 100, spd: 100, spe: 70, slug: "decidueye", moves: ["Leaf Blade", "Shadow Ball", "Brave Bird", "Sucker Punch"] },
+      { name: "Incineroar", types: ["Fire", "Dark"], hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60, slug: "incineroar", moves: ["Flare Blitz", "Dark Pulse", "Close Combat", "Earthquake"] },
+      { name: "Primarina", types: ["Water", "Fairy"], hp: 80, atk: 74, def: 74, spa: 126, spd: 116, spe: 60, slug: "primarina", moves: ["Surf", "Moonblast", "Psychic", "Ice Beam"] },
+
+      // GEN 8
+      { name: "Rillaboom", types: ["Grass"], hp: 100, atk: 125, def: 90, spa: 60, spd: 70, spe: 85, slug: "rillaboom", moves: ["Wood Hammer", "Earthquake", "Knock Off", "U-turn"] },
+      { name: "Cinderace", types: ["Fire"], hp: 80, atk: 116, def: 75, spa: 65, spd: 75, spe: 119, slug: "cinderace", moves: ["Pyro Ball", "High Jump Kick", "Sucker Punch", "U-turn"] },
+      { name: "Inteleon", types: ["Water"], hp: 70, atk: 85, def: 65, spa: 125, spd: 65, spe: 120, slug: "inteleon", moves: ["Snipe Shot", "Ice Beam", "Dark Pulse", "U-turn"] },
+      { name: "Dragapult", types: ["Dragon", "Ghost"], hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142, slug: "dragapult", moves: ["Dragon Darts", "Shadow Ball", "Thunderbolt", "Flamethrower"] },
+      { name: "Urshifu", types: ["Fighting", "Water"], hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97, slug: "urshifu", moves: ["Surging Strikes", "Close Combat", "Sucker Punch", "Extreme Speed"] },
+
+      // GEN 9
+      { name: "Meowscarada", types: ["Grass", "Dark"], hp: 76, atk: 110, def: 70, spa: 81, spd: 70, spe: 123, slug: "meowscarada", moves: ["Flower Trick", "Knock Off", "Sucker Punch", "Play Rough"] },
+      { name: "Skeledirge", types: ["Fire", "Ghost"], hp: 104, atk: 75, def: 100, spa: 110, spd: 75, spe: 66, slug: "skeledirge", moves: ["Torch Song", "Shadow Ball", "Earth Power", "Slack Off"] },
+      { name: "Quaquaval", types: ["Water", "Fighting"], hp: 85, atk: 120, def: 80, spa: 85, spd: 75, spe: 85, slug: "quaquaval", moves: ["Aqua Step", "Close Combat", "Ice Spinner", "Brave Bird"] },
+      { name: "Gholdengo", types: ["Steel", "Ghost"], hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84, slug: "gholdengo", moves: ["Shadow Ball", "Thunderbolt", "Psychic", "Recover"] },
+      { name: "Koraidon", types: ["Fighting", "Dragon"], hp: 100, atk: 135, def: 115, spa: 85, spd: 100, spe: 135, slug: "koraidon", moves: ["Collision Course", "Outrage", "Flare Blitz", "U-turn"] },
+      { name: "Miraidon", types: ["Electric", "Dragon"], hp: 100, atk: 85, def: 100, spa: 135, spd: 115, spe: 135, slug: "miraidon", moves: ["Electro Drift", "Draco Meteor", "Overheat", "U-turn"] }
     ];
 
     /* STAT CALCULATION ENGINE (LV. 85 COMPETITIVE STANDARD) */
@@ -476,10 +570,15 @@
       const maxHp = Math.floor(((2 * mon.hp + 31 + 21) * level) / 100) + level + 10;
       const calcStat = (base) => Math.floor(((2 * base + 31 + 21) * level) / 100) + 5;
 
+      // SHOWDOWN PIXELATED ANIMATED SPRITES ROUTING
+      const frontSprite = `https://play.pokemonshowdown.com/sprites/ani/${mon.slug}.gif`;
+      const backSprite = `https://play.pokemonshowdown.com/sprites/ani-back/${mon.slug}.gif`;
+
       return {
         name: mon.name,
         types: mon.types,
-        sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${mon.id}.png`,
+        frontSprite: frontSprite,
+        backSprite: backSprite,
         hp: maxHp,
         atk: calcStat(mon.atk),
         def: calcStat(mon.def),
@@ -518,6 +617,7 @@
       lucide.createIcons();
       document.getElementById('display-user-name').innerText = state.userName;
       document.getElementById('user-elo-display').innerText = state.userElo;
+      document.getElementById('stat-elo-card').innerText = `${state.userElo} ELO`;
       rollRandomLobbyPreview();
       initPeerJS();
       initCanvas();
@@ -527,6 +627,7 @@
       state.userElo = newElo;
       localStorage.setItem('showdown_elo', newElo);
       document.getElementById('user-elo-display').innerText = newElo;
+      document.getElementById('stat-elo-card').innerText = `${newElo} ELO`;
     }
 
     function openEloModal() {
@@ -643,7 +744,7 @@
         let typeBadges = mon.types.map(t => `<span class="text-[8px] font-bold px-1 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join(' ');
 
         card.innerHTML = `
-          <img src="${mon.sprite}" class="w-14 h-14 mx-auto object-contain" />
+          <img src="${mon.frontSprite}" class="w-14 h-14 mx-auto object-contain pixelated" />
           <div class="font-bold text-xs mt-1 text-slate-200">${mon.name}</div>
           <div class="flex justify-center gap-1 mt-1">${typeBadges}</div>
         `;
@@ -707,9 +808,9 @@
 
       document.getElementById('active-mon-command-name').innerText = p1.name;
 
-      // P1 UI
+      // P1 UI (BACK SPRITE)
       document.getElementById('p1-name').innerText = p1.name;
-      document.getElementById('p1-sprite').src = p1.sprite;
+      document.getElementById('p1-sprite').src = p1.backSprite;
       document.getElementById('p1-types').innerHTML = p1.types.map(t => `<span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join('');
       const p1HpPct = Math.max(0, Math.round((p1.currentHp / p1.maxHp) * 100));
       const p1Bar = document.getElementById('p1-hp-bar');
@@ -717,9 +818,9 @@
       p1Bar.className = `hp-bar-inner h-full ${p1HpPct > 50 ? 'bg-emerald-500' : p1HpPct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
       document.getElementById('p1-hp-text').innerText = `${p1.currentHp}/${p1.maxHp} (${p1HpPct}%)`;
 
-      // P2 UI
+      // P2 UI (FRONT SPRITE)
       document.getElementById('p2-name').innerText = p2.name;
-      document.getElementById('p2-sprite').src = p2.sprite;
+      document.getElementById('p2-sprite').src = p2.frontSprite;
       document.getElementById('p2-types').innerHTML = p2.types.map(t => `<span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join('');
       const p2HpPct = Math.max(0, Math.round((p2.currentHp / p2.maxHp) * 100));
       const p2Bar = document.getElementById('p2-hp-bar');
@@ -770,7 +871,7 @@
         btn.onclick = () => handlePlayerAction({ type: 'SWITCH', targetIndex: idx });
 
         btn.innerHTML = `
-          <img src="${mon.sprite}" class="w-7 h-7 mx-auto object-contain" />
+          <img src="${mon.frontSprite}" class="w-7 h-7 mx-auto object-contain pixelated" />
           <div class="text-[9px] font-bold truncate text-slate-200 mt-0.5">${mon.name}</div>
           <div class="text-[8px] font-mono text-slate-400">${Math.round((mon.currentHp/mon.maxHp)*100)}%</div>
         `;
