@@ -49,33 +49,12 @@
     @keyframes anim-hit-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-14px, 10px) rotate(-6deg); } 40% { transform: translate(14px, -10px) rotate(6deg); } 60% { transform: translate(-10px, -6px); } 80% { transform: translate(10px, 6px); } }
     @keyframes anim-faint-down { 0% { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); } 100% { opacity: 0; transform: translateY(60px) scale(0.4); filter: brightness(0.2); } }
     @keyframes anim-switch-in { 0% { opacity: 0; transform: scale(0.2) translateY(40px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes anim-fx-flash { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0; transform: scale(1.5); } }
 
     .fx-lunge-p1 { animation: anim-lunge-right 0.45s cubic-bezier(0.25, 1, 0.5, 1); }
     .fx-lunge-p2 { animation: anim-lunge-left 0.45s cubic-bezier(0.25, 1, 0.5, 1); }
     .fx-hit { animation: anim-hit-shake 0.45s ease-in-out; }
     .fx-faint { animation: anim-faint-down 0.85s ease-in forwards; }
     .fx-switch { animation: anim-switch-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-    /* TYPE FX OVERLAYS */
-    .fx-overlay-Fire { background: radial-gradient(circle, rgba(239,68,68,0.95) 0%, rgba(249,115,22,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Water { background: radial-gradient(circle, rgba(59,130,246,0.95) 0%, rgba(6,182,212,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Electric { background: radial-gradient(circle, rgba(234,179,8,0.95) 0%, rgba(250,204,21,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Grass { background: radial-gradient(circle, rgba(34,197,94,0.95) 0%, rgba(16,185,129,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Ice { background: radial-gradient(circle, rgba(165,243,252,0.95) 0%, rgba(56,189,248,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Psychic { background: radial-gradient(circle, rgba(236,72,153,0.95) 0%, rgba(168,85,247,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Fighting { background: radial-gradient(circle, rgba(220,38,38,0.95) 0%, rgba(180,83,9,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Dark { background: radial-gradient(circle, rgba(30,41,59,0.95) 0%, rgba(15,23,42,0.85) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Ghost { background: radial-gradient(circle, rgba(126,34,206,0.95) 0%, rgba(88,28,135,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Dragon { background: radial-gradient(circle, rgba(99,102,241,0.95) 0%, rgba(67,56,202,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Normal { background: radial-gradient(circle, rgba(226,232,240,0.85) 0%, rgba(148,163,184,0.6) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Poison { background: radial-gradient(circle, rgba(168,85,247,0.95) 0%, rgba(147,51,234,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Ground { background: radial-gradient(circle, rgba(217,119,6,0.95) 0%, rgba(180,83,9,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Flying { background: radial-gradient(circle, rgba(192,132,252,0.95) 0%, rgba(129,140,248,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Bug { background: radial-gradient(circle, rgba(132,204,22,0.95) 0%, rgba(101,163,13,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Rock { background: radial-gradient(circle, rgba(202,138,4,0.95) 0%, rgba(161,98,7,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Steel { background: radial-gradient(circle, rgba(148,163,184,0.95) 0%, rgba(100,116,139,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
-    .fx-overlay-Fairy { background: radial-gradient(circle, rgba(244,114,182,0.95) 0%, rgba(236,72,153,0.7) 60%, transparent 100%); animation: anim-fx-flash 0.5s forwards; }
 
     /* TYPE COLOR BADGES */
     .bg-type-normal { background-color: #A8A878; color: #111; } 
@@ -97,7 +76,6 @@
     .bg-type-steel { background-color: #B8B8D0; color: #000; } 
     .bg-type-fairy { background-color: #EE99AC; color: #000; }
 
-    /* TURN TIMER PACING ANIMATION */
     @keyframes progress-countdown {
       from { width: 100%; }
       to { width: 0%; }
@@ -121,7 +99,7 @@
             </h1>
             <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">GEN 1–9 ENGINE</span>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Particle Attack FX • Moveset Tooltips • 4s Turn Pacing</p>
+          <p class="text-xs text-slate-400 hidden sm:block">100% Accurate Showdown Damage Engine & Type Chart</p>
         </div>
       </div>
 
@@ -248,7 +226,7 @@
 
         <div class="space-y-2">
           <label class="block text-xs font-semibold text-slate-400">Display Handle</label>
-          <input type="text" id="username-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Enter username..." />
+          <input type="text" id="username-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Enter username..." maxlength="18" />
         </div>
 
         <button onclick="saveUsername()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all">
@@ -348,7 +326,7 @@
       
       <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">GEN 1-9 TYPE ENGINE</span>
+          <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">ACCURATE SHOWDOWN ENGINE</span>
           <div class="text-xs text-slate-400">Turn <span id="turn-counter" class="text-white font-bold text-sm">1</span></div>
         </div>
 
@@ -366,7 +344,6 @@
         
         <!-- CANVAS ANIMATION OVERLAY FOR EVERY ATTACK TYPE -->
         <canvas id="attack-fx-canvas" class="absolute inset-0 z-30 pointer-events-none w-full h-full"></canvas>
-        <div id="move-fx-overlay" class="absolute inset-0 z-20 pointer-events-none"></div>
 
         <!-- 4-SECOND TURN COUNTDOWN PACING OVERLAY -->
         <div id="turn-cooldown-overlay" class="hidden absolute inset-x-0 top-0 z-40 bg-slate-900/90 backdrop-blur-xs py-2 px-4 flex items-center justify-between border-b border-blue-500/40">
@@ -464,26 +441,26 @@
   </main>
 
   <script>
-    /* 100% ACCURATE 18-TYPE EFFECTIVENESS MATRIX */
+    /* 100% ACCURATE 18x18 POKEMON SHOWDOWN TYPE CHART MATRIX */
     const TYPE_CHART = {
-      Normal:   { Rock: 0.5, Ghost: 0, Steel: 0.5 },
-      Fire:     { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 2, Bug: 2, Rock: 0.5, Dragon: 0.5, Steel: 2 },
-      Water:    { Fire: 2, Water: 0.5, Grass: 0.5, Ground: 2, Rock: 2, Dragon: 0.5 },
-      Electric: { Water: 2, Electric: 0.5, Grass: 0.5, Ground: 0, Flying: 2, Dragon: 0.5 },
-      Grass:    { Fire: 0.5, Water: 2, Grass: 0.5, Poison: 0.5, Ground: 2, Flying: 0.5, Bug: 0.5, Rock: 2, Dragon: 0.5, Steel: 0.5 },
-      Ice:      { Fire: 0.5, Water: 0.5, Grass: 2, Ice: 0.5, Ground: 2, Flying: 2, Dragon: 2, Steel: 0.5 },
-      Fighting: { Normal: 2, Ice: 2, Poison: 0.5, Flying: 0.5, Psychic: 0.5, Bug: 0.5, Rock: 2, Ghost: 0, Dark: 2, Steel: 2, Fairy: 0.5 },
-      Poison:   { Grass: 2, Poison: 0.5, Ground: 0.5, Rock: 0.5, Ghost: 0.5, Steel: 0, Fairy: 2 },
-      Ground:   { Fire: 2, Electric: 2, Grass: 0.5, Poison: 2, Flying: 0, Bug: 0.5, Rock: 2, Steel: 2 },
-      Flying:   { Electric: 0.5, Grass: 2, Fighting: 2, Bug: 2, Rock: 0.5, Steel: 0.5 },
-      Psychic:  { Fighting: 2, Poison: 2, Psychic: 0.5, Dark: 0, Steel: 0.5 },
-      Bug:      { Fire: 0.5, Grass: 2, Fighting: 0.5, Poison: 0.5, Flying: 0.5, Psychic: 2, Ghost: 0.5, Dark: 2, Steel: 0.5, Fairy: 0.5 },
-      Rock:     { Fire: 2, Ice: 2, Fighting: 0.5, Ground: 0.5, Flying: 2, Bug: 2, Steel: 0.5 },
-      Ghost:    { Normal: 0, Psychic: 2, Ghost: 2, Dark: 0.5 },
-      Dragon:   { Dragon: 2, Steel: 0.5, Fairy: 0 },
-      Dark:     { Fighting: 0.5, Psychic: 2, Ghost: 2, Dark: 0.5, Fairy: 0.5 },
-      Steel:    { Fire: 0.5, Water: 0.5, Electric: 0.5, Ice: 2, Rock: 2, Steel: 0.5, Fairy: 2 },
-      Fairy:    { Fire: 0.5, Fighting: 2, Poison: 0.5, Dragon: 2, Dark: 2, Steel: 0.5 }
+      Normal:   { Normal: 1, Fire: 1, Water: 1, Electric: 1, Grass: 1, Ice: 1, Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 1, Rock: 0.5, Ghost: 0, Dragon: 1, Dark: 1, Steel: 0.5, Fairy: 1 },
+      Fire:     { Normal: 1, Fire: 0.5, Water: 0.5, Electric: 1, Grass: 2, Ice: 2, Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 2, Rock: 0.5, Ghost: 1, Dragon: 0.5, Dark: 1, Steel: 2, Fairy: 1 },
+      Water:    { Normal: 1, Fire: 2, Water: 0.5, Electric: 1, Grass: 0.5, Ice: 1, Fighting: 1, Poison: 1, Ground: 2, Flying: 1, Psychic: 1, Bug: 1, Rock: 2, Ghost: 1, Dragon: 0.5, Dark: 1, Steel: 1, Fairy: 1 },
+      Electric: { Normal: 1, Fire: 1, Water: 2, Electric: 0.5, Grass: 0.5, Ice: 1, Fighting: 1, Poison: 1, Ground: 0, Flying: 2, Psychic: 1, Bug: 1, Rock: 1, Ghost: 1, Dragon: 0.5, Dark: 1, Steel: 1, Fairy: 1 },
+      Grass:    { Normal: 1, Fire: 0.5, Water: 2, Electric: 1, Grass: 0.5, Ice: 1, Fighting: 1, Poison: 0.5, Ground: 2, Flying: 0.5, Psychic: 1, Bug: 0.5, Rock: 2, Ghost: 1, Dragon: 0.5, Dark: 1, Steel: 0.5, Fairy: 1 },
+      Ice:      { Normal: 1, Fire: 0.5, Water: 0.5, Electric: 1, Grass: 2, Ice: 0.5, Fighting: 1, Poison: 1, Ground: 2, Flying: 2, Psychic: 1, Bug: 1, Rock: 1, Ghost: 1, Dragon: 2, Dark: 1, Steel: 0.5, Fairy: 1 },
+      Fighting: { Normal: 2, Fire: 1, Water: 1, Electric: 1, Grass: 1, Ice: 2, Fighting: 1, Poison: 0.5, Ground: 1, Flying: 0.5, Psychic: 0.5, Bug: 0.5, Rock: 2, Ghost: 0, Dragon: 1, Dark: 2, Steel: 2, Fairy: 0.5 },
+      Poison:   { Normal: 1, Fire: 1, Water: 1, Electric: 1, Grass: 2, Ice: 1, Fighting: 1, Poison: 0.5, Ground: 0.5, Flying: 1, Psychic: 1, Bug: 1, Rock: 0.5, Ghost: 0.5, Dragon: 1, Dark: 1, Steel: 0, Fairy: 2 },
+      Ground:   { Normal: 1, Fire: 2, Water: 1, Electric: 2, Grass: 0.5, Ice: 1, Fighting: 1, Poison: 2, Ground: 1, Flying: 0, Psychic: 1, Bug: 0.5, Rock: 2, Ghost: 1, Dragon: 1, Dark: 1, Steel: 2, Fairy: 1 },
+      Flying:   { Normal: 1, Fire: 1, Water: 1, Electric: 0.5, Grass: 2, Ice: 1, Fighting: 2, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 2, Rock: 0.5, Ghost: 1, Dragon: 1, Dark: 1, Steel: 0.5, Fairy: 1 },
+      Psychic:  { Normal: 1, Fire: 1, Water: 1, Electric: 1, Grass: 1, Ice: 1, Fighting: 2, Poison: 2, Ground: 1, Flying: 1, Psychic: 0.5, Bug: 1, Rock: 1, Ghost: 1, Dragon: 1, Dark: 0, Steel: 0.5, Fairy: 1 },
+      Bug:      { Normal: 1, Fire: 0.5, Water: 1, Electric: 1, Grass: 2, Ice: 1, Fighting: 0.5, Poison: 0.5, Ground: 1, Flying: 0.5, Psychic: 2, Bug: 1, Rock: 1, Ghost: 0.5, Dragon: 1, Dark: 2, Steel: 0.5, Fairy: 0.5 },
+      Rock:     { Normal: 1, Fire: 2, Water: 1, Electric: 1, Grass: 1, Ice: 2, Fighting: 0.5, Poison: 1, Ground: 0.5, Flying: 2, Psychic: 1, Bug: 2, Rock: 1, Ghost: 1, Dragon: 1, Dark: 1, Steel: 0.5, Fairy: 1 },
+      Ghost:    { Normal: 0, Fire: 1, Water: 1, Electric: 1, Grass: 1, Ice: 1, Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 2, Bug: 1, Rock: 1, Ghost: 2, Dragon: 1, Dark: 0.5, Steel: 1, Fairy: 1 },
+      Dragon:   { Normal: 1, Fire: 1, Water: 1, Electric: 1, Grass: 1, Ice: 1, Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 1, Rock: 1, Ghost: 1, Dragon: 2, Dark: 1, Steel: 0.5, Fairy: 0 },
+      Dark:     { Normal: 1, Fire: 1, Water: 1, Electric: 1, Grass: 1, Ice: 1, Fighting: 0.5, Poison: 1, Ground: 1, Flying: 1, Psychic: 2, Bug: 1, Rock: 1, Ghost: 2, Dragon: 1, Dark: 0.5, Steel: 1, Fairy: 0.5 },
+      Steel:    { Normal: 1, Fire: 0.5, Water: 0.5, Electric: 0.5, Grass: 1, Ice: 2, Fighting: 1, Poison: 1, Ground: 1, Flying: 1, Psychic: 1, Bug: 1, Rock: 2, Ghost: 1, Dragon: 1, Dark: 1, Steel: 0.5, Fairy: 2 },
+      Fairy:    { Normal: 1, Fire: 0.5, Water: 1, Electric: 1, Grass: 1, Ice: 1, Fighting: 2, Poison: 0.5, Ground: 1, Flying: 1, Psychic: 1, Bug: 1, Rock: 1, Ghost: 1, Dragon: 2, Dark: 2, Steel: 0.5, Fairy: 1 }
     };
 
     function getTypeMultiplier(moveType, targetTypes) {
@@ -496,771 +473,687 @@
       return mult;
     }
 
-    /* POKEMON POOL WITH EXPANDED MOVESET DESCRIPTIONS */
+    /* POKEMON POOL WITH STATS & MOVESETS */
     const POKEMON_POOL = [
-      { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, speed: 80, moves: [
+      { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, atk: 180, def: 202, spAtk: 236, spDef: 236, speed: 196, moves: [
         { name: 'Sludge Bomb', type: 'Poison', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '30% chance to poison target.' },
         { name: 'Energy Ball', type: 'Grass', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to lower Sp. Def.' },
         { name: 'Earth Power', type: 'Ground', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to lower Sp. Def.' },
         { name: 'Giga Drain', type: 'Grass', category: 'Special', power: 75, accuracy: 100, priority: 0, desc: 'Heals user for 50% of damage dealt.' }
       ]},
-      { num: 6, name: 'Charizard', types: ['Fire', 'Flying'], hp: 297, speed: 100, moves: [
-        { name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to burn target.' },
-        { name: 'Air Slash', type: 'Flying', category: 'Special', power: 75, accuracy: 95, priority: 0, desc: '30% chance to flinch target.' },
-        { name: 'Dragon Pulse', type: 'Dragon', category: 'Special', power: 85, accuracy: 100, priority: 0, desc: 'Deals dragon-type damage.' },
-        { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, priority: 0, desc: '10% chance to lower Sp. Def.' }
+      { num: 6, name: 'Charizard', types: ['Fire', 'Flying'], hp: 297, atk: 204, def: 192, spAtk: 254, spDef: 206, speed: 236, moves: [
+        { name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to burn.' },
+        { name: 'Air Slash', type: 'Flying', category: 'Special', power: 75, accuracy: 95, priority: 0, desc: '30% chance to flinch.' },
+        { name: 'Dragon Pulse', type: 'Dragon', category: 'Special', power: 85, accuracy: 100, priority: 0, desc: 'Standard Dragon damage.' },
+        { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, priority: 0, desc: 'High risk high damage.' }
       ]},
-      { num: 9, name: 'Blastoise', types: ['Water'], hp: 299, speed: 78, moves: [
-        { name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, priority: 0, desc: 'Blasts high volume of water.' },
-        { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to freeze target.' },
-        { name: 'Aura Sphere', type: 'Fighting', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Never misses target.' },
+      { num: 9, name: 'Blastoise', types: ['Water'], hp: 299, atk: 202, def: 236, spAtk: 206, spDef: 246, speed: 192, moves: [
+        { name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, priority: 0, desc: 'Massive water cannon.' },
+        { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to freeze.' },
+        { name: 'Aura Sphere', type: 'Fighting', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Never misses.' },
         { name: 'Flash Cannon', type: 'Steel', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: '10% chance to lower Sp. Def.' }
       ]},
-      { num: 25, name: 'Pikachu', types: ['Electric'], hp: 211, speed: 90, moves: [
+      { num: 25, name: 'Pikachu', types: ['Electric'], hp: 211, atk: 146, def: 116, spAtk: 136, spDef: 136, speed: 216, moves: [
         { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to paralyze.' },
-        { name: 'Volt Tackle', type: 'Electric', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'High physical electricity.' },
-        { name: 'Iron Tail', type: 'Steel', category: 'Physical', power: 100, accuracy: 75, priority: 0, desc: '30% chance to lower Defense.' },
-        { name: 'Quick Attack', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Increased priority strike (+1).' }
+        { name: 'Volt Tackle', type: 'Electric', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Recoil damage to user.' },
+        { name: 'Iron Tail', type: 'Steel', category: 'Physical', power: 100, accuracy: 75, priority: 0, desc: '30% chance to lower Def.' },
+        { name: 'Quick Attack', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Increased priority.' }
       ]},
-      { num: 94, name: 'Gengar', types: ['Ghost', 'Poison'], hp: 261, speed: 110, moves: [
+      { num: 94, name: 'Gengar', types: ['Ghost', 'Poison'], hp: 261, atk: 166, def: 156, spAtk: 296, spDef: 186, speed: 256, moves: [
         { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: '20% chance to lower Sp. Def.' },
         { name: 'Sludge Wave', type: 'Poison', category: 'Special', power: 95, accuracy: 100, priority: 0, desc: '10% chance to poison.' },
-        { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to paralyze.' },
-        { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, priority: 0, desc: 'Heavy blast of focused energy.' }
+        { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: 'Coverage move.' },
+        { name: 'Dazzling Gleam', type: 'Fairy', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Fairy coverage.' }
       ]},
-      { num: 130, name: 'Gyarados', types: ['Water', 'Flying'], hp: 331, speed: 81, moves: [
-        { name: 'Waterfall', type: 'Water', category: 'Physical', power: 80, accuracy: 100, priority: 0, desc: '20% chance to flinch target.' },
-        { name: 'Bounce', type: 'Flying', category: 'Physical', power: 85, accuracy: 85, priority: 0, desc: '30% chance to paralyze target.' },
-        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Hits all adjacent Pokemon.' },
-        { name: 'Ice Fang', type: 'Ice', category: 'Physical', power: 65, accuracy: 95, priority: 0, desc: '10% chance to freeze or flinch.' }
+      { num: 130, name: 'Gyarados', types: ['Water', 'Flying'], hp: 331, atk: 286, def: 194, spAtk: 156, spDef: 236, speed: 198, moves: [
+        { name: 'Waterfall', type: 'Water', category: 'Physical', power: 80, accuracy: 100, priority: 0, desc: '20% chance to flinch.' },
+        { name: 'Bounce', type: 'Flying', category: 'Physical', power: 85, accuracy: 85, priority: 0, desc: '30% chance to paralyze.' },
+        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Hits all surrounding.' },
+        { name: 'Ice Fang', type: 'Ice', category: 'Physical', power: 65, accuracy: 95, priority: 0, desc: 'Chance to freeze or flinch.' }
       ]},
-      { num: 149, name: 'Dragonite', types: ['Dragon', 'Flying'], hp: 323, speed: 80, moves: [
-        { name: 'Outrage', type: 'Dragon', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Rampaging dragon attack.' },
-        { name: 'Extreme Speed', type: 'Normal', category: 'Physical', power: 80, accuracy: 100, priority: 2, desc: 'High priority (+2) blinding attack.' },
-        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Ground shaking physical damage.' },
-        { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, priority: 0, desc: '10% chance to burn target.' }
+      { num: 149, name: 'Dragonite', types: ['Dragon', 'Flying'], hp: 323, atk: 304, def: 226, spAtk: 236, spDef: 236, speed: 196, moves: [
+        { name: 'Outrage', type: 'Dragon', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Rampages for 2-3 turns.' },
+        { name: 'Extreme Speed', type: 'Normal', category: 'Physical', power: 80, accuracy: 100, priority: 2, desc: 'High priority strike.' },
+        { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, priority: 0, desc: '10% burn chance.' },
+        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Ground coverage.' }
       ]},
-      { num: 212, name: 'Scizor', types: ['Bug', 'Steel'], hp: 281, speed: 65, moves: [
-        { name: 'Bullet Punch', type: 'Steel', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Priority steel punch (+1).' },
-        { name: 'Bug Bite', type: 'Bug', category: 'Physical', power: 60, accuracy: 100, priority: 0, desc: 'Bites target with sharp pincers.' },
-        { name: 'Superpower', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Massive physical power.' },
-        { name: 'Knock Off', type: 'Dark', category: 'Physical', power: 65, accuracy: 100, priority: 0, desc: 'Knocks off enemy item.' }
-      ]},
-      { num: 248, name: 'Tyranitar', types: ['Rock', 'Dark'], hp: 341, speed: 61, moves: [
+      { num: 248, name: 'Tyranitar', types: ['Rock', 'Dark'], hp: 341, atk: 304, def: 256, spAtk: 226, spDef: 236, speed: 158, moves: [
         { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, priority: 0, desc: 'High critical hit ratio.' },
-        { name: 'Crunch', type: 'Dark', category: 'Physical', power: 80, accuracy: 100, priority: 0, desc: '20% chance to lower Defense.' },
-        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Powerful ground quake.' },
-        { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, priority: 0, desc: 'Fire-infused punch.' }
+        { name: 'Crunch', type: 'Dark', category: 'Physical', power: 80, accuracy: 100, priority: 0, desc: '20% chance to lower Def.' },
+        { name: 'Pursuit', type: 'Dark', category: 'Physical', power: 40, accuracy: 100, priority: 0, desc: 'Hits switching targets hard.' },
+        { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, priority: 0, desc: 'Fire coverage.' }
       ]},
-      { num: 257, name: 'Blaziken', types: ['Fire', 'Fighting'], hp: 301, speed: 80, moves: [
-        { name: 'Flare Blitz', type: 'Fire', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: '10% burn, user takes recoil.' },
-        { name: 'High Jump Kick', type: 'Fighting', category: 'Physical', power: 130, accuracy: 90, priority: 0, desc: 'Huge fighting kick.' },
-        { name: 'Brave Bird', type: 'Flying', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Flying dive, user takes recoil.' },
-        { name: 'Quick Attack', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Priority strike (+1).' }
+      { num: 445, name: 'Garchomp', types: ['Dragon', 'Ground'], hp: 357, atk: 296, def: 226, spAtk: 196, spDef: 206, speed: 240, moves: [
+        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Devastating STAB.' },
+        { name: 'Dragon Claw', type: 'Dragon', category: 'Physical', power: 80, accuracy: 100, priority: 0, desc: 'Clean Dragon physical.' },
+        { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, priority: 0, desc: 'Rock coverage.' },
+        { name: 'Fire Blast', type: 'Fire', category: 'Special', power: 110, accuracy: 85, priority: 0, desc: 'Breaks Steel walls.' }
       ]},
-      { num: 260, name: 'Swampert', types: ['Water', 'Ground'], hp: 341, speed: 60, moves: [
-        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Tremendous ground damage.' },
-        { name: 'Waterfall', type: 'Water', category: 'Physical', power: 80, accuracy: 100, priority: 0, desc: 'Water rush attack.' },
-        { name: 'Ice Punch', type: 'Ice', category: 'Physical', power: 75, accuracy: 100, priority: 0, desc: '10% chance to freeze.' },
-        { name: 'Superpower', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'High fighting burst.' }
-      ]},
-      { num: 282, name: 'Gardevoir', types: ['Psychic', 'Fairy'], hp: 277, speed: 80, moves: [
-        { name: 'Moonblast', type: 'Fairy', category: 'Special', power: 95, accuracy: 100, priority: 0, desc: '30% chance to lower Sp. Atk.' },
-        { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to lower Sp. Def.' },
-        { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: '20% chance to lower Sp. Def.' },
-        { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: 'Electric spark attack.' }
-      ]},
-      { num: 376, name: 'Metagross', types: ['Steel', 'Psychic'], hp: 301, speed: 70, moves: [
-        { name: 'Meteor Mash', type: 'Steel', category: 'Physical', power: 90, accuracy: 90, priority: 0, desc: '20% chance to raise Attack.' },
-        { name: 'Zen Headbutt', type: 'Psychic', category: 'Physical', power: 80, accuracy: 90, priority: 0, desc: '20% chance to flinch target.' },
-        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Ground tremor attack.' },
-        { name: 'Bullet Punch', type: 'Steel', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Priority punch (+1).' }
-      ]},
-      { num: 445, name: 'Garchomp', types: ['Dragon', 'Ground'], hp: 357, speed: 102, moves: [
-        { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'High physical quake.' },
-        { name: 'Outrage', type: 'Dragon', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Furious dragon strike.' },
-        { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, priority: 0, desc: 'High critical hit rate.' },
-        { name: 'Fire Fang', type: 'Fire', category: 'Physical', power: 65, accuracy: 95, priority: 0, desc: '10% burn / flinch chance.' }
-      ]},
-      { num: 448, name: 'Lucario', types: ['Fighting', 'Steel'], hp: 281, speed: 90, moves: [
-        { name: 'Aura Sphere', type: 'Fighting', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Never misses the opponent.' },
-        { name: 'Flash Cannon', type: 'Steel', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Light energy beam.' },
-        { name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Lowers user Def/Sp.Def.' },
-        { name: 'Extreme Speed', type: 'Normal', category: 'Physical', power: 80, accuracy: 100, priority: 2, desc: 'Blinding fast strike (+2).' }
-      ]},
-      { num: 478, name: 'Froslass', types: ['Ice', 'Ghost'], hp: 281, speed: 110, moves: [
-        { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: '10% chance to freeze.' },
-        { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Ghost energy blast.' },
-        { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: 'Lightning strike.' },
-        { name: 'Ice Shard', type: 'Ice', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Priority ice shard (+1).' }
-      ]},
-      { num: 658, name: 'Greninja', types: ['Water', 'Dark'], hp: 285, speed: 122, moves: [
-        { name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, priority: 0, desc: 'Water cannon blast.' },
-        { name: 'Dark Pulse', type: 'Dark', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: '20% chance to flinch.' },
-        { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: 'Freezing ice wave.' },
-        { name: 'Water Shuriken', type: 'Water', category: 'Special', power: 40, accuracy: 100, priority: 1, desc: 'Priority water star (+1).' }
-      ]},
-      { num: 700, name: 'Sylveon', types: ['Fairy'], hp: 331, speed: 60, moves: [
-        { name: 'Hyper Voice', type: 'Fairy', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: 'Sound-based fairy wave.' },
-        { name: 'Psyshock', type: 'Psychic', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Calculates physical defense.' },
-        { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Ghost pulse.' },
-        { name: 'Mystical Fire', type: 'Fire', category: 'Special', power: 75, accuracy: 100, priority: 0, desc: 'Lowers enemy Sp. Atk.' }
-      ]},
-      { num: 778, name: 'Mimikyu', types: ['Ghost', 'Fairy'], hp: 251, speed: 96, moves: [
-        { name: 'Play Rough', type: 'Fairy', category: 'Physical', power: 90, accuracy: 90, priority: 0, desc: '10% chance to lower Attack.' },
-        { name: 'Shadow Claw', type: 'Ghost', category: 'Physical', power: 70, accuracy: 100, priority: 0, desc: 'High critical hit ratio.' },
-        { name: 'Shadow Sneak', type: 'Ghost', category: 'Physical', power: 40, accuracy: 100, priority: 1, desc: 'Priority shadow hit (+1).' },
-        { name: 'Drain Punch', type: 'Fighting', category: 'Physical', power: 75, accuracy: 100, priority: 0, desc: 'Heals user for 50% damage.' }
-      ]},
-      { num: 887, name: 'Dragapult', types: ['Dragon', 'Ghost'], hp: 317, speed: 142, moves: [
-        { name: 'Dragon Darts', type: 'Dragon', category: 'Physical', power: 100, accuracy: 100, priority: 0, desc: 'Shoots Dreepy darts.' },
-        { name: 'Phantom Force', type: 'Ghost', category: 'Physical', power: 90, accuracy: 100, priority: 0, desc: 'Disappears then strikes.' },
-        { name: 'U-turn', type: 'Bug', category: 'Physical', power: 70, accuracy: 100, priority: 0, desc: 'Switches after attack.' },
-        { name: 'Sucker Punch', type: 'Dark', category: 'Physical', power: 70, accuracy: 100, priority: 1, desc: 'Priority counter (+1).' }
-      ]},
-      { num: 959, name: 'Tinkaton', types: ['Fairy', 'Steel'], hp: 311, speed: 94, moves: [
-        { name: 'Gigaton Hammer', type: 'Steel', category: 'Physical', power: 160, accuracy: 100, priority: 0, desc: 'Massive steel hammer strike.' },
-        { name: 'Play Rough', type: 'Fairy', category: 'Physical', power: 90, accuracy: 90, priority: 0, desc: 'Fairy roughhouse.' },
-        { name: 'Knock Off', type: 'Dark', category: 'Physical', power: 65, accuracy: 100, priority: 0, desc: 'Knocks off target item.' },
-        { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, priority: 0, desc: 'Rock pillar attack.' }
-      ]},
-      { num: 1006, name: 'Iron Valiant', types: ['Fairy', 'Fighting'], hp: 289, speed: 116, moves: [
-        { name: 'Moonblast', type: 'Fairy', category: 'Special', power: 95, accuracy: 100, priority: 0, desc: 'Fairy energy blast.' },
-        { name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Fierce fighting rush.' },
-        { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Ghost sphere.' },
-        { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, priority: 0, desc: 'Electric discharge.' }
+      { num: 448, name: 'Lucario', types: ['Fighting', 'Steel'], hp: 281, atk: 256, def: 176, spAtk: 266, spDef: 176, speed: 216, moves: [
+        { name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, priority: 0, desc: 'Lowers Def/SpD.' },
+        { name: 'Flash Cannon', type: 'Steel', category: 'Special', power: 80, accuracy: 100, priority: 0, desc: 'Steel special STAB.' },
+        { name: 'Extreme Speed', type: 'Normal', category: 'Physical', power: 80, accuracy: 100, priority: 2, desc: 'High priority.' },
+        { name: 'Meteor Mash', type: 'Steel', category: 'Physical', power: 90, accuracy: 90, priority: 0, desc: '20% chance to raise Atk.' }
       ]}
     ];
 
-    function getRandomPokemonFromPool() {
-      const template = POKEMON_POOL[Math.floor(Math.random() * POKEMON_POOL.length)];
-      return {
-        ...JSON.parse(JSON.stringify(template)),
-        spriteFront: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${template.num}.gif`,
-        spriteBack: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/${template.num}.gif`
-      };
-    }
+    /* APP STATE */
+    let currentUsername = localStorage.getItem('showdown_username') || 'Red_Master_01';
+    let p1Team = [], p2Team = [];
+    let p1ActiveIndex = 0, p2ActiveIndex = 0;
+    let turnCount = 1;
+    let gameMode = 'ai'; // 'ai', 'pass', 'online'
+    let audioEnabled = true;
+    let isLocked = false;
+    let p1Action = null, p2Action = null;
+    let peer = null, peerConn = null;
 
-    function generateRandomTeam() {
-      const team = [];
-      const usedNums = new Set();
-      while (team.length < 6) {
-        const mon = getRandomPokemonFromPool();
-        if (!usedNums.has(mon.num)) {
-          usedNums.add(mon.num);
-          mon.currentHp = mon.hp;
-          mon.maxHp = mon.hp;
-          mon.fainted = false;
-          team.push(mon);
-        }
-      }
-      return team;
-    }
+    /* INITIALIZATION & USERNAME LOGIC */
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      updateUsernameDisplay();
+      rollRandomLobbyPreview();
+      initCanvas();
+    });
 
-    const state = {
-      activeTab: 'lobby',
-      soundEnabled: true,
-      user: { name: 'Red_Master_01', elo: 1850 },
-      previewTeam: [],
-      battle: {
-        active: false,
-        turn: 1,
-        p1: null,
-        p2: null,
-        isAI: true,
-        isMultiplayer: false,
-        isHost: false,
-        p1Locked: false,
-        p2Locked: false,
-        p1Action: null,
-        p2Action: null,
-        isExecuting: false
-      },
-      net: { peer: null, conn: null, peerId: null }
-    };
-
-    /* EDIT USERNAME FUNCTIONS */
     function openUsernameModal() {
-      document.getElementById('username-input').value = state.user.name;
-      document.getElementById('username-modal').classList.remove('hidden');
+      const input = document.getElementById('username-input');
+      if (input) input.value = currentUsername;
+      document.getElementById('username-modal')?.classList.remove('hidden');
     }
+
     function closeUsernameModal() {
-      document.getElementById('username-modal').classList.add('hidden');
+      document.getElementById('username-modal')?.classList.add('hidden');
     }
+
     function saveUsername() {
-      const newName = document.getElementById('username-input').value.trim();
-      if (newName) {
-        state.user.name = newName;
-        document.getElementById('display-user-name').innerText = newName;
-        if (state.battle.p1) state.battle.p1.name = newName;
+      const input = document.getElementById('username-input');
+      if (!input) return;
+      const newName = input.value.trim();
+      if (newName.length === 0) {
+        alert('Username cannot be empty!');
+        return;
       }
+      currentUsername = newName;
+      localStorage.setItem('showdown_username', currentUsername);
+      updateUsernameDisplay();
       closeUsernameModal();
     }
 
-    /* SYNTH AUDIO GENERATOR */
-    let audioCtx = null;
-    function playSynthSound(type) {
-      if (!state.soundEnabled) return;
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+    function updateUsernameDisplay() {
+      const headerName = document.getElementById('display-user-name');
+      if (headerName) headerName.textContent = currentUsername;
+      const p1Name = document.getElementById('p1-name');
+      if (p1Name && gameMode !== 'pass') p1Name.textContent = currentUsername;
+    }
 
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      if (type === 'hit') {
-        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now); osc.frequency.exponentialRampToValueAtTime(30, now + 0.2);
-        gain.gain.setValueAtTime(0.4, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
-      } else if (type === 'click') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(650, now); osc.frequency.exponentialRampToValueAtTime(320, now + 0.05);
-        gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-        osc.start(now); osc.stop(now + 0.05);
-      } else if (type === 'faint') {
-        osc.type = 'triangle'; osc.frequency.setValueAtTime(280, now); osc.frequency.linearRampToValueAtTime(50, now + 0.6);
-        gain.gain.setValueAtTime(0.35, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.6);
-        osc.start(now); osc.stop(now + 0.6);
-      } else if (type === 'switch') {
-        osc.type = 'sine'; osc.frequency.setValueAtTime(220, now); osc.frequency.exponentialRampToValueAtTime(580, now + 0.22);
-        gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
-        osc.start(now); osc.stop(now + 0.22);
+    /* NAVIGATION */
+    function switchTab(tab) {
+      document.getElementById('view-lobby').classList.toggle('hidden', tab !== 'lobby');
+      document.getElementById('view-battle').classList.toggle('hidden', tab !== 'battle');
+      
+      const navLobby = document.getElementById('nav-lobby');
+      const navBattle = document.getElementById('nav-battle');
+      
+      if (tab === 'lobby') {
+        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md";
+        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
+      } else {
+        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md";
+        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
       }
     }
 
     function toggleAudio() {
-      state.soundEnabled = !state.soundEnabled;
+      audioEnabled = !audioEnabled;
       const icon = document.getElementById('audio-icon');
-      icon.className = state.soundEnabled ? 'w-5 h-5 text-emerald-400' : 'w-5 h-5 text-slate-500';
+      if (audioEnabled) {
+        icon.setAttribute('data-lucide', 'volume-2');
+        icon.className = 'w-5 h-5 text-emerald-400';
+      } else {
+        icon.setAttribute('data-lucide', 'volume-x');
+        icon.className = 'w-5 h-5 text-red-400';
+      }
+      lucide.createIcons();
     }
 
-    function switchTab(tabId) {
-      playSynthSound('click');
-      state.activeTab = tabId;
-      ['lobby', 'battle'].forEach(id => {
-        const viewEl = document.getElementById(`view-${id}`);
-        if (id === tabId) viewEl.classList.remove('hidden');
-        else viewEl.classList.add('hidden');
-      });
-    }
-
+    /* PREVIEW TEAM GENERATOR */
     function rollRandomLobbyPreview() {
-      state.previewTeam = generateRandomTeam();
       const container = document.getElementById('lobby-team-preview');
-      container.innerHTML = state.previewTeam.map(mon => `
-        <div class="glass-panel glass-panel-hover p-2.5 rounded-xl border border-slate-800 flex flex-col items-center text-center relative group">
-          <img src="${mon.spriteFront}" class="w-16 h-16 object-contain filter drop-shadow-md" />
-          <div class="font-bold text-xs text-slate-200 mt-1">${mon.name}</div>
+      container.innerHTML = '';
+      const shuffled = [...POKEMON_POOL].sort(() => 0.5 - Math.random()).slice(0, 6);
+      
+      shuffled.forEach(mon => {
+        const div = document.createElement('div');
+        div.className = 'glass-panel glass-panel-hover p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer group relative';
+        div.innerHTML = `
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.num}.png" class="w-16 h-16 group-hover:scale-110 transition-transform" />
+          <div class="font-extrabold text-xs text-slate-200 mt-1">${mon.name}</div>
           <div class="flex gap-1 mt-1">
-            ${mon.types.map(t => `<span class="text-[8px] px-1 py-0.2 rounded font-extrabold bg-type-${t.toLowerCase()} uppercase">${t}</span>`).join('')}
+            ${mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-type-${t.toLowerCase()}">${t}</span>`).join('')}
           </div>
-
-          <!-- MOVESET INSPECTOR HOVER TOOLTIP -->
-          <div class="hidden group-hover:block absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 p-2.5 bg-slate-950/95 rounded-xl border border-blue-500/50 shadow-2xl z-50 text-left pointer-events-none">
-            <div class="text-[10px] font-extrabold text-blue-400 uppercase tracking-wider mb-1.5">${mon.name}'s Moveset</div>
-            <div class="space-y-1">
-              ${mon.moves.map(m => `
-                <div class="flex items-center justify-between text-[9px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">
-                  <span class="font-bold text-slate-200">${m.name}</span>
-                  <span class="font-extrabold px-1 py-0.2 rounded bg-type-${m.type.toLowerCase()}">${m.type}</span>
-                </div>
-              `).join('')}
-            </div>
+          
+          <!-- Tooltip Moveset Inspection -->
+          <div class="opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity absolute bottom-full mb-2 z-50 w-48 glass-panel p-2 rounded-lg border border-slate-700 shadow-2xl text-left">
+            <div class="text-[10px] font-bold text-blue-400 mb-1 border-b border-slate-800 pb-1">${mon.name} Moveset:</div>
+            ${mon.moves.map(m => `
+              <div class="text-[10px] flex justify-between items-center my-0.5">
+                <span class="text-slate-300">${m.name}</span>
+                <span class="text-[9px] font-bold px-1 rounded bg-type-${m.type.toLowerCase()}">${m.type}</span>
+              </div>
+            `).join('')}
           </div>
-        </div>
-      `).join('');
-    }
-
-    /* PEERJS REAL-TIME MULTIPLAYER */
-    function initPeerNetwork() {
-      state.net.peer = new Peer();
-      state.net.peer.on('open', (id) => {
-        state.net.peerId = id;
-        document.getElementById('my-peer-id').value = id;
-      });
-
-      state.net.peer.on('connection', (conn) => {
-        state.net.conn = conn;
-        state.battle.isHost = true;
-        setupNetworkListeners();
-        
-        const p1Team = generateRandomTeam();
-        const p2Team = generateRandomTeam();
-        conn.send({ type: 'START_GAME', p1Team: p2Team, p2Team: p1Team });
-        initBattleSession(false, 'Online Challenger', p1Team, p2Team, true);
-        closeCustomRoomModal();
+        `;
+        container.appendChild(div);
       });
     }
 
-    function connectToPeer() {
-      const targetId = document.getElementById('join-peer-id').value.trim();
-      if (!targetId) return alert('Please enter a valid Room ID!');
-
-      const conn = state.net.peer.connect(targetId);
-      state.net.conn = conn;
-      state.battle.isHost = false;
-      setupNetworkListeners();
-      closeCustomRoomModal();
-    }
-
-    function setupNetworkListeners() {
-      state.net.conn.on('data', (data) => {
-        if (data.type === 'START_GAME') {
-          initBattleSession(false, 'Room Host', data.p1Team, data.p2Team, true);
-        } else if (data.type === 'SUBMIT_ACTION') {
-          receiveOpponentAction(data.action);
-        }
-      });
-    }
-
-    function copyPeerId() {
-      const input = document.getElementById('my-peer-id');
-      input.select();
-      document.execCommand('copy');
-      alert('Room ID copied! Share with a friend.');
-    }
-
-    function openCustomRoomModal() { document.getElementById('custom-room-modal').classList.remove('hidden'); }
-    function closeCustomRoomModal() { document.getElementById('custom-room-modal').classList.add('hidden'); }
-
+    /* MATCHMAKING & STARTING GAMES */
     function startMatchmaking() {
-      playSynthSound('click');
       document.getElementById('matchmaking-modal').classList.remove('hidden');
       setTimeout(() => {
-        cancelMatchmaking();
-        initBattleSession(true, 'Rival Trainer');
-      }, 1000);
+        document.getElementById('matchmaking-modal').classList.add('hidden');
+        gameMode = 'ai';
+        initBattle();
+      }, 1500);
     }
 
     function cancelMatchmaking() {
       document.getElementById('matchmaking-modal').classList.add('hidden');
     }
 
-    function startAIMatch() { initBattleSession(true, 'Smart Bot AI'); }
-    function startPassAndPlay() { initBattleSession(false, 'Player 2 (Local)'); }
+    function startAIMatch() {
+      gameMode = 'ai';
+      initBattle();
+    }
 
-    function initBattleSession(isAI, opponentName, team1 = null, team2 = null, isMultiplayer = false) {
-      playSynthSound('click');
+    function startPassAndPlay() {
+      gameMode = 'pass';
+      initBattle();
+    }
 
-      state.battle = {
-        active: true,
-        turn: 1,
-        isAI: isAI,
-        isMultiplayer: isMultiplayer,
-        p1Locked: false,
-        p2Locked: false,
-        p1Action: null,
-        p2Action: null,
-        isExecuting: false,
-        p1: { name: state.user.name, team: team1 || generateRandomTeam(), activeIdx: 0 },
-        p2: { name: opponentName, team: team2 || generateRandomTeam(), activeIdx: 0 }
+    /* BATTLE ENGINE CORE */
+    function clonePokemon(template) {
+      return {
+        ...template,
+        maxHp: template.hp,
+        currentHp: template.hp,
+        fainted: false,
+        moves: template.moves.map(m => ({ ...m }))
       };
+    }
 
-      switchTab('battle');
-      updateBattleUI();
+    function generateRandomTeam(size = 6) {
+      const shuffled = [...POKEMON_POOL].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, size).map(clonePokemon);
+    }
+
+    function initBattle() {
+      p1Team = generateRandomTeam(6);
+      p2Team = generateRandomTeam(6);
+      p1ActiveIndex = 0;
+      p2ActiveIndex = 0;
+      turnCount = 1;
+      isLocked = false;
+      p1Action = null;
+      p2Action = null;
+
+      document.getElementById('turn-counter').textContent = turnCount;
       document.getElementById('battle-log').innerHTML = '';
-      appendBattleLog(`Battle Started! Hover buttons to inspect moves.`);
-      appendBattleLog(`Go! ${state.battle.p1.team[0].name} vs ${state.battle.p2.team[0].name}!`);
-    }
-
-    function updateBattleUI() {
-      const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
-      const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
-
-      document.getElementById('turn-counter').innerText = state.battle.turn;
-
-      // Player 1
-      document.getElementById('p1-name').innerText = p1Mon.name;
-      document.getElementById('p1-sprite').src = p1Mon.spriteBack;
-      const p1Pct = Math.max(0, Math.round((p1Mon.currentHp / p1Mon.maxHp) * 100));
-      document.getElementById('p1-hp-text').innerText = `${p1Mon.currentHp} / ${p1Mon.maxHp} HP (${p1Pct}%)`;
-      const p1Bar = document.getElementById('p1-hp-bar');
-      p1Bar.style.width = `${p1Pct}%`;
-      p1Bar.className = `hp-bar-fill h-full ${p1Pct > 50 ? 'bg-emerald-500' : p1Pct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
-      document.getElementById('p1-types').innerHTML = p1Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-extrabold bg-type-${t.toLowerCase()}">${t.toUpperCase()}</span>`).join('');
-
-      // Player 2
-      document.getElementById('p2-name').innerText = p2Mon.name;
-      document.getElementById('p2-sprite').src = p2Mon.spriteFront;
-      const p2Pct = Math.max(0, Math.round((p2Mon.currentHp / p2Mon.maxHp) * 100));
-      document.getElementById('p2-hp-text').innerText = `${p2Pct}%`;
-      const p2Bar = document.getElementById('p2-hp-bar');
-      p2Bar.style.width = `${p2Pct}%`;
-      p2Bar.className = `hp-bar-fill h-full ${p2Pct > 50 ? 'bg-emerald-500' : p2Pct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
-      document.getElementById('p2-types').innerHTML = p2Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-extrabold bg-type-${t.toLowerCase()}">${t.toUpperCase()}</span>`).join('');
-
-      renderBenchDots('p1-bench-dots', state.battle.p1.team);
-      renderBenchDots('p2-bench-dots', state.battle.p2.team);
-      renderMoveButtons(p1Mon);
-      renderSwitchButtons();
-
-      const statusEl = document.getElementById('p2-lock-status');
-      if (state.battle.p1Locked && !state.battle.p2Locked) {
-        statusEl.innerText = 'Waiting for Opponent...';
-        statusEl.className = 'text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30';
+      
+      if (gameMode === 'pass') {
+        document.getElementById('p1-name').textContent = "Player 1";
+        document.getElementById('p2-name').textContent = "Player 2";
       } else {
-        statusEl.innerText = 'Waiting for actions...';
-        statusEl.className = 'text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+        document.getElementById('p1-name').textContent = currentUsername;
+        document.getElementById('p2-name').textContent = gameMode === 'ai' ? "AI Rival" : "Remote Opponent";
       }
+
+      logMessage(`Battle started between ${document.getElementById('p1-name').textContent} and ${document.getElementById('p2-name').textContent}!`);
+      
+      switchTab('battle');
+      renderBattleUI();
     }
 
-    function renderBenchDots(elemId, team) {
-      document.getElementById(elemId).innerHTML = team.map(m => `<span class="w-2.5 h-2.5 rounded-full ${m.fainted ? 'bg-slate-700' : 'bg-emerald-400'} border border-slate-900 inline-block"></span>`).join('');
+    function renderBattleUI() {
+      const p1Mon = p1Team[p1ActiveIndex];
+      const p2Mon = p2Team[p2ActiveIndex];
+
+      // P1 UI
+      document.getElementById('p1-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${p1Mon.num}.png`;
+      document.getElementById('p1-types').innerHTML = p1Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-type-${t.toLowerCase()}">${t}</span>`).join('');
+      updateHpBar('p1', p1Mon);
+      renderBenchDots('p1', p1Team, p1ActiveIndex);
+
+      // P2 UI
+      document.getElementById('p2-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p2Mon.num}.png`;
+      document.getElementById('p2-types').innerHTML = p2Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-type-${t.toLowerCase()}">${t}</span>`).join('');
+      updateHpBar('p2', p2Mon);
+      renderBenchDots('p2', p2Team, p2ActiveIndex);
+
+      // Moves & Switch Controls
+      renderCommandControls();
     }
 
-    /* BATTLE MOVE BUTTONS WITH HOVER INSPECT TOOLTIPS */
-    function renderMoveButtons(mon) {
-      const disabledAttr = state.battle.p1Locked || state.battle.isExecuting ? 'disabled' : '';
-      document.getElementById('moves-container').innerHTML = mon.moves.map((m, idx) => `
-        <div class="relative group">
-          <button onclick="lockAction('move', ${idx})" ${disabledAttr} class="w-full glass-panel glass-panel-hover p-3 rounded-xl border border-slate-700/80 flex flex-col justify-between text-left relative overflow-hidden ${disabledAttr ? 'opacity-50 cursor-not-allowed' : ''}">
-            <div class="flex justify-between items-center mb-1">
-              <span class="font-extrabold text-sm text-slate-100">${m.name}</span>
-              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-type-${m.type.toLowerCase()} uppercase">${m.type}</span>
-            </div>
-            <div class="flex justify-between text-[10px] text-slate-400 font-mono">
-              <span>Pwr: ${m.power}</span>
-              <span>Acc: ${m.accuracy}%</span>
-            </div>
-          </button>
+    function updateHpBar(player, mon) {
+      const pct = Math.max(0, Math.round((mon.currentHp / mon.maxHp) * 100));
+      const bar = document.getElementById(`${player}-hp-bar`);
+      const text = document.getElementById(`${player}-hp-text`);
 
-          <!-- MOVE HOVER INSPECTOR CARD -->
-          <div class="hidden group-hover:block absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-56 p-3 bg-slate-950/95 rounded-xl border border-blue-500/60 shadow-2xl z-50 pointer-events-none">
-            <div class="flex items-center justify-between pb-1 border-b border-slate-800 mb-1.5">
-              <span class="font-extrabold text-xs text-white">${m.name}</span>
-              <span class="text-[8px] font-extrabold px-1.5 py-0.2 rounded bg-type-${m.type.toLowerCase()} uppercase">${m.type}</span>
-            </div>
-            <div class="grid grid-cols-2 gap-1 text-[10px] text-slate-400 font-mono mb-1">
-              <div>Category: <span class="text-slate-200 font-bold">${m.category}</span></div>
-              <div>Priority: <span class="text-slate-200 font-bold">${m.priority > 0 ? '+' + m.priority : m.priority}</span></div>
-            </div>
-            <p class="text-[10px] text-slate-300 italic">${m.desc}</p>
-          </div>
-        </div>
-      `).join('');
+      bar.style.width = `${pct}%`;
+      text.textContent = `${pct}% (${mon.currentHp}/${mon.maxHp})`;
+
+      if (pct > 50) bar.className = 'hp-bar-fill h-full bg-emerald-500';
+      else if (pct > 20) bar.className = 'hp-bar-fill h-full bg-amber-500';
+      else bar.className = 'hp-bar-fill h-full bg-red-500';
     }
 
-    function renderSwitchButtons() {
-      const disabledAll = state.battle.p1Locked || state.battle.isExecuting;
-      document.getElementById('switch-team-container').innerHTML = state.battle.p1.team.map((m, idx) => {
-        const isCurrent = idx === state.battle.p1.activeIdx;
-        const isDisabled = disabledAll || isCurrent || m.fainted;
-        return `
-          <div class="relative group">
-            <button onclick="lockAction('switch', ${idx})" ${isDisabled ? 'disabled' : ''} class="w-full glass-panel p-2 rounded-xl border border-slate-800 flex flex-col items-center text-center ${isCurrent ? 'border-blue-500 bg-blue-500/10' : 'hover:border-slate-700'} ${m.fainted || isDisabled ? 'opacity-40 cursor-not-allowed' : ''}">
-              <img src="${m.spriteFront}" class="w-10 h-10 object-contain" />
-              <span class="text-[10px] font-bold truncate w-full mt-1 text-slate-200">${m.name}</span>
-            </button>
-
-            <!-- SWITCH MON HOVER MOVESET -->
-            <div class="hidden group-hover:block absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 p-2 bg-slate-950/95 rounded-xl border border-slate-700 shadow-2xl z-50 pointer-events-none">
-              <div class="text-[9px] font-bold text-slate-300 mb-1 text-center">${m.name} Moveset</div>
-              <div class="space-y-0.5">
-                ${m.moves.map(mv => `
-                  <div class="flex justify-between items-center text-[8px] bg-slate-900 px-1 py-0.5 rounded">
-                    <span class="text-slate-200">${mv.name}</span>
-                    <span class="font-extrabold px-1 rounded bg-type-${mv.type.toLowerCase()}">${mv.type}</span>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `;
+    function renderBenchDots(player, team, activeIdx) {
+      const container = document.getElementById(`${player}-bench-dots`);
+      container.innerHTML = team.map((mon, idx) => {
+        let color = 'bg-emerald-500';
+        if (mon.fainted) color = 'bg-red-500/40';
+        else if (idx === activeIdx) color = 'bg-blue-400 border border-white';
+        return `<span class="w-2 h-2 rounded-full ${color}"></span>`;
       }).join('');
     }
 
-    /* ACTION LOCK-IN SYSTEM */
-    function lockAction(actionType, actionVal) {
-      if (!state.battle.active || state.battle.p1Locked || state.battle.isExecuting) return;
+    function renderCommandControls() {
+      const p1Mon = p1Team[p1ActiveIndex];
+      const p2Mon = p2Team[p2ActiveIndex];
+      const movesContainer = document.getElementById('moves-container');
+      const switchContainer = document.getElementById('switch-team-container');
 
-      playSynthSound('click');
-      state.battle.p1Action = { type: actionType, val: actionVal };
-      state.battle.p1Locked = true;
+      movesContainer.innerHTML = '';
+      switchContainer.innerHTML = '';
 
-      document.getElementById('lock-indicator').classList.remove('hidden');
-      updateBattleUI();
-
-      if (state.battle.isAI) {
-        const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
-        state.battle.p2Action = selectAIMove(p2Mon, state.battle.p1.team[state.battle.p1.activeIdx]);
-        state.battle.p2Locked = true;
-        checkBothActionsReady();
-      } else if (state.battle.isMultiplayer) {
-        if (state.net.conn) {
-          state.net.conn.send({ type: 'SUBMIT_ACTION', action: state.battle.p1Action });
-        }
-        checkBothActionsReady();
-      } else {
-        const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
-        state.battle.p2Action = { type: 'move', val: Math.floor(Math.random() * p2Mon.moves.length) };
-        state.battle.p2Locked = true;
-        checkBothActionsReady();
-      }
-    }
-
-    function selectAIMove(aiMon, playerMon) {
-      let bestMoveIdx = 0;
-      let maxDmg = -1;
-
-      aiMon.moves.forEach((m, idx) => {
-        const mult = getTypeMultiplier(m.type, playerMon.types);
-        const estDmg = m.power * mult;
-        if (estDmg > maxDmg) {
-          maxDmg = estDmg;
-          bestMoveIdx = idx;
-        }
-      });
-      return { type: 'move', val: bestMoveIdx };
-    }
-
-    function receiveOpponentAction(action) {
-      state.battle.p2Action = action;
-      state.battle.p2Locked = true;
-      checkBothActionsReady();
-    }
-
-    function checkBothActionsReady() {
-      if (state.battle.p1Locked && state.battle.p2Locked) {
-        state.battle.isExecuting = true;
-        document.getElementById('lock-indicator').classList.add('hidden');
-        processTurnSequence();
-      }
-    }
-
-    /* 4-SECOND TURN COUNTDOWN PACING RESOLUTION ENGINE */
-    async function processTurnSequence() {
-      const act1 = state.battle.p1Action;
-      const act2 = state.battle.p2Action;
-      const p1Mon = state.battle.p1.team[state.battle.p1.activeIdx];
-      const p2Mon = state.battle.p2.team[state.battle.p2.activeIdx];
-
-      // Show Turn 4-Second Countdown Overlay
-      const cooldownOverlay = document.getElementById('turn-cooldown-overlay');
-      const cooldownBar = document.getElementById('cooldown-bar');
-      cooldownOverlay.classList.remove('hidden');
-      cooldownBar.className = 'bg-gradient-to-r from-blue-500 via-indigo-400 to-cyan-400 h-full w-full timer-countdown-bar';
-
-      // DETERMINE TURN ORDER
-      let p1Priority = act1.type === 'switch' ? 7 : (p1Mon.moves[act1.val].priority || 0);
-      let p2Priority = act2.type === 'switch' ? 7 : (p2Mon.moves[act2.val].priority || 0);
-
-      let first = 'p1';
-      if (p1Priority > p2Priority) first = 'p1';
-      else if (p2Priority > p1Priority) first = 'p2';
-      else if (p1Mon.speed > p2Mon.speed) first = 'p1';
-      else if (p2Mon.speed > p1Mon.speed) first = 'p2';
-      else first = Math.random() < 0.5 ? 'p1' : 'p2';
-
-      const second = first === 'p1' ? 'p2' : 'p1';
-      const actFirst = first === 'p1' ? act1 : act2;
-      const actSecond = second === 'p1' ? act1 : act2;
-
-      // FIRST ACTION
-      await performSingleAction(first, actFirst);
-      await delay(1200);
-
-      // SECOND ACTION
-      const secondOwner = second === 'p1' ? state.battle.p1 : state.battle.p2;
-      const secondMon = secondOwner.team[secondOwner.activeIdx];
-
-      if (state.battle.active && secondMon.currentHp > 0) {
-        await performSingleAction(second, actSecond);
-        await delay(1200);
-      }
-
-      // RESET TURN STATE
-      state.battle.p1Locked = false;
-      state.battle.p2Locked = false;
-      state.battle.p1Action = null;
-      state.battle.p2Action = null;
-      state.battle.isExecuting = false;
-      state.battle.turn++;
-
-      cooldownOverlay.classList.add('hidden');
-      cooldownBar.className = 'bg-gradient-to-r from-blue-500 via-indigo-400 to-cyan-400 h-full w-full';
-      updateBattleUI();
-    }
-
-    function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
-    async function performSingleAction(playerKey, action) {
-      const isP1 = playerKey === 'p1';
-      const attackerOwner = isP1 ? state.battle.p1 : state.battle.p2;
-      const defenderOwner = isP1 ? state.battle.p2 : state.battle.p1;
-      const attackerMon = attackerOwner.team[attackerOwner.activeIdx];
-      const defenderMon = defenderOwner.team[defenderOwner.activeIdx];
-
-      if (action.type === 'switch') {
-        attackerOwner.activeIdx = action.val;
-        const newMon = attackerOwner.team[action.val];
-        playSynthSound('switch');
-        
-        const spriteEl = document.getElementById(isP1 ? 'p1-sprite' : 'p2-sprite');
-        spriteEl.classList.add('fx-switch');
-        setTimeout(() => spriteEl.classList.remove('fx-switch'), 500);
-
-        appendBattleLog(`${attackerOwner.name} switched out to ${newMon.name}!`);
-        updateBattleUI();
+      if (isLocked) {
+        document.getElementById('command-prompt-text').textContent = "Action locked! Waiting to resolve...";
+        document.getElementById('lock-indicator').classList.remove('hidden');
         return;
       }
 
-      if (attackerMon.currentHp <= 0) return;
+      document.getElementById('command-prompt-text').textContent = "Choose your move or switch:";
+      document.getElementById('lock-indicator').classList.add('hidden');
 
-      const move = attackerMon.moves[action.val];
+      // Moves
+      p1Mon.moves.forEach((m, idx) => {
+        const mult = getTypeMultiplier(m.type, p2Mon.types);
+        let effBadge = '';
+        if (mult > 1) effBadge = `<span class="text-[9px] font-extrabold text-emerald-400">${mult}x Super Effective</span>`;
+        else if (mult < 1 && mult > 0) effBadge = `<span class="text-[9px] font-extrabold text-amber-400">${mult}x Not Effective</span>`;
+        else if (mult === 0) effBadge = `<span class="text-[9px] font-extrabold text-slate-400">0x Immune</span>`;
+
+        const btn = document.createElement('button');
+        btn.className = `p-3 rounded-xl glass-panel glass-panel-hover flex flex-col justify-between border-l-4 border-l-blue-500 text-left transition-all`;
+        btn.onclick = () => selectAction({ type: 'move', moveIndex: idx });
+        btn.innerHTML = `
+          <div class="flex justify-between items-center w-full">
+            <span class="font-bold text-xs text-white">${m.name}</span>
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-type-${m.type.toLowerCase()}">${m.type}</span>
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-slate-400 mt-2">
+            <span>Pwr: ${m.power} | Acc: ${m.accuracy}%</span>
+            ${effBadge}
+          </div>
+        `;
+        movesContainer.appendChild(btn);
+      });
+
+      // Switch Team Buttons
+      p1Team.forEach((mon, idx) => {
+        const btn = document.createElement('button');
+        const isCurrent = idx === p1ActiveIndex;
+        const isDisabled = mon.fainted || isCurrent;
+
+        btn.disabled = isDisabled;
+        btn.onclick = () => selectAction({ type: 'switch', targetIndex: idx });
+        btn.className = `p-2 rounded-xl border text-center flex flex-col items-center justify-center transition-all ${
+          isCurrent 
+            ? 'border-blue-500 bg-blue-500/20 opacity-70 cursor-not-allowed' 
+            : mon.fainted 
+              ? 'border-slate-800 bg-slate-900/40 opacity-40 cursor-not-allowed' 
+              : 'border-slate-700 glass-panel glass-panel-hover'
+        }`;
+
+        btn.innerHTML = `
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.num}.png" class="w-10 h-10 object-contain" />
+          <div class="text-[10px] font-bold text-slate-200 truncate w-full">${mon.name}</div>
+          <div class="text-[9px] text-slate-400 font-mono">${Math.max(0, Math.round((mon.currentHp / mon.maxHp) * 100))}%</div>
+        `;
+        switchContainer.appendChild(btn);
+      });
+    }
+
+    function selectAction(action) {
+      if (isLocked) return;
+      p1Action = action;
+      isLocked = true;
+      renderCommandControls();
+
+      if (gameMode === 'ai') {
+        p2Action = getAiAction();
+        resolveTurn();
+      } else if (gameMode === 'online' && peerConn) {
+        peerConn.send({ type: 'ACTION', action: p1Action });
+        document.getElementById('p2-lock-status').textContent = "Waiting for remote opponent...";
+      }
+    }
+
+    function getAiAction() {
+      const p2Mon = p2Team[p2ActiveIndex];
+      const p1Mon = p1Team[p1ActiveIndex];
+
+      let bestMoveIdx = 0;
+      let maxMult = -1;
+
+      p2Mon.moves.forEach((m, idx) => {
+        const mult = getTypeMultiplier(m.type, p1Mon.types);
+        if (mult > maxMult) {
+          maxMult = mult;
+          bestMoveIdx = idx;
+        }
+      });
+
+      return { type: 'move', moveIndex: bestMoveIdx };
+    }
+
+    /* TURN RESOLUTION & ACCURATE DAMAGE CALCULATION */
+    async function resolveTurn() {
+      const overlay = document.getElementById('turn-cooldown-overlay');
+      const bar = document.getElementById('cooldown-bar');
+      overlay.classList.remove('hidden');
       
-      // TRIGGER CANVAS PARTICLE ANIMATION & TYPE OVERLAYS
-      triggerMoveVisualFX(playerKey, move.type);
-      playSynthSound('hit');
+      bar.classList.remove('timer-countdown-bar');
+      void bar.offsetWidth;
+      bar.classList.add('timer-countdown-bar');
 
-      // DAMAGE CALCULATIONS
+      const p1Mon = p1Team[p1ActiveIndex];
+      const p2Mon = p2Team[p2ActiveIndex];
+
+      let p1First = true;
+      if (p1Action.type === 'switch' && p2Action.type !== 'switch') {
+        p1First = true;
+      } else if (p2Action.type === 'switch' && p1Action.type !== 'switch') {
+        p1First = false;
+      } else if (p1Action.type === 'move' && p2Action.type === 'move') {
+        const m1 = p1Mon.moves[p1Action.moveIndex];
+        const m2 = p2Mon.moves[p2Action.moveIndex];
+
+        if (m1.priority !== m2.priority) {
+          p1First = m1.priority > m2.priority;
+        } else {
+          p1First = p1Mon.speed >= p2Mon.speed;
+        }
+      }
+
+      const firstActor = p1First ? 'p1' : 'p2';
+      const secondActor = p1First ? 'p2' : 'p1';
+      const firstAction = p1First ? p1Action : p2Action;
+      const secondAction = p1First ? p2Action : p1Action;
+
+      await executeAction(firstActor, firstAction);
+
+      const targetMon = secondActor === 'p1' ? p1Team[p1ActiveIndex] : p2Team[p2ActiveIndex];
+      if (!targetMon.fainted) {
+        await executeAction(secondActor, secondAction);
+      }
+
+      await new Promise(r => setTimeout(r, 1200));
+
+      overlay.classList.add('hidden');
+      isLocked = false;
+      p1Action = null;
+      p2Action = null;
+      turnCount++;
+      document.getElementById('turn-counter').textContent = turnCount;
+
+      checkFaintedAndSwitch();
+      renderBattleUI();
+    }
+
+    async function executeAction(actor, action) {
+      const isP1 = actor === 'p1';
+      const userSprite = document.getElementById(isP1 ? 'p1-sprite' : 'p2-sprite');
+      const targetSprite = document.getElementById(isP1 ? 'p2-sprite' : 'p1-sprite');
+      const attackerMon = isP1 ? p1Team[p1ActiveIndex] : p2Team[p2ActiveIndex];
+      const defenderMon = isP1 ? p2Team[p2ActiveIndex] : p1Team[p1ActiveIndex];
+
+      if (action.type === 'switch') {
+        if (isP1) p1ActiveIndex = action.targetIndex;
+        else p2ActiveIndex = action.targetIndex;
+
+        const newMon = isP1 ? p1Team[p1ActiveIndex] : p2Team[p2ActiveIndex];
+        logMessage(`${isP1 ? 'Player 1' : 'Opponent'} switched out to ${newMon.name}!`);
+        userSprite.classList.add('fx-switch');
+        await new Promise(r => setTimeout(r, 500));
+        userSprite.classList.remove('fx-switch');
+        renderBattleUI();
+        return;
+      }
+
+      const move = attackerMon.moves[action.moveIndex];
+      logMessage(`${attackerMon.name} used ${move.name}!`);
+
+      userSprite.classList.add(isP1 ? 'fx-lunge-p1' : 'fx-lunge-p2');
+      await new Promise(r => setTimeout(r, 250));
+      userSprite.classList.remove(isP1 ? 'fx-lunge-p1' : 'fx-lunge-p2');
+
+      triggerParticleFX(move.type, !isP1);
+
+      // ACCURATE POKEMON SHOWDOWN DAMAGE FORMULA
+      const level = 85;
+      const atkStat = move.category === 'Physical' ? attackerMon.atk : attackerMon.spAtk;
+      const defStat = move.category === 'Physical' ? defenderMon.def : defenderMon.spDef;
+      
+      const stab = attackerMon.types.includes(move.type) ? 1.5 : 1.0;
       const typeMult = getTypeMultiplier(move.type, defenderMon.types);
-      const baseDmg = Math.floor(move.power * 0.85 + Math.random() * 20);
-      const finalDmg = Math.floor(baseDmg * typeMult);
+      const randomVar = 0.85 + Math.random() * 0.15;
 
-      defenderMon.currentHp = Math.max(0, defenderMon.currentHp - finalDmg);
-      updateBattleUI();
+      let baseDamage = Math.floor(Math.floor(Math.floor((2 * level) / 5 + 2) * move.power * (atkStat / defStat)) / 50) + 2;
+      let finalDamage = Math.floor(baseDamage * stab * typeMult * randomVar);
 
-      let logMsg = `${attackerMon.name} used ${move.name}! Dealt ${finalDmg} HP damage.`;
-      if (typeMult >= 4) logMsg += ' (It\'s extremely effective! 4x)';
-      else if (typeMult === 2) logMsg += ' (It\'s super effective! 2x)';
-      else if (typeMult === 0.5) logMsg += ' (It\'s not very effective... 0.5x)';
-      else if (typeMult === 0.25) logMsg += ' (It\'s barely effective... 0.25x)';
-      else if (typeMult === 0) logMsg += ' (It had no effect! 0x)';
+      if (typeMult === 0) finalDamage = 0;
 
-      appendBattleLog(logMsg);
+      defenderMon.currentHp = Math.max(0, defenderMon.currentHp - finalDamage);
+
+      targetSprite.classList.add('fx-hit');
+      await new Promise(r => setTimeout(r, 450));
+      targetSprite.classList.remove('fx-hit');
+
+      if (typeMult > 1) logMessage(`It's super effective! (-${finalDamage} HP)`);
+      else if (typeMult < 1 && typeMult > 0) logMessage(`It's not very effective... (-${finalDamage} HP)`);
+      else if (typeMult === 0) logMessage(`It had no effect!`);
+      else logMessage(`Dealt ${finalDamage} damage to ${defenderMon.name}!`);
+
+      updateHpBar(isP1 ? 'p2' : 'p1', defenderMon);
 
       if (defenderMon.currentHp <= 0) {
         defenderMon.fainted = true;
-        playSynthSound('faint');
-        
-        const defSprite = document.getElementById(isP1 ? 'p2-sprite' : 'p1-sprite');
-        defSprite.classList.add('fx-faint');
-        await delay(800);
-        defSprite.classList.remove('fx-faint');
-
-        appendBattleLog(`${defenderMon.name} fainted!`);
-
-        const nextIdx = defenderOwner.team.findIndex(m => !m.fainted);
-        if (nextIdx !== -1) {
-          defenderOwner.activeIdx = nextIdx;
-          appendBattleLog(`${defenderOwner.name} sent out ${defenderOwner.team[nextIdx].name}!`);
-          updateBattleUI();
-        } else {
-          state.battle.active = false;
-          appendBattleLog(`🏆 ${attackerOwner.name} won the match!`);
-          document.getElementById('result-title').innerText = isP1 ? 'VICTORY!' : 'DEFEAT!';
-          document.getElementById('result-subtext').innerText = `${attackerOwner.name} defeated ${defenderOwner.name}!`;
-          setTimeout(() => document.getElementById('results-modal').classList.remove('hidden'), 600);
-        }
+        logMessage(`${defenderMon.name} fainted!`);
+        targetSprite.classList.add('fx-faint');
+        await new Promise(r => setTimeout(r, 850));
+        targetSprite.classList.remove('fx-faint');
       }
     }
 
-    /* CUSTOM CANVAS ATTACK PARTICLE ANIMATIONS FOR EVERY TYPE */
-    function triggerMoveVisualFX(attackerKey, moveType) {
-      const attackerSprite = document.getElementById(attackerKey === 'p1' ? 'p1-sprite' : 'p2-sprite');
-      const defenderSprite = document.getElementById(attackerKey === 'p1' ? 'p2-sprite' : 'p1-sprite');
-      const fxOverlay = document.getElementById('move-fx-overlay');
+    function checkFaintedAndSwitch() {
+      const p1AllFainted = p1Team.every(m => m.fainted);
+      const p2AllFainted = p2Team.every(m => m.fainted);
 
-      attackerSprite.classList.add(attackerKey === 'p1' ? 'fx-lunge-p1' : 'fx-lunge-p2');
-      
-      setTimeout(() => {
-        defenderSprite.classList.add('fx-hit');
-        fxOverlay.className = `absolute inset-0 z-20 pointer-events-none fx-overlay-${moveType || 'Normal'}`;
-        
-        // Spawn Canvas Particles
-        spawnTypeParticles(attackerKey, moveType);
-
-        setTimeout(() => {
-          attackerSprite.classList.remove('fx-lunge-p1', 'fx-lunge-p2');
-          defenderSprite.classList.remove('fx-hit');
-          fxOverlay.className = 'absolute inset-0 z-20 pointer-events-none';
-        }, 450);
-      }, 220);
-    }
-
-    function spawnTypeParticles(attackerKey, moveType) {
-      const canvas = document.getElementById('attack-fx-canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-
-      const particles = [];
-      const colorMap = {
-        Fire: '#ef4444', Water: '#3b82f6', Electric: '#eab308', Grass: '#22c55e',
-        Ice: '#38bdf8', Fighting: '#dc2626', Poison: '#a855f7', Ground: '#d97706',
-        Flying: '#818cf8', Psychic: '#ec4899', Bug: '#84cc16', Rock: '#ca8a04',
-        Ghost: '#7e22ce', Dragon: '#6366f1', Dark: '#334155', Steel: '#94a3b8',
-        Fairy: '#f472b6', Normal: '#f1f5f9'
-      };
-
-      const pColor = colorMap[moveType] || '#3b82f6';
-      const startX = attackerKey === 'p1' ? canvas.width * 0.25 : canvas.width * 0.75;
-      const startY = attackerKey === 'p1' ? canvas.height * 0.75 : canvas.height * 0.25;
-      const targetX = attackerKey === 'p1' ? canvas.width * 0.75 : canvas.width * 0.25;
-      const targetY = attackerKey === 'p1' ? canvas.height * 0.25 : canvas.height * 0.75;
-
-      for (let i = 0; i < 40; i++) {
-        particles.push({
-          x: startX,
-          y: startY,
-          vx: (targetX - startX) * 0.05 + (Math.random() - 0.5) * 8,
-          vy: (targetY - startY) * 0.05 + (Math.random() - 0.5) * 8,
-          radius: Math.random() * 6 + 3,
-          alpha: 1,
-          color: pColor
-        });
+      if (p1AllFainted || p2AllFainted) {
+        showMatchResults(!p1AllFainted);
+        return;
       }
 
-      function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let active = false;
-
-        particles.forEach(p => {
-          if (p.alpha > 0) {
-            active = true;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.alpha -= 0.03;
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = Math.max(0, p.alpha);
-            ctx.fill();
-          }
-        });
-
-        if (active) requestAnimationFrame(animateParticles);
-        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (p1Team[p1ActiveIndex].fainted) {
+        const nextP1 = p1Team.findIndex(m => !m.fainted);
+        if (nextP1 !== -1) p1ActiveIndex = nextP1;
       }
 
-      requestAnimationFrame(animateParticles);
+      if (p2Team[p2ActiveIndex].fainted) {
+        const nextP2 = p2Team.findIndex(m => !m.fainted);
+        if (nextP2 !== -1) p2ActiveIndex = nextP2;
+      }
     }
 
-    function appendBattleLog(txt) {
-      const log = document.getElementById('battle-log');
-      const div = document.createElement('div');
-      div.className = 'py-0.5 border-b border-slate-800/40';
-      div.innerText = txt;
-      log.appendChild(div);
-      log.scrollTop = log.scrollHeight;
+    function showMatchResults(isP1Winner) {
+      const modal = document.getElementById('results-modal');
+      const icon = document.getElementById('result-header-icon');
+      const title = document.getElementById('result-title');
+      const sub = document.getElementById('result-subtext');
+
+      modal.classList.remove('hidden');
+      if (isP1Winner) {
+        icon.className = "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+        icon.textContent = "🏆";
+        title.textContent = "VICTORY!";
+        sub.textContent = "You defeated your opponent in battle!";
+      } else {
+        icon.className = "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl font-black bg-red-500/20 text-red-400 border border-red-500/30";
+        icon.textContent = "💀";
+        title.textContent = "DEFEAT";
+        sub.textContent = "All your Pokémon have fainted...";
+      }
     }
 
     function forfeitBattle() {
-      state.battle.active = false;
-      switchTab('lobby');
+      if (confirm('Are you sure you want to forfeit this match?')) {
+        showMatchResults(false);
+      }
     }
 
     function closeResultsModal() {
       document.getElementById('results-modal').classList.add('hidden');
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      rollRandomLobbyPreview();
-      initPeerNetwork();
-      lucide.createIcons();
-    });
+    function logMessage(msg) {
+      const log = document.getElementById('battle-log');
+      const p = document.createElement('div');
+      p.className = 'py-0.5 border-b border-slate-800/40';
+      p.textContent = `> ${msg}`;
+      log.appendChild(p);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    /* CANVAS ATTACK PARTICLE SYSTEM */
+    let canvas, ctx;
+    let particles = [];
+
+    function initCanvas() {
+      canvas = document.getElementById('attack-fx-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      requestAnimationFrame(animateParticles);
+    }
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function triggerParticleFX(type, isOpponentAttacker) {
+      if (!canvas) return;
+      const startX = isOpponentAttacker ? canvas.width * 0.75 : canvas.width * 0.25;
+      const startY = isOpponentAttacker ? canvas.height * 0.3 : canvas.height * 0.7;
+      
+      const targetX = isOpponentAttacker ? canvas.width * 0.25 : canvas.width * 0.75;
+      const targetY = isOpponentAttacker ? canvas.height * 0.7 : canvas.height * 0.3;
+
+      let color = '#3b82f6';
+      if (type === 'Fire') color = '#ef4444';
+      if (type === 'Electric') color = '#eab308';
+      if (type === 'Grass') color = '#22c55e';
+      if (type === 'Ice') color = '#06b6d4';
+      if (type === 'Ghost' || type === 'Psychic') color = '#a855f7';
+
+      for (let i = 0; i < 35; i++) {
+        particles.push({
+          x: startX,
+          y: startY,
+          vx: (targetX - startX) / 15 + (Math.random() - 0.5) * 6,
+          vy: (targetY - startY) / 15 + (Math.random() - 0.5) * 6,
+          radius: Math.random() * 5 + 3,
+          color: color,
+          alpha: 1,
+          life: 20 + Math.random() * 10
+        });
+      }
+    }
+
+    function animateParticles() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, idx) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 1 / p.life;
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        ctx.restore();
+
+        if (p.alpha <= 0) particles.splice(idx, 1);
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    /* PEERJS MULTIPLAYER MODAL & NETWORK HANDLERS */
+    function openCustomRoomModal() {
+      document.getElementById('custom-room-modal').classList.remove('hidden');
+      if (!peer) {
+        peer = new Peer();
+        peer.on('open', id => {
+          document.getElementById('my-peer-id').value = id;
+        });
+        peer.on('connection', conn => {
+          peerConn = conn;
+          setupPeerListeners();
+          gameMode = 'online';
+          document.getElementById('custom-room-modal').classList.add('hidden');
+          initBattle();
+        });
+      }
+    }
+
+    function closeCustomRoomModal() {
+      document.getElementById('custom-room-modal').classList.add('hidden');
+    }
+
+    function copyPeerId() {
+      const copyText = document.getElementById("my-peer-id");
+      navigator.clipboard.writeText(copyText.value);
+      alert("Room Code copied to clipboard!");
+    }
+
+    function connectToPeer() {
+      const remoteId = document.getElementById('join-peer-id').value.trim();
+      if (!remoteId) return alert('Please enter a valid Room Code');
+      peerConn = peer.connect(remoteId);
+      setupPeerListeners();
+      gameMode = 'online';
+      document.getElementById('custom-room-modal').classList.add('hidden');
+      initBattle();
+    }
+
+    function setupPeerListeners() {
+      peerConn.on('data', data => {
+        if (data.type === 'ACTION') {
+          p2Action = data.action;
+          document.getElementById('p2-lock-status').textContent = "Opponent Ready!";
+          if (p1Action) resolveTurn();
+        }
+      });
+    }
   </script>
 </body>
 </html>
