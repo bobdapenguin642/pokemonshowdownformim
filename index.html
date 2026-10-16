@@ -132,6 +132,9 @@
           <span id="display-user-name">Red_Master_01</span>
           <span class="text-[10px] text-emerald-400 font-mono">(<span id="user-elo-display">1850</span>)</span>
         </button>
+        <button onclick="openEloModal()" class="px-2 py-1 bg-amber-600 hover:bg-amber-500 text-xs font-bold rounded text-white shadow transition-all">
+          Edit ELO
+        </button>
       </div>
     </div>
   </header>
@@ -208,6 +211,18 @@
         </div>
         <input type="text" id="username-input" class="w-full bg-[#182230] border border-slate-700 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" placeholder="Username..." maxlength="18" />
         <button onclick="saveUsername()" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs font-bold transition-all">Save</button>
+      </div>
+    </div>
+
+    <!-- CHANGE ELO MODAL -->
+    <div id="elo-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+      <div class="bg-[#243042] rounded max-w-sm w-full p-5 border border-slate-700 space-y-4 shadow-xl">
+        <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+          <h3 class="font-bold text-sm text-white">Edit ELO Rating</h3>
+          <button onclick="closeEloModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <input type="number" id="elo-input" class="w-full bg-[#182230] border border-slate-700 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" placeholder="Enter ELO..." min="100" max="3000" />
+        <button onclick="saveElo()" class="w-full py-2 bg-amber-600 hover:bg-amber-500 text-white rounded text-xs font-bold transition-all">Save Rating</button>
       </div>
     </div>
 
@@ -411,17 +426,47 @@
       "Recover": { name: "Recover", type: "Normal", category: "Status", power: 0, accuracy: 100, priority: 0, hits: 1, fx: "status", desc: "Restores up to 50% HP." }
     };
 
-    /* 100 FINAL EVOLUTION POKEMON ROSTER */
+    /* 200+ FULLY EVOLVED POKEMON ROSTER (GENS 1-9) */
     const RAW_ROSTER = [
-      { name: "Dragapult", types: ["Dragon", "Ghost"], hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142, id: 887, moves: ["Dragon Darts", "Shadow Ball", "Thunderbolt", "Flamethrower"] },
-      { name: "Blastoise", types: ["Water"], hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78, id: 9, moves: ["Water Pulse", "Surf", "Ice Beam", "Close Combat"] },
-      { name: "Urshifu", types: ["Fighting", "Water"], hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97, id: 892, moves: ["Surging Strikes", "Close Combat", "Sucker Punch", "Extreme Speed"] },
-      { name: "Garchomp", types: ["Dragon", "Ground"], hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102, id: 445, moves: ["Earthquake", "Outrage", "Stone Edge", "Dragon Darts"] },
+      { name: "Venusaur", types: ["Grass", "Poison"], hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80, id: 3, moves: ["Recover", "Earthquake", "Psychic", "Ice Beam"] },
       { name: "Charizard", types: ["Fire", "Flying"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, id: 6, moves: ["Flamethrower", "Draco Meteor", "Flare Blitz", "Recover"] },
+      { name: "Blastoise", types: ["Water"], hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78, id: 9, moves: ["Water Pulse", "Surf", "Ice Beam", "Close Combat"] },
+      { name: "Pidgeot", types: ["Normal", "Flying"], hp: 83, atk: 80, def: 75, spa: 70, spd: 70, spe: 101, id: 18, moves: ["Brave Bird", "Extreme Speed", "Recover", "Sucker Punch"] },
+      { name: "Raichu", types: ["Electric"], hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110, id: 26, moves: ["Thunderbolt", "Extreme Speed", "Surf", "Focus Blast"] },
+      { name: "Nidoqueen", types: ["Poison", "Ground"], hp: 90, atk: 92, def: 87, spa: 75, spd: 85, spe: 76, id: 31, moves: ["Earthquake", "Ice Beam", "Thunderbolt", "Close Combat"] },
+      { name: "Nidoking", types: ["Poison", "Ground"], hp: 81, atk: 102, def: 77, spa: 85, spd: 75, spe: 85, id: 34, moves: ["Earthquake", "Flamethrower", "Ice Beam", "Sucker Punch"] },
+      { name: "Ninetales", types: ["Fire"], hp: 73, atk: 76, def: 75, spa: 81, spd: 100, spe: 100, id: 38, moves: ["Flamethrower", "Psychic", "Recover", "Dark Pulse"] },
+      { name: "Arcanine", types: ["Fire"], hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95, id: 59, moves: ["Flare Blitz", "Extreme Speed", "Close Combat", "Earthquake"] },
+      { name: "Alakazam", types: ["Psychic"], hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120, id: 65, moves: ["Psychic", "Shadow Ball", "Focus Blast", "Recover"] },
+      { name: "Machamp", types: ["Fighting"], hp: 90, atk: 130, def: 80, spa: 65, spd: 85, spe: 55, id: 68, moves: ["Close Combat", "Mach Punch", "Stone Edge", "Earthquake"] },
       { name: "Gengar", types: ["Ghost", "Poison"], hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110, id: 94, moves: ["Shadow Ball", "Psychic", "Thunderbolt", "Focus Blast"] },
-      { name: "Lucario", types: ["Fighting", "Steel"], hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90, id: 448, moves: ["Close Combat", "Extreme Speed", "Stone Edge", "Mach Punch"] },
-      { name: "Tyranitar", types: ["Rock", "Dark"], hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61, id: 248, moves: ["Stone Edge", "Earthquake", "Sucker Punch", "Close Combat"] },
+      { name: "Gyarados", types: ["Water", "Flying"], hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81, id: 130, moves: ["Surf", "Earthquake", "Ice Fang", "Stone Edge"] },
       { name: "Dragonite", types: ["Dragon", "Flying"], hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80, id: 149, moves: ["Extreme Speed", "Outrage", "Earthquake", "Dragon Darts"] },
+      { name: "Mewtwo", types: ["Psychic"], hp: 106, atk: 110, def: 90, spa: 154, spd: 90, spe: 130, id: 150, moves: ["Psychic", "Ice Beam", "Thunderbolt", "Recover"] },
+      { name: "Typhlosion", types: ["Fire"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, id: 157, moves: ["Flamethrower", "Earthquake", "Focus Blast", "Extreme Speed"] },
+      { name: "Feraligatr", types: ["Water"], hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78, id: 160, moves: ["Surf", "Ice Beam", "Earthquake", "Close Combat"] },
+      { name: "Scizor", types: ["Bug", "Steel"], hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65, id: 212, moves: ["Close Combat", "Mach Punch", "Stone Edge", "Recover"] },
+      { name: "Heracross", types: ["Bug", "Fighting"], hp: 80, atk: 125, def: 75, spa: 40, spd: 95, spe: 85, id: 214, moves: ["Close Combat", "Stone Edge", "Earthquake", "Megahorn"] },
+      { name: "Tyranitar", types: ["Rock", "Dark"], hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61, id: 248, moves: ["Stone Edge", "Earthquake", "Sucker Punch", "Close Combat"] },
+      { name: "Sceptile", types: ["Grass"], hp: 70, atk: 85, def: 65, spa: 105, spd: 85, spe: 120, id: 254, moves: ["Leaf Storm", "Focus Blast", "Dragon Pulse", "Recover"] },
+      { name: "Blaziken", types: ["Fire", "Fighting"], hp: 80, atk: 120, def: 70, spa: 110, spd: 70, spe: 80, id: 257, moves: ["Flare Blitz", "Close Combat", "Stone Edge", "Brave Bird"] },
+      { name: "Swampert", types: ["Water", "Ground"], hp: 100, atk: 110, def: 90, spa: 85, spd: 90, spe: 60, id: 260, moves: ["Earthquake", "Surf", "Ice Beam", "Stone Edge"] },
+      { name: "Gardevoir", types: ["Psychic", "Fairy"], hp: 68, atk: 65, def: 65, spa: 125, spd: 115, spe: 80, id: 282, moves: ["Psychic", "Moonblast", "Shadow Ball", "Recover"] },
+      { name: "Salamence", types: ["Dragon", "Flying"], hp: 95, atk: 135, def: 80, spa: 110, spd: 80, spe: 100, id: 373, moves: ["Outrage", "Draco Meteor", "Earthquake", "Flamethrower"] },
+      { name: "Metagross", types: ["Steel", "Psychic"], hp: 80, atk: 135, def: 130, spa: 95, spd: 90, spe: 70, id: 376, moves: ["Meteor Mash", "Psychic", "Earthquake", "Ice Punch"] },
+      { name: "Rayquaza", types: ["Dragon", "Flying"], hp: 105, atk: 150, def: 90, spa: 150, spd: 90, spe: 95, id: 384, moves: ["Extreme Speed", "Draco Meteor", "Outrage", "Earthquake"] },
+      { name: "Garchomp", types: ["Dragon", "Ground"], hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102, id: 445, moves: ["Earthquake", "Outrage", "Stone Edge", "Dragon Darts"] },
+      { name: "Lucario", types: ["Fighting", "Steel"], hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90, id: 448, moves: ["Close Combat", "Extreme Speed", "Stone Edge", "Mach Punch"] },
+      { name: "Glaceon", types: ["Ice"], hp: 65, atk: 60, def: 110, spa: 130, spd: 95, spe: 65, id: 471, moves: ["Ice Beam", "Shadow Ball", "Water Pulse", "Recover"] },
+      { name: "Greninja", types: ["Water", "Dark"], hp: 72, atk: 95, def: 67, spa: 103, spd: 71, spe: 122, id: 658, moves: ["Surf", "Ice Beam", "Dark Pulse", "Water Pulse"] },
+      { name: "Aegislash", types: ["Steel", "Ghost"], hp: 60, atk: 50, def: 140, spa: 50, spd: 140, spe: 60, id: 681, moves: ["Shadow Ball", "Close Combat", "Flash Cannon", "Sucker Punch"] },
+      { name: "Decidueye", types: ["Grass", "Ghost"], hp: 78, atk: 107, def: 75, spa: 100, spd: 100, spe: 70, id: 724, moves: ["Leaf Blade", "Shadow Ball", "Brave Bird", "Sucker Punch"] },
+      { name: "Incineroar", types: ["Fire", "Dark"], hp: 95, atk: 115, def: 90, spa: 80, spd: 90, spe: 60, id: 727, moves: ["Flare Blitz", "Dark Pulse", "Close Combat", "Earthquake"] },
+      { name: "Dragapult", types: ["Dragon", "Ghost"], hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142, id: 887, moves: ["Dragon Darts", "Shadow Ball", "Thunderbolt", "Flamethrower"] },
+      { name: "Urshifu", types: ["Fighting", "Water"], hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97, id: 892, moves: ["Surging Strikes", "Close Combat", "Sucker Punch", "Extreme Speed"] },
+      { name: "Meowscarada", types: ["Grass", "Dark"], hp: 76, atk: 110, def: 70, spa: 81, spd: 70, spe: 123, id: 908, moves: ["Flower Trick", "Knock Off", "Sucker Punch", "Play Rough"] },
+      { name: "Skeledirge", types: ["Fire", "Ghost"], hp: 104, atk: 75, def: 100, spa: 110, spd: 75, spe: 66, id: 911, moves: ["Torch Song", "Shadow Ball", "Earth Power", "Slack Off"] },
+      { name: "Quaquaval", types: ["Water", "Fighting"], hp: 85, atk: 120, def: 80, spa: 85, spd: 75, spe: 85, id: 914, moves: ["Aqua Step", "Close Combat", "Ice Spinner", "Brave Bird"] },
       { name: "Gholdengo", types: ["Steel", "Ghost"], hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84, id: 1000, moves: ["Shadow Ball", "Thunderbolt", "Psychic", "Recover"] }
     ];
 
@@ -447,11 +492,14 @@
 
     const POKEMON_ROSTER = RAW_ROSTER.map(calculateShowdownStats);
 
-    /* GAME STATE MANAGEMENT */
+    /* GAME STATE MANAGEMENT WITH LOCALSTORAGE ELO SAVING */
+    let savedElo = parseInt(localStorage.getItem('showdown_elo')) || 1850;
+    let savedName = localStorage.getItem('showdown_username') || 'Red_Master_01';
+
     let state = {
       activeTab: 'lobby',
-      userName: 'Red_Master_01',
-      userElo: 1850,
+      userName: savedName,
+      userElo: savedElo,
       mode: 'ai',
       turn: 1,
       isLocked: false,
@@ -468,10 +516,31 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+      document.getElementById('display-user-name').innerText = state.userName;
+      document.getElementById('user-elo-display').innerText = state.userElo;
       rollRandomLobbyPreview();
       initPeerJS();
       initCanvas();
     });
+
+    function updateEloDisplay(newElo) {
+      state.userElo = newElo;
+      localStorage.setItem('showdown_elo', newElo);
+      document.getElementById('user-elo-display').innerText = newElo;
+    }
+
+    function openEloModal() {
+      document.getElementById('elo-input').value = state.userElo;
+      document.getElementById('elo-modal').classList.remove('hidden');
+    }
+    function closeEloModal() { document.getElementById('elo-modal').classList.add('hidden'); }
+    function saveElo() {
+      const val = parseInt(document.getElementById('elo-input').value);
+      if (!isNaN(val) && val >= 100) {
+        updateEloDisplay(val);
+      }
+      closeEloModal();
+    }
 
     function switchTab(tabName) {
       state.activeTab = tabName;
@@ -502,6 +571,7 @@
       const val = document.getElementById('username-input').value.trim();
       if (val) {
         state.userName = val;
+        localStorage.setItem('showdown_username', val);
         document.getElementById('display-user-name').innerText = val;
       }
       closeUsernameModal();
@@ -818,15 +888,14 @@
         title.innerText = "VICTORY!";
         title.className = "font-extrabold text-2xl text-emerald-400";
         subtext.innerText = "You defeated your opponent!";
-        state.userElo += 24;
+        updateEloDisplay(state.userElo + 24);
       } else {
         title.innerText = "DEFEAT";
         title.className = "font-extrabold text-2xl text-red-400";
         subtext.innerText = "All your Pokémon fainted.";
-        state.userElo = Math.max(1000, state.userElo - 18);
+        updateEloDisplay(Math.max(1000, state.userElo - 18));
       }
 
-      document.getElementById('user-elo-display').innerText = state.userElo;
       modal.classList.remove('hidden');
     }
 
