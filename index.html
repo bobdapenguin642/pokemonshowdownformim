@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pokémon Showdown - Ultra Edition</title>
+  <title>Pokémon Showdown - Classic Edition</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -12,10 +12,12 @@
       theme: {
         extend: {
           colors: {
-            brand: { 50: '#f0f7ff', 100: '#e0effe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#0f172a' }
-          },
-          fontFamily: {
-            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            showdown: {
+              bg: '#2b384b',
+              panel: '#3a4a61',
+              border: '#1b2533',
+              logBg: '#1e2836'
+            }
           }
         }
       }
@@ -27,45 +29,47 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <style id="theme-styles">
-    body { font-family: 'Inter', sans-serif; background: #070a12; color: #f1f5f9; overflow-x: hidden; transition: background 0.3s ease; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
-    ::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 9999px; }
-
-    .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-    .glass-panel-hover:hover { background: rgba(30, 41, 59, 0.95); border-color: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
-
-    .bg-animated { background: radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.2), transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.2), transparent 45%), radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15), transparent 60%); }
-    .hp-bar-fill { transition: width 0.5s ease-out, background-color 0.3s ease; }
-
-    .arena-grass { background: radial-gradient(circle at 50% 30%, #1e293b 0%, #064e3b 55%, #022c22 100%); }
-
-    /* THEME MODIFIERS */
-    body.theme-neon { background: #020617; }
-    body.theme-neon .glass-panel { background: rgba(15, 23, 42, 0.92); border-color: rgba(168, 85, 247, 0.3); }
+  <style>
+    body { font-family: 'Roboto', sans-serif; background: #1a2332; color: #e2e8f0; margin: 0; padding: 0; }
     
-    body.theme-showdown { background: #18212e; color: #e2e8f0; }
-    body.theme-showdown .glass-panel { background: #222d3d; border-color: #334155; }
+    /* CLASSIC SHOWDOWN ARENA STYLING */
+    .showdown-battlefield {
+      background: linear-gradient(to bottom, #72a8da 0%, #a2c8ec 50%, #68a048 50%, #488028 100%);
+      border: 3px solid #141c28;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+    }
+    
+    .hp-bar-outer {
+      background: #2a2a2a;
+      border: 1px solid #000;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+    }
+    .hp-bar-inner {
+      transition: width 0.4s ease-in-out, background-color 0.3s ease;
+    }
 
-    /* MOVE & ACTION ANIMATIONS */
-    @keyframes anim-lunge-right { 0% { transform: translateX(0) scale(1); } 40% { transform: translateX(110px) scale(1.2); } 100% { transform: translateX(0) scale(1); } }
-    @keyframes anim-lunge-left { 0% { transform: translateX(0) scale(1); } 40% { transform: translateX(-110px) scale(1.2); } 100% { transform: translateX(0) scale(1); } }
-    @keyframes anim-hit-shake { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-14px, 10px) rotate(-6deg); } 40% { transform: translate(14px, -10px) rotate(6deg); } 60% { transform: translate(-10px, -6px); } 80% { transform: translate(10px, 6px); } }
-    @keyframes anim-miss-dodge { 0%, 100% { transform: translateX(0); opacity: 1; } 50% { transform: translateX(30px); opacity: 0.5; } }
-    @keyframes anim-faint-down { 0% { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); } 100% { opacity: 0; transform: translateY(60px) scale(0.4); filter: brightness(0.2); } }
-    @keyframes anim-switch-in { 0% { opacity: 0; transform: scale(0.2) translateY(40px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+    /* SHOWDOWN BUTTON STYLES */
+    .btn-move {
+      background: linear-gradient(to bottom, #4a5c76, #324054);
+      border: 1px solid #1c2736;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .btn-move:hover:not(:disabled) {
+      background: linear-gradient(to bottom, #5b708f, #3d4f68);
+      border-color: #60a5fa;
+    }
+    .btn-switch {
+      background: linear-gradient(to bottom, #2d3748, #1a202c);
+      border: 1px solid #0f172a;
+    }
+    .btn-switch:hover:not(:disabled) {
+      background: linear-gradient(to bottom, #3a4a61, #2d3748);
+      border-color: #94a3b8;
+    }
 
-    .fx-lunge-p1 { animation: anim-lunge-right 0.45s cubic-bezier(0.25, 1, 0.5, 1); }
-    .fx-lunge-p2 { animation: anim-lunge-left 0.45s cubic-bezier(0.25, 1, 0.5, 1); }
-    .fx-hit { animation: anim-hit-shake 0.45s ease-in-out; }
-    .fx-miss { animation: anim-miss-dodge 0.45s ease-in-out; }
-    .fx-faint { animation: anim-faint-down 0.85s ease-in forwards; }
-    .fx-switch { animation: anim-switch-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-    /* TYPE COLOR BADGES */
+    /* TYPE BADGES */
     .bg-type-normal { background-color: #A8A878; color: #111; } 
     .bg-type-fire { background-color: #F08030; color: #fff; }
     .bg-type-water { background-color: #6890F0; color: #fff; } 
@@ -85,142 +89,110 @@
     .bg-type-steel { background-color: #B8B8D0; color: #000; } 
     .bg-type-fairy { background-color: #EE99AC; color: #000; }
 
-    @keyframes progress-countdown {
-      from { width: 100%; }
-      to { width: 0%; }
-    }
-    .timer-countdown-bar { animation: progress-countdown 4s linear forwards; }
+    /* SPRITE ANIMATIONS */
+    @keyframes lunge-p1 { 0% { transform: translate(0,0); } 50% { transform: translate(60px, -30px); } 100% { transform: translate(0,0); } }
+    @keyframes lunge-p2 { 0% { transform: translate(0,0); } 50% { transform: translate(-60px, 30px); } 100% { transform: translate(0,0); } }
+    @keyframes hit-shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(-8px, 0); } 75% { transform: translate(8px, 0); } }
+    @keyframes faint-down { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(40px); } }
+
+    .anim-lunge-p1 { animation: lunge-p1 0.35s ease-in-out; }
+    .anim-lunge-p2 { animation: lunge-p2 0.35s ease-in-out; }
+    .anim-hit { animation: hit-shake 0.3s ease-in-out; }
+    .anim-faint { animation: faint-down 0.6s ease-in forwards; }
   </style>
 </head>
-<body class="min-h-screen bg-animated flex flex-col justify-between text-slate-100">
+<body class="min-h-screen bg-[#1a2332] flex flex-col justify-between text-slate-100">
 
   <!-- TOP HEADER NAV -->
-  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+  <header class="bg-[#101722] border-b border-[#243042] px-4 py-2.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('lobby')">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-          <i data-lucide="swords" class="w-6 h-6 text-white"></i>
+        <div class="w-8 h-8 rounded bg-blue-600 flex items-center justify-center font-bold text-white shadow">
+          <i data-lucide="swords" class="w-5 h-5"></i>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
-              SHOWDOWN ULTRA
-            </h1>
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">GEN 1–9 ENGINE</span>
-          </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Full Move Priorities, Multi-Hit Animations & Preserved Teams</p>
+          <h1 class="text-base font-bold tracking-wide text-slate-100">
+            POKÉMON SHOWDOWN
+          </h1>
+          <p class="text-[11px] text-slate-400">Classic Battle Simulator</p>
         </div>
       </div>
 
-      <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800">
-        <button id="nav-lobby" onclick="switchTab('lobby')" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md">
-          <i data-lucide="layout-grid" class="w-4 h-4"></i> Lobby
+      <nav class="flex items-center gap-2">
+        <button id="nav-lobby" onclick="switchTab('lobby')" class="px-3 py-1.5 rounded text-xs font-bold transition-all bg-blue-600 text-white shadow">
+          Lobby
         </button>
-        <button id="nav-battle" onclick="switchTab('battle')" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all">
-          <i data-lucide="swords" class="w-4 h-4"></i> Battle Arena
+        <button id="nav-battle" onclick="switchTab('battle')" class="px-3 py-1.5 rounded text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+          Battle
         </button>
       </nav>
 
       <div class="flex items-center gap-3">
-        <!-- DARK MODE MODIFIER BUTTON -->
-        <button onclick="cycleThemeModifier()" class="p-2.5 rounded-xl glass-panel text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all flex items-center gap-1.5" title="Cycle Dark Mode Modifier">
-          <i data-lucide="moon" class="w-4 h-4 text-purple-400"></i>
-          <span id="theme-label" class="text-[11px] font-bold hidden sm:inline">Ultra Dark</span>
+        <button onclick="openUsernameModal()" class="flex items-center gap-2 bg-[#222c3d] px-2.5 py-1 rounded border border-slate-700 hover:border-blue-500 text-xs font-bold transition-all">
+          <span id="display-user-name">Red_Master_01</span>
+          <span class="text-[10px] text-emerald-400 font-mono">(<span id="user-elo-display">1850</span>)</span>
         </button>
-
-        <button id="audio-toggle-btn" onclick="toggleAudio()" class="p-2.5 rounded-xl glass-panel text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all" title="Toggle Sound">
-          <i id="audio-icon" data-lucide="volume-2" class="w-5 h-5 text-emerald-400"></i>
-        </button>
-
-        <!-- EDITABLE USERNAME BADGE -->
-        <div onclick="openUsernameModal()" class="flex items-center gap-3 glass-panel px-3 py-1.5 rounded-xl border border-slate-700/60 cursor-pointer hover:border-blue-500/60 transition-all group" title="Click to Change Username">
-          <div class="relative">
-            <div id="user-tier-badge" class="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center font-bold text-slate-900 text-xs shadow-inner">
-              MASTER
-            </div>
-            <span class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
-          </div>
-          <div class="hidden lg:block text-left">
-            <div class="flex items-center gap-1 text-xs font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
-              <span id="display-user-name">Red_Master_01</span>
-              <i data-lucide="edit-3" class="w-3 h-3 opacity-60"></i>
-            </div>
-            <div class="text-[10px] text-emerald-400 font-medium">Rank #14 • <span id="user-elo-display">1850</span> ELO</div>
-          </div>
-        </div>
       </div>
     </div>
   </header>
 
   <!-- MAIN CONTENT WRAPPER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 space-y-8">
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 space-y-6">
 
     <!-- LOBBY HUB -->
-    <div id="view-lobby" class="space-y-8 animate-fadeIn">
+    <div id="view-lobby" class="space-y-6">
       
-      <div class="relative rounded-2xl glass-panel p-6 lg:p-8 border border-slate-700/60 overflow-hidden shadow-2xl">
-        <div class="relative z-10 space-y-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20 mb-2">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Custom Canvas Attack Particle FX Enabled
-              </div>
-              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Competitive Random Battles</h2>
-              <p class="text-slate-400 text-sm mt-1">Your current rolled preview team will be locked in when entering a match.</p>
-            </div>
+      <div class="bg-[#243042] p-5 rounded border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
+        <div>
+          <h2 class="text-xl font-bold text-white">Format: [Gen 9] Random Battle</h2>
+          <p class="text-xs text-slate-400 mt-1">Your rolled team will automatically carry over into your next match.</p>
+        </div>
 
-            <div class="flex flex-wrap items-center gap-3">
-              <button onclick="startMatchmaking()" class="flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-slate-950 font-black text-sm shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.02] transition-all">
-                <i data-lucide="trophy" class="w-4 h-4"></i>
-                <span>Queue Solo Ranked</span>
-              </button>
-              <button onclick="openCustomRoomModal()" class="flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-black text-sm shadow-lg shadow-emerald-500/25 hover:scale-[1.02] transition-all">
-                <i data-lucide="users" class="w-4 h-4"></i>
-                <span>Queue Ranked With Friend</span>
-              </button>
-            </div>
-          </div>
+        <div class="flex items-center gap-3">
+          <button onclick="startMatchmaking()" class="px-5 py-2.5 rounded bg-emerald-600 hover:bg-emerald-500 font-bold text-xs text-white shadow transition-all">
+            Find Battle
+          </button>
+          <button onclick="openCustomRoomModal()" class="px-5 py-2.5 rounded bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white shadow transition-all">
+            Battle Friend
+          </button>
         </div>
       </div>
 
-      <!-- PREVIEW TEAM & HOVER MOVESET INSPECTOR -->
-      <div class="glass-panel rounded-2xl p-5 border border-slate-800">
-        <div class="flex items-center justify-between gap-4 mb-4">
-          <div class="flex items-center gap-2">
-            <i data-lucide="shuffle" class="w-5 h-5 text-indigo-400"></i>
-            <h3 class="font-bold text-slate-200 text-sm tracking-wide uppercase">Your Active Battle Team (Preserved in Battle)</h3>
-          </div>
-          <button onclick="rollRandomLobbyPreview()" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-600/80 hover:bg-blue-500 text-white flex items-center gap-1 transition-colors">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Reroll Team
+      <!-- PREVIEW TEAM INSPECTOR -->
+      <div class="bg-[#243042] p-4 rounded border border-slate-700 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+          <span class="text-xs font-bold uppercase text-slate-300">Active Roster Preview</span>
+          <button onclick="rollRandomLobbyPreview()" class="text-xs font-bold px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1 transition-all">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Re-roll
           </button>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" id="lobby-team-preview"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" id="lobby-team-preview"></div>
       </div>
 
       <!-- GAME MODES -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <button onclick="startAIMatch()" class="glass-panel glass-panel-hover p-4 rounded-xl flex items-center gap-3 border-l-4 border-l-cyan-500 text-left">
-          <div class="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400"><i data-lucide="bot" class="w-5 h-5"></i></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <button onclick="startAIMatch()" class="bg-[#243042] hover:bg-[#2b3a50] p-3.5 rounded border border-slate-700 text-left flex items-center gap-3 transition-all">
+          <i data-lucide="bot" class="w-6 h-6 text-cyan-400"></i>
           <div>
-            <div class="font-bold text-sm">VS Smart Bot</div>
-            <div class="text-xs text-slate-400">AI predicts move priorities & coverage</div>
+            <div class="font-bold text-xs text-white">VS Computer</div>
+            <div class="text-[11px] text-slate-400">Play against AI bot</div>
           </div>
         </button>
 
-        <button onclick="startPassAndPlay()" class="glass-panel glass-panel-hover p-4 rounded-xl flex items-center gap-3 border-l-4 border-l-purple-500 text-left">
-          <div class="p-2.5 rounded-lg bg-purple-500/10 text-purple-400"><i data-lucide="users" class="w-5 h-5"></i></div>
+        <button onclick="startPassAndPlay()" class="bg-[#243042] hover:bg-[#2b3a50] p-3.5 rounded border border-slate-700 text-left flex items-center gap-3 transition-all">
+          <i data-lucide="users" class="w-6 h-6 text-purple-400"></i>
           <div>
-            <div class="font-bold text-sm">Pass & Play</div>
-            <div class="text-xs text-slate-400">2 Players on 1 Local Device</div>
+            <div class="font-bold text-xs text-white">Pass & Play</div>
+            <div class="text-[11px] text-slate-400">Two players on one device</div>
           </div>
         </button>
 
-        <button onclick="openCustomRoomModal()" class="glass-panel glass-panel-hover p-4 rounded-xl flex items-center gap-3 border-l-4 border-l-emerald-500 text-left">
-          <div class="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400"><i data-lucide="globe" class="w-5 h-5"></i></div>
+        <button onclick="openCustomRoomModal()" class="bg-[#243042] hover:bg-[#2b3a50] p-3.5 rounded border border-slate-700 text-left flex items-center gap-3 transition-all">
+          <i data-lucide="globe" class="w-6 h-6 text-emerald-400"></i>
           <div>
-            <div class="font-bold text-sm">Host / Join Online Friend</div>
-            <div class="text-xs text-slate-400">PeerJS P2P multiplayer room connection</div>
+            <div class="font-bold text-xs text-white">P2P Custom Room</div>
+            <div class="text-[11px] text-slate-400">Direct multiplayer room</div>
           </div>
         </button>
       </div>
@@ -228,61 +200,37 @@
     </div>
 
     <!-- CHANGE USERNAME MODAL -->
-    <div id="username-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="glass-panel rounded-2xl max-w-sm w-full p-6 border border-slate-700 shadow-2xl space-y-4">
-        <div class="flex justify-between items-center">
-          <h3 class="font-bold text-base text-slate-100 flex items-center gap-2">
-            <i data-lucide="user" class="w-4 h-4 text-blue-400"></i> Edit Trainer Name
-          </h3>
-          <button onclick="closeUsernameModal()" class="text-slate-400 hover:text-white">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
+    <div id="username-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+      <div class="bg-[#243042] rounded max-w-sm w-full p-5 border border-slate-700 space-y-4 shadow-xl">
+        <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+          <h3 class="font-bold text-sm text-white">Change Name</h3>
+          <button onclick="closeUsernameModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
-
-        <div class="space-y-2">
-          <label class="block text-xs font-semibold text-slate-400">Display Handle</label>
-          <input type="text" id="username-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Enter username..." maxlength="18" />
-        </div>
-
-        <button onclick="saveUsername()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all">
-          Save Username
-        </button>
+        <input type="text" id="username-input" class="w-full bg-[#182230] border border-slate-700 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500" placeholder="Username..." maxlength="18" />
+        <button onclick="saveUsername()" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs font-bold transition-all">Save</button>
       </div>
     </div>
 
-    <!-- MULTIPLAYER & RANKED FRIEND ROOM MODAL -->
-    <div id="custom-room-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 shadow-2xl space-y-5">
-        <div class="flex justify-between items-center">
-          <h3 class="font-bold text-lg text-slate-100 flex items-center gap-2">
-            <i data-lucide="wifi" class="w-5 h-5 text-emerald-400"></i> Online & Ranked Friend Queue
-          </h3>
-          <button onclick="closeCustomRoomModal()" class="text-slate-400 hover:text-white">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
+    <!-- ROOM MODAL -->
+    <div id="custom-room-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+      <div class="bg-[#243042] rounded max-w-md w-full p-5 border border-slate-700 space-y-4 shadow-xl">
+        <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+          <h3 class="font-bold text-sm text-white">Online Match Room</h3>
+          <button onclick="closeCustomRoomModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
-
-        <div class="space-y-4">
-          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
-            <label class="block text-xs font-bold text-slate-300">Your Lobby Code (Share with Friend)</label>
+        <div class="space-y-3">
+          <div class="bg-[#182230] p-3 rounded border border-slate-800 space-y-1">
+            <span class="text-[11px] font-bold text-slate-400 block">Your Room Code:</span>
             <div class="flex gap-2">
-              <input type="text" id="my-peer-id" readonly value="Generating ID..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-emerald-400 font-bold focus:outline-none" />
-              <button onclick="copyPeerId()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1 transition-all">
-                <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy
-              </button>
+              <input type="text" id="my-peer-id" readonly value="Connecting..." class="flex-1 bg-black border border-slate-700 rounded px-2 py-1 text-xs font-mono text-emerald-400" />
+              <button onclick="copyPeerId()" class="px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-xs rounded font-bold">Copy</button>
             </div>
-            <p class="text-[10px] text-slate-400">Share this code with your friend to queue directly into a match.</p>
           </div>
-
-          <div class="text-center text-xs font-bold text-slate-500 uppercase">OR</div>
-
-          <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2">
-            <label class="block text-xs font-bold text-slate-300">Join Friend in Ranked Match</label>
+          <div class="bg-[#182230] p-3 rounded border border-slate-800 space-y-1">
+            <span class="text-[11px] font-bold text-slate-400 block">Join Opponent Code:</span>
             <div class="flex gap-2">
-              <input type="text" id="join-peer-id" placeholder="Paste friend's Lobby Code..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-blue-400 focus:outline-none focus:border-blue-500" />
-              <button onclick="connectToPeer()" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 rounded-xl text-xs font-black transition-all">
-                Queue Ranked
-              </button>
+              <input type="text" id="join-peer-id" placeholder="Paste Code..." class="flex-1 bg-black border border-slate-700 rounded px-2 py-1 text-xs font-mono text-blue-400" />
+              <button onclick="connectToPeer()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-xs rounded font-bold">Join</button>
             </div>
           </div>
         </div>
@@ -290,178 +238,116 @@
     </div>
 
     <!-- MATCHMAKING MODAL -->
-    <div id="matchmaking-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-      <div class="glass-panel rounded-2xl max-w-md w-full p-8 border border-slate-700 shadow-2xl text-center space-y-6 relative overflow-hidden">
-        <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
-          <div class="absolute inset-0 rounded-full border-2 border-blue-500/40 animate-ping"></div>
-          <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/50">
-            <i data-lucide="swords" class="w-8 h-8 text-white animate-bounce"></i>
-          </div>
-        </div>
-
-        <div>
-          <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/30">
-            RANKED QUEUE ACTIVE
-          </span>
-          <h3 class="font-black text-xl text-slate-100 mt-2">Searching for Opponent...</h3>
-          <p class="text-xs text-slate-400 mt-1">Matching ELO ratings and assembling randomized Gen 1–9 teams</p>
-        </div>
-
-        <button onclick="cancelMatchmaking()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 border border-slate-700 transition-all">
-          Cancel Queue
-        </button>
+    <div id="matchmaking-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div class="bg-[#243042] rounded max-w-sm w-full p-6 border border-slate-700 text-center space-y-4">
+        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <h3 class="font-bold text-sm text-white">Searching for Opponent...</h3>
+        <button onclick="cancelMatchmaking()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-xs rounded font-bold">Cancel</button>
       </div>
     </div>
 
-    <!-- POST-MATCH RESULTS MODAL -->
-    <div id="results-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-      <div id="results-card" class="glass-panel rounded-3xl max-w-md w-full p-8 border-2 shadow-2xl text-center space-y-6 transform transition-all duration-300 scale-95">
-        <div id="result-header-icon" class="w-20 h-20 rounded-3xl mx-auto flex items-center justify-center text-4xl font-black shadow-2xl">
-          🏆
-        </div>
-
-        <div class="space-y-2">
-          <span id="result-badge" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-            MATCH RESOLVED
-          </span>
-          <h3 id="result-title" class="font-black text-3xl tracking-tight">VICTORY!</h3>
-          <p id="result-subtext" class="text-xs text-slate-400 max-w-xs mx-auto">You defeated your opponent in battle!</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 text-left font-mono text-xs">
-          <div>
-            <span class="text-slate-500 block text-[10px]">Turns Duration</span>
-            <span id="result-turns-count" class="text-slate-200 font-bold">12 Turns</span>
-          </div>
-          <div>
-            <span class="text-slate-500 block text-[10px]">Rating Adjust</span>
-            <span id="result-elo-change" class="text-emerald-400 font-bold">+24 ELO</span>
-          </div>
-        </div>
-
-        <div class="flex gap-3">
-          <button onclick="closeResultsModal(); switchTab('lobby');" class="flex-1 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 transition-all">
-            Return to Lobby
-          </button>
-          <button onclick="closeResultsModal(); startMatchmaking();" class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:opacity-90 text-xs font-bold text-white shadow-lg shadow-blue-600/30 transition-all">
-            Queue Next Match
-          </button>
+    <!-- RESULTS MODAL -->
+    <div id="results-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div class="bg-[#243042] rounded max-w-sm w-full p-6 border border-slate-700 text-center space-y-4">
+        <h3 id="result-title" class="font-extrabold text-2xl text-white">VICTORY!</h3>
+        <p id="result-subtext" class="text-xs text-slate-300">You won the battle!</p>
+        <div class="flex gap-2">
+          <button onclick="closeResultsModal(); switchTab('lobby');" class="flex-1 py-2 bg-slate-700 hover:bg-slate-600 text-xs font-bold rounded">Lobby</button>
+          <button onclick="closeResultsModal(); startMatchmaking();" class="flex-1 py-2 bg-blue-600 hover:bg-blue-500 text-xs font-bold rounded">Next Match</button>
         </div>
       </div>
     </div>
 
-    <!-- BATTLE ARENA -->
-    <div id="view-battle" class="hidden space-y-6 animate-fadeIn">
+    <!-- SHOWDOWN BATTLE ARENA -->
+    <div id="view-battle" class="hidden space-y-4">
       
-      <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold">ACCURATE SHOWDOWN ENGINE</span>
-          <div class="text-xs text-slate-400">Turn <span id="turn-counter" class="text-white font-bold text-sm">1</span></div>
-        </div>
-
-        <div id="p2-lock-status" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
-          Waiting for actions...
-        </div>
-
-        <button onclick="forfeitBattle()" class="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold transition-all">
-          Forfeit Match
-        </button>
-      </div>
-
-      <div id="battle-stage" class="relative rounded-2xl arena-grass border-2 border-slate-800 shadow-2xl overflow-hidden min-h-[380px] md:min-h-[460px] flex flex-col justify-between p-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         
-        <!-- CANVAS ANIMATION OVERLAY -->
-        <canvas id="attack-fx-canvas" class="absolute inset-0 z-30 pointer-events-none w-full h-full"></canvas>
+        <!-- LEFT 2 COLS: THE BATTLEFIELD & CONTROLS -->
+        <div class="lg:col-span-2 space-y-3">
+          
+          <!-- SHOWDOWN ARENA BOX -->
+          <div id="battle-stage" class="showdown-battlefield relative rounded h-[320px] sm:h-[360px] flex flex-col justify-between p-4 overflow-hidden">
+            <canvas id="attack-fx-canvas" class="absolute inset-0 pointer-events-none z-30 w-full h-full"></canvas>
 
-        <!-- TURN COUNTDOWN PACING OVERLAY -->
-        <div id="turn-cooldown-overlay" class="hidden absolute inset-x-0 top-0 z-40 bg-slate-900/90 backdrop-blur-xs py-2 px-4 flex items-center justify-between border-b border-blue-500/40">
-          <div class="flex items-center gap-2">
-            <i data-lucide="timer" class="w-4 h-4 text-blue-400 animate-spin"></i>
-            <span id="cooldown-label" class="text-xs font-mono font-bold text-blue-300">Resolving Turn Actions...</span>
+            <!-- TOP OPPONENT ROW -->
+            <div class="flex justify-between items-start z-10">
+              <!-- P2 HP PANEL -->
+              <div class="bg-[#182230]/90 border border-black p-2 rounded w-52 sm:w-60 shadow-md">
+                <div class="flex justify-between items-center text-xs font-bold text-white mb-1">
+                  <span id="p2-name">Opponent</span>
+                  <span id="p2-level" class="text-[10px] text-slate-400">Lv. 85</span>
+                </div>
+                <div id="p2-types" class="flex gap-1 mb-1"></div>
+                <div class="hp-bar-outer w-full h-2.5 rounded-sm overflow-hidden mb-1">
+                  <div id="p2-hp-bar" class="hp-bar-inner h-full bg-emerald-500 w-full"></div>
+                </div>
+                <div class="flex justify-between items-center text-[10px] font-mono text-slate-300">
+                  <span id="p2-hp-text">100%</span>
+                  <div id="p2-bench-dots" class="flex gap-1"></div>
+                </div>
+              </div>
+
+              <!-- P2 SPRITE -->
+              <div class="mr-8 sm:mr-16">
+                <img id="p2-sprite" src="" class="w-28 h-28 sm:w-36 sm:h-36 object-contain filter drop-shadow-md" />
+              </div>
+            </div>
+
+            <!-- BOTTOM PLAYER ROW -->
+            <div class="flex justify-between items-end z-10">
+              <!-- P1 SPRITE -->
+              <div class="ml-8 sm:ml-16">
+                <img id="p1-sprite" src="" class="w-32 h-32 sm:w-40 sm:h-40 object-contain filter drop-shadow-md" />
+              </div>
+
+              <!-- P1 HP PANEL -->
+              <div class="bg-[#182230]/90 border border-black p-2 rounded w-52 sm:w-60 shadow-md">
+                <div class="flex justify-between items-center text-xs font-bold text-white mb-1">
+                  <span id="p1-name">Player</span>
+                  <span id="p1-level" class="text-[10px] text-slate-400">Lv. 85</span>
+                </div>
+                <div id="p1-types" class="flex gap-1 mb-1"></div>
+                <div class="hp-bar-outer w-full h-2.5 rounded-sm overflow-hidden mb-1">
+                  <div id="p1-hp-bar" class="hp-bar-inner h-full bg-emerald-500 w-full"></div>
+                </div>
+                <div class="flex justify-between items-center text-[10px] font-mono text-slate-300">
+                  <span id="p1-hp-text">100%</span>
+                  <div id="p1-bench-dots" class="flex gap-1"></div>
+                </div>
+              </div>
+            </div>
+
           </div>
-          <div class="w-1/3 bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-700">
-            <div id="cooldown-bar" class="bg-gradient-to-r from-blue-500 via-indigo-400 to-cyan-400 h-full w-full"></div>
+
+          <!-- COMMAND CONTROLS PANEL -->
+          <div class="bg-[#243042] border border-slate-700 rounded p-3 space-y-3">
+            <div class="text-xs font-bold text-slate-300 border-b border-slate-700 pb-1.5 flex justify-between items-center">
+              <span>What will <b id="active-mon-command-name" class="text-white">Pokémon</b> do?</span>
+              <span id="turn-cooldown-label" class="hidden text-amber-400 font-mono text-[11px]">Resolving turn...</span>
+            </div>
+
+            <!-- MOVES GRID -->
+            <div class="grid grid-cols-2 gap-2" id="moves-container"></div>
+
+            <!-- SWITCH TEAM GRID -->
+            <div class="border-t border-slate-700 pt-2">
+              <span class="text-[10px] font-bold text-slate-400 uppercase block mb-1.5">Switch Pokémon:</span>
+              <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5" id="switch-team-container"></div>
+            </div>
           </div>
+
         </div>
 
-        <!-- TOP: OPPONENT MON -->
-        <div class="flex flex-col sm:flex-row justify-between items-start gap-4 z-10">
-          <div class="glass-panel rounded-xl p-3 border border-slate-700/80 w-full sm:w-72 shadow-xl">
-            <div class="flex justify-between items-baseline mb-1">
-              <span id="p2-name" class="font-extrabold text-sm text-slate-100">Opponent</span>
-              <span id="p2-level" class="text-xs text-slate-400">Lv. 85</span>
-            </div>
-            
-            <div class="flex items-center gap-2 mb-1.5">
-              <div id="p2-types" class="flex gap-1"></div>
-            </div>
-
-            <div class="w-full bg-slate-900 rounded-full h-3 border border-slate-700 overflow-hidden relative">
-              <div id="p2-hp-bar" class="hp-bar-fill h-full bg-emerald-500 w-full"></div>
-            </div>
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
-              <span id="p2-hp-text">100%</span>
-              <div id="p2-bench-dots" class="flex gap-1"></div>
-            </div>
+        <!-- RIGHT COL: CLASSIC SHOWDOWN BATTLE LOG -->
+        <div class="bg-[#1e2836] border border-slate-700 rounded p-3 flex flex-col h-[400px] lg:h-auto">
+          <div class="text-xs font-bold uppercase text-slate-400 border-b border-slate-700 pb-1.5 mb-2 flex items-center justify-between">
+            <span>Battle Log</span>
+            <span class="text-[10px] text-slate-500">Turn <b id="turn-counter" class="text-slate-300">1</b></span>
           </div>
-
-          <div class="self-end sm:self-center mr-8 sm:mr-16 relative">
-            <img id="p2-sprite" src="" alt="Opponent Pokemon" class="w-36 h-36 md:w-44 md:h-44 object-contain relative z-10 filter drop-shadow-xl" />
-          </div>
+          <div id="battle-log" class="flex-1 overflow-y-auto space-y-1 text-xs font-mono text-slate-300 pr-1"></div>
         </div>
 
-        <!-- BOTTOM: PLAYER MON -->
-        <div class="flex flex-col-reverse sm:flex-row justify-between items-end gap-4 z-10 mt-8">
-          <div class="ml-8 sm:ml-16 relative">
-            <img id="p1-sprite" src="" alt="Player Pokemon" class="w-40 h-40 md:w-48 md:h-48 object-contain relative z-10 filter drop-shadow-xl" />
-          </div>
-
-          <div class="glass-panel rounded-xl p-3 border border-slate-700/80 w-full sm:w-72 shadow-xl">
-            <div class="flex justify-between items-baseline mb-1">
-              <span id="p1-name" class="font-extrabold text-sm text-slate-100">Player</span>
-              <span id="p1-level" class="text-xs text-slate-400">Lv. 85</span>
-            </div>
-
-            <div class="flex items-center gap-2 mb-1.5">
-              <div id="p1-types" class="flex gap-1"></div>
-            </div>
-
-            <div class="w-full bg-slate-900 rounded-full h-3 border border-slate-700 overflow-hidden relative">
-              <div id="p1-hp-bar" class="hp-bar-fill h-full bg-emerald-500 w-full"></div>
-            </div>
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
-              <span id="p1-hp-text">100%</span>
-              <div id="p1-bench-dots" class="flex gap-1"></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- COMMAND PANEL -->
-        <div class="lg:col-span-2 glass-panel rounded-2xl p-5 border border-slate-800 space-y-4">
-          <div id="turn-status-banner" class="text-xs font-bold text-amber-400 uppercase tracking-wider pb-2 border-b border-slate-800 flex items-center justify-between">
-            <span id="command-prompt-text">Choose your move or switch (Hover buttons for full move breakdown):</span>
-            <span id="lock-indicator" class="hidden text-emerald-400 text-[11px] font-bold">✓ Action Locked In</span>
-          </div>
-
-          <!-- Battle Move Buttons -->
-          <div class="grid grid-cols-2 gap-3" id="moves-container"></div>
-
-          <div class="pt-2">
-            <div class="text-[11px] font-bold text-slate-400 mb-2 uppercase tracking-wide">Switch Pokémon</div>
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="switch-team-container"></div>
-          </div>
-        </div>
-
-        <!-- LOG PANEL -->
-        <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col h-[280px] lg:h-auto">
-          <div class="text-xs font-bold uppercase text-slate-400 pb-2 border-b border-slate-800 flex items-center gap-2">
-            <i data-lucide="scroll-text" class="w-4 h-4 text-blue-400"></i> Battle Transcript
-          </div>
-          <div id="battle-log" class="flex-1 overflow-y-auto space-y-1.5 text-xs font-mono py-2 pr-1 text-slate-300"></div>
-        </div>
       </div>
 
     </div>
@@ -501,47 +387,40 @@
       return mult;
     }
 
-    /* EXTENDED MOVE DATABASE WITH CUSTOM ANIMATION KEYS & MULTI-HIT FLAGS */
+    /* EXTENDED MOVE DATABASE WITH MULTI-HIT FLAGS & PRIORITIES */
     const MOVES_DB = {
-      "Dragon Darts": { name: "Dragon Darts", type: "Dragon", category: "Physical", power: 50, accuracy: 100, priority: 0, hits: 2, fx: "dragondarts", desc: "Fires two dragon darts at high speed. Hits twice in one turn." },
-      "Water Pulse": { name: "Water Pulse", type: "Water", category: "Special", power: 60, accuracy: 100, priority: 0, hits: 1, fx: "waterpulse", desc: "Attacks with ultrasonic water pulses. May confuse the target." },
-      "Surging Strikes": { name: "Surging Strikes", type: "Water", category: "Physical", power: 25, accuracy: 100, priority: 0, hits: 3, fx: "water", desc: "Hits 3 times in a row. Always lands critical hits." },
-      "Extreme Speed": { name: "Extreme Speed", type: "Normal", category: "Physical", power: 80, accuracy: 100, priority: 2, hits: 1, fx: "slash", desc: "Has +2 priority. Attacks before almost any other move." },
-      "Sucker Punch": { name: "Sucker Punch", type: "Dark", category: "Physical", power: 70, accuracy: 100, priority: 1, hits: 1, fx: "dark", desc: "Has +1 priority. Fails if target is not preparing an attack." },
-      "Mach Punch": { name: "Mach Punch", type: "Fighting", category: "Physical", power: 40, accuracy: 100, priority: 1, hits: 1, fx: "fist", desc: "Has +1 priority. A lightning-fast punch." },
-      "Ice Shard": { name: "Ice Shard", type: "Ice", category: "Physical", power: 40, accuracy: 100, priority: 1, hits: 1, fx: "ice", desc: "Has +1 priority. Chunks of ice hurled at high speed." },
-      "Close Combat": { name: "Close Combat", type: "Fighting", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "fist", desc: "Lowers user's Def and Sp. Def by 1 stage." },
-      "Earthquake": { name: "Earthquake", type: "Ground", category: "Physical", power: 100, accuracy: 100, priority: 0, hits: 1, fx: "ground", desc: "Hits all adjacent targets with immense force." },
+      "Dragon Darts": { name: "Dragon Darts", type: "Dragon", category: "Physical", power: 50, accuracy: 100, priority: 0, hits: 2, fx: "dragondarts", desc: "Fires two dragon darts. Hits twice." },
+      "Water Pulse": { name: "Water Pulse", type: "Water", category: "Special", power: 60, accuracy: 100, priority: 0, hits: 1, fx: "waterpulse", desc: "Ultrasonic water pulse. May confuse." },
+      "Surging Strikes": { name: "Surging Strikes", type: "Water", category: "Physical", power: 25, accuracy: 100, priority: 0, hits: 3, fx: "water", desc: "Hits 3 times. Always critical." },
+      "Extreme Speed": { name: "Extreme Speed", type: "Normal", category: "Physical", power: 80, accuracy: 100, priority: 2, hits: 1, fx: "slash", desc: "+2 Priority strike." },
+      "Sucker Punch": { name: "Sucker Punch", type: "Dark", category: "Physical", power: 70, accuracy: 100, priority: 1, hits: 1, fx: "dark", desc: "+1 Priority strike." },
+      "Mach Punch": { name: "Mach Punch", type: "Fighting", category: "Physical", power: 40, accuracy: 100, priority: 1, hits: 1, fx: "fist", desc: "+1 Priority fast punch." },
+      "Ice Shard": { name: "Ice Shard", type: "Ice", category: "Physical", power: 40, accuracy: 100, priority: 1, hits: 1, fx: "ice", desc: "+1 Priority ice chunk." },
+      "Close Combat": { name: "Close Combat", type: "Fighting", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "fist", desc: "High damage, lowers user defenses." },
+      "Earthquake": { name: "Earthquake", type: "Ground", category: "Physical", power: 100, accuracy: 100, priority: 0, hits: 1, fx: "ground", desc: "Heavy ground slam." },
       "Stone Edge": { name: "Stone Edge", type: "Rock", category: "Physical", power: 100, accuracy: 80, priority: 0, hits: 1, fx: "rock", desc: "High critical hit ratio." },
-      "Brave Bird": { name: "Brave Bird", type: "Flying", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "slash", desc: "User takes 33% recoil damage." },
-      "Flare Blitz": { name: "Flare Blitz", type: "Fire", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "fire", desc: "User takes 33% recoil damage. May burn target." },
-      "Wave Crash": { name: "Wave Crash", type: "Water", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "water", desc: "User takes 33% recoil damage." },
-      "Wood Hammer": { name: "Wood Hammer", type: "Grass", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "grass", desc: "User takes 33% recoil damage." },
-      "Outrage": { name: "Outrage", type: "Dragon", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "dragon", desc: "Rampages for 2-3 turns then becomes confused." },
-      "Knock Off": { name: "Knock Off", type: "Dark", category: "Physical", power: 65, accuracy: 100, priority: 0, hits: 1, fx: "dark", desc: "Deals 1.5x damage if target is holding an item." },
-      "Thunderbolt": { name: "Thunderbolt", type: "Electric", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "lightning", desc: "Has 10% chance to paralyze target." },
-      "Flamethrower": { name: "Flamethrower", type: "Fire", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "fire", desc: "Has 10% chance to burn target." },
-      "Surf": { name: "Surf", type: "Water", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "waterpulse", desc: "Hits all adjacent targets in battle with a surge of water." },
-      "Ice Beam": { name: "Ice Beam", type: "Ice", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "ice", desc: "Has 10% chance to freeze target." },
-      "Psychic": { name: "Psychic", type: "Psychic", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "psy", desc: "Has 10% chance to lower Sp. Def by 1 stage." },
-      "Shadow Ball": { name: "Shadow Ball", type: "Ghost", category: "Special", power: 80, accuracy: 100, priority: 0, hits: 1, fx: "dark", desc: "Has 20% chance to lower Sp. Def by 1 stage." },
-      "Moonblast": { name: "Moonblast", type: "Fairy", category: "Special", power: 95, accuracy: 100, priority: 0, hits: 1, fx: "fairy", desc: "Has 30% chance to lower Sp. Atk by 1 stage." },
-      "Draco Meteor": { name: "Draco Meteor", type: "Dragon", category: "Special", power: 130, accuracy: 90, priority: 0, hits: 1, fx: "dragon", desc: "Lowers user's Sp. Atk by 2 stages." },
-      "Roar": { name: "Roar", type: "Normal", category: "Status", power: 0, accuracy: 100, priority: -6, hits: 1, fx: "status", desc: "Forces target to switch out." },
-      "Toxic": { name: "Toxic", type: "Poison", category: "Status", power: 0, accuracy: 90, priority: 0, hits: 1, fx: "status", desc: "Badly poisons the target." },
-      "Recover": { name: "Recover", type: "Normal", category: "Status", power: 0, accuracy: 100, priority: 0, hits: 1, fx: "status", desc: "Restores up to 50% max HP." }
+      "Brave Bird": { name: "Brave Bird", type: "Flying", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "slash", desc: "Takes recoil damage." },
+      "Flare Blitz": { name: "Flare Blitz", type: "Fire", category: "Physical", power: 120, accuracy: 100, priority: 0, hits: 1, fx: "fire", desc: "Recoil fire charge." },
+      "Thunderbolt": { name: "Thunderbolt", type: "Electric", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "lightning", desc: "10% chance to paralyze." },
+      "Flamethrower": { name: "Flamethrower", type: "Fire", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "fire", desc: "10% chance to burn." },
+      "Surf": { name: "Surf", type: "Water", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "waterpulse", desc: "Rushing wave attack." },
+      "Ice Beam": { name: "Ice Beam", type: "Ice", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "ice", desc: "10% chance to freeze." },
+      "Psychic": { name: "Psychic", type: "Psychic", category: "Special", power: 90, accuracy: 100, priority: 0, hits: 1, fx: "psy", desc: "10% chance to lower Sp. Def." },
+      "Shadow Ball": { name: "Shadow Ball", type: "Ghost", category: "Special", power: 80, accuracy: 100, priority: 0, hits: 1, fx: "dark", desc: "20% chance to lower Sp. Def." },
+      "Draco Meteor": { name: "Draco Meteor", type: "Dragon", category: "Special", power: 130, accuracy: 90, priority: 0, hits: 1, fx: "dragon", desc: "Harshly lowers user Sp. Atk." },
+      "Recover": { name: "Recover", type: "Normal", category: "Status", power: 0, accuracy: 100, priority: 0, hits: 1, fx: "status", desc: "Restores up to 50% HP." }
     };
 
-    /* 100 FINAL EVOLUTION ROSTER WITH EXPANDED MOVESETS */
+    /* 100 FINAL EVOLUTION POKEMON ROSTER */
     const RAW_ROSTER = [
       { name: "Dragapult", types: ["Dragon", "Ghost"], hp: 88, atk: 120, def: 75, spa: 100, spd: 75, spe: 142, id: 887, moves: ["Dragon Darts", "Shadow Ball", "Thunderbolt", "Flamethrower"] },
       { name: "Blastoise", types: ["Water"], hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78, id: 9, moves: ["Water Pulse", "Surf", "Ice Beam", "Close Combat"] },
       { name: "Urshifu", types: ["Fighting", "Water"], hp: 100, atk: 130, def: 100, spa: 63, spd: 60, spe: 97, id: 892, moves: ["Surging Strikes", "Close Combat", "Sucker Punch", "Extreme Speed"] },
       { name: "Garchomp", types: ["Dragon", "Ground"], hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102, id: 445, moves: ["Earthquake", "Outrage", "Stone Edge", "Dragon Darts"] },
-      { name: "Charizard", types: ["Fire", "Flying"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, id: 6, moves: ["Flamethrower", "Draco Meteor", "Flare Blitz", "Roar"] },
-      { name: "Gengar", types: ["Ghost", "Poison"], hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110, id: 94, moves: ["Shadow Ball", "Toxic", "Psychic", "Thunderbolt"] },
+      { name: "Charizard", types: ["Fire", "Flying"], hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100, id: 6, moves: ["Flamethrower", "Draco Meteor", "Flare Blitz", "Recover"] },
+      { name: "Gengar", types: ["Ghost", "Poison"], hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110, id: 94, moves: ["Shadow Ball", "Psychic", "Thunderbolt", "Focus Blast"] },
       { name: "Lucario", types: ["Fighting", "Steel"], hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90, id: 448, moves: ["Close Combat", "Extreme Speed", "Stone Edge", "Mach Punch"] },
-      { name: "Tyranitar", types: ["Rock", "Dark"], hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61, id: 248, moves: ["Stone Edge", "Knock Off", "Earthquake", "Sucker Punch"] },
+      { name: "Tyranitar", types: ["Rock", "Dark"], hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61, id: 248, moves: ["Stone Edge", "Earthquake", "Sucker Punch", "Close Combat"] },
       { name: "Dragonite", types: ["Dragon", "Flying"], hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80, id: 149, moves: ["Extreme Speed", "Outrage", "Earthquake", "Dragon Darts"] },
       { name: "Gholdengo", types: ["Steel", "Ghost"], hp: 87, atk: 60, def: 95, spa: 133, spd: 91, spe: 84, id: 1000, moves: ["Shadow Ball", "Thunderbolt", "Psychic", "Recover"] }
     ];
@@ -573,9 +452,6 @@
       activeTab: 'lobby',
       userName: 'Red_Master_01',
       userElo: 1850,
-      audioMuted: false,
-      themeIndex: 0,
-      themes: ['theme-default', 'theme-neon', 'theme-showdown'],
       mode: 'ai',
       turn: 1,
       isLocked: false,
@@ -590,7 +466,6 @@
       lobbyPreviewTeam: []
     };
 
-    // INITIALIZATION & TAB CONTROLS
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       rollRandomLobbyPreview();
@@ -608,42 +483,21 @@
       if (tabName === 'lobby') {
         lobbyView.classList.remove('hidden');
         battleView.classList.add('hidden');
-        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md";
-        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
+        navLobby.className = "px-3 py-1.5 rounded text-xs font-bold transition-all bg-blue-600 text-white shadow";
+        navBattle.className = "px-3 py-1.5 rounded text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-all";
       } else {
         lobbyView.classList.add('hidden');
         battleView.classList.remove('hidden');
-        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md";
-        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
+        navBattle.className = "px-3 py-1.5 rounded text-xs font-bold transition-all bg-blue-600 text-white shadow";
+        navLobby.className = "px-3 py-1.5 rounded text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-all";
       }
     }
 
-    function cycleThemeModifier() {
-      document.body.classList.remove(...state.themes);
-      state.themeIndex = (state.themeIndex + 1) % state.themes.length;
-      const newTheme = state.themes[state.themeIndex];
-      if (newTheme !== 'theme-default') document.body.classList.add(newTheme);
-      
-      const labels = ['Ultra Dark', 'Neon Cyber', 'Showdown Classic'];
-      document.getElementById('theme-label').innerText = labels[state.themeIndex];
-    }
-
-    function toggleAudio() {
-      state.audioMuted = !state.audioMuted;
-      const icon = document.getElementById('audio-icon');
-      icon.setAttribute('data-lucide', state.audioMuted ? 'volume-x' : 'volume-2');
-      icon.className = state.audioMuted ? 'w-5 h-5 text-red-400' : 'w-5 h-5 text-emerald-400';
-      lucide.createIcons();
-    }
-
-    /* USERNAME & MODALS */
     function openUsernameModal() {
       document.getElementById('username-input').value = state.userName;
       document.getElementById('username-modal').classList.remove('hidden');
     }
-    function closeUsernameModal() {
-      document.getElementById('username-modal').classList.add('hidden');
-    }
+    function closeUsernameModal() { document.getElementById('username-modal').classList.add('hidden'); }
     function saveUsername() {
       const val = document.getElementById('username-input').value.trim();
       if (val) {
@@ -653,40 +507,32 @@
       closeUsernameModal();
     }
 
-    function openCustomRoomModal() {
-      document.getElementById('custom-room-modal').classList.remove('hidden');
-    }
-    function closeCustomRoomModal() {
-      document.getElementById('custom-room-modal').classList.add('hidden');
-    }
+    function openCustomRoomModal() { document.getElementById('custom-room-modal').classList.remove('hidden'); }
+    function closeCustomRoomModal() { document.getElementById('custom-room-modal').classList.add('hidden'); }
 
-    /* PEERJS REAL-TIME MULTIPLAYER */
+    /* PEERJS MULTIPLAYER */
     function initPeerJS() {
       try {
         state.peer = new Peer();
-        state.peer.on('open', (id) => {
-          document.getElementById('my-peer-id').value = id;
-        });
+        state.peer.on('open', (id) => { document.getElementById('my-peer-id').value = id; });
         state.peer.on('connection', (conn) => {
           state.peerConn = conn;
           setupPeerEvents();
           startOnlineMatch(false);
         });
-      } catch (e) {
-        console.error("PeerJS initialization failed:", e);
-      }
+      } catch (e) { console.error("PeerJS initialization error:", e); }
     }
 
     function copyPeerId() {
       const copyText = document.getElementById("my-peer-id");
       copyText.select();
       navigator.clipboard.writeText(copyText.value);
-      alert("Lobby Code copied to clipboard!");
+      alert("Room Code copied to clipboard!");
     }
 
     function connectToPeer() {
       const friendId = document.getElementById('join-peer-id').value.trim();
-      if (!friendId) return alert("Please enter a valid Lobby Code.");
+      if (!friendId) return alert("Please enter a valid code.");
       state.peerConn = state.peer.connect(friendId);
       setupPeerEvents();
       startOnlineMatch(true);
@@ -696,7 +542,7 @@
       state.peerConn.on('data', (data) => {
         if (data.type === 'P2_ACTION') {
           state.p2Action = data.action;
-          checkAndResolveTurn();
+          if (state.p1Action) resolveTurnActions();
         } else if (data.type === 'START_SYNC') {
           state.p2Team = data.p1Team;
           initBattleStage();
@@ -723,11 +569,11 @@
 
       state.lobbyPreviewTeam.forEach(mon => {
         const card = document.createElement('div');
-        card.className = "bg-slate-900/80 p-3 rounded-xl border border-slate-800 hover:border-indigo-500/50 transition-all text-center relative group cursor-pointer";
-        let typeBadges = mon.types.map(t => `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join(' ');
+        card.className = "bg-[#1e2836] p-2.5 rounded border border-slate-700 text-center";
+        let typeBadges = mon.types.map(t => `<span class="text-[8px] font-bold px-1 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join(' ');
 
         card.innerHTML = `
-          <img src="${mon.sprite}" class="w-16 h-16 mx-auto object-contain group-hover:scale-110 transition-transform" />
+          <img src="${mon.sprite}" class="w-14 h-14 mx-auto object-contain" />
           <div class="font-bold text-xs mt-1 text-slate-200">${mon.name}</div>
           <div class="flex justify-center gap-1 mt-1">${typeBadges}</div>
         `;
@@ -762,14 +608,12 @@
       setTimeout(() => {
         document.getElementById('matchmaking-modal').classList.add('hidden');
         startAIMatch();
-      }, 2000);
+      }, 1500);
     }
 
-    function cancelMatchmaking() {
-      document.getElementById('matchmaking-modal').classList.add('hidden');
-    }
+    function cancelMatchmaking() { document.getElementById('matchmaking-modal').classList.add('hidden'); }
 
-    /* BATTLE STAGE & RENDERING */
+    /* BATTLE ENGINE & UI RENDERING */
     function initBattleStage() {
       state.turn = 1;
       state.p1ActiveIndex = 0;
@@ -779,6 +623,7 @@
       state.p2Action = null;
 
       document.getElementById('battle-log').innerHTML = '';
+      logBattle(`★ Format: [Gen 9] Random Battle`);
       logBattle(`Battle started between ${state.userName} and Opponent!`);
       switchTab('battle');
       renderBattleUI();
@@ -790,23 +635,31 @@
       const p1 = state.p1Team[state.p1ActiveIndex];
       const p2 = state.p2Team[state.p2ActiveIndex];
 
+      document.getElementById('active-mon-command-name').innerText = p1.name;
+
+      // P1 UI
       document.getElementById('p1-name').innerText = p1.name;
       document.getElementById('p1-sprite').src = p1.sprite;
-      document.getElementById('p1-types').innerHTML = p1.types.map(t => `<span class="text-[9px] font-bold px-2 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join('');
+      document.getElementById('p1-types').innerHTML = p1.types.map(t => `<span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join('');
       const p1HpPct = Math.max(0, Math.round((p1.currentHp / p1.maxHp) * 100));
       const p1Bar = document.getElementById('p1-hp-bar');
       p1Bar.style.width = p1HpPct + '%';
-      p1Bar.className = `hp-bar-fill h-full ${p1HpPct > 50 ? 'bg-emerald-500' : p1HpPct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
-      document.getElementById('p1-hp-text').innerText = `${p1.currentHp} / ${p1.maxHp} HP (${p1HpPct}%)`;
+      p1Bar.className = `hp-bar-inner h-full ${p1HpPct > 50 ? 'bg-emerald-500' : p1HpPct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
+      document.getElementById('p1-hp-text').innerText = `${p1.currentHp}/${p1.maxHp} (${p1HpPct}%)`;
 
+      // P2 UI
       document.getElementById('p2-name').innerText = p2.name;
       document.getElementById('p2-sprite').src = p2.sprite;
-      document.getElementById('p2-types').innerHTML = p2.types.map(t => `<span class="text-[9px] font-bold px-2 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join('');
+      document.getElementById('p2-types').innerHTML = p2.types.map(t => `<span class="text-[8px] font-bold px-1.5 py-0.5 rounded bg-type-${t.toLowerCase()}">${t}</span>`).join('');
       const p2HpPct = Math.max(0, Math.round((p2.currentHp / p2.maxHp) * 100));
       const p2Bar = document.getElementById('p2-hp-bar');
       p2Bar.style.width = p2HpPct + '%';
-      p2Bar.className = `hp-bar-fill h-full ${p2HpPct > 50 ? 'bg-emerald-500' : p2HpPct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
-      document.getElementById('p2-hp-text').innerText = `${p2HpPct}% HP`;
+      p2Bar.className = `hp-bar-inner h-full ${p2HpPct > 50 ? 'bg-emerald-500' : p2HpPct > 20 ? 'bg-amber-500' : 'bg-red-500'}`;
+      document.getElementById('p2-hp-text').innerText = `${p2HpPct}%`;
+
+      // Bench Dots
+      document.getElementById('p1-bench-dots').innerHTML = state.p1Team.map(m => `<span class="w-2 h-2 rounded-full ${m.fainted ? 'bg-red-800' : 'bg-emerald-400'}"></span>`).join('');
+      document.getElementById('p2-bench-dots').innerHTML = state.p2Team.map(m => `<span class="w-2 h-2 rounded-full ${m.fainted ? 'bg-red-800' : 'bg-emerald-400'}"></span>`).join('');
 
       renderCommandPanel();
     }
@@ -817,21 +670,20 @@
       const p1 = state.p1Team[state.p1ActiveIndex];
 
       p1.moves.forEach(mName => {
-        const move = MOVES_DB[mName] || { name: mName, type: 'Normal', power: 80, accuracy: 100, priority: 0, hits: 1, desc: 'Standard attack.' };
+        const move = MOVES_DB[mName] || { name: mName, type: 'Normal', power: 80, priority: 0, hits: 1 };
         const btn = document.createElement('button');
-        btn.className = `p-3 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-blue-500 text-left transition-all relative group ${state.isLocked ? 'opacity-50 cursor-not-allowed' : ''}`;
+        btn.className = `btn-move p-2 rounded text-left transition-all ${state.isLocked ? 'opacity-50 cursor-not-allowed' : ''}`;
         btn.disabled = state.isLocked || p1.fainted;
 
         btn.onclick = () => handlePlayerAction({ type: 'MOVE', moveName: mName });
 
         btn.innerHTML = `
-          <div class="flex justify-between items-center mb-1">
-            <span class="font-bold text-xs text-white">${move.name} ${move.hits > 1 ? '<span class="text-amber-400">(' + move.hits + 'x)</span>' : ''}</span>
-            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-type-${move.type.toLowerCase()}">${move.type}</span>
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs text-white">${move.name}</span>
+            <span class="text-[8px] font-bold px-1 py-0.5 rounded bg-type-${move.type.toLowerCase()}">${move.type}</span>
           </div>
-          <div class="text-[10px] text-slate-400 font-mono flex gap-3">
-            <span>PWR: <b class="text-slate-200">${move.power}</b></span>
-            <span>PRIO: <b class="${move.priority > 0 ? 'text-emerald-400' : 'text-slate-400'}">${move.priority > 0 ? '+' + move.priority : move.priority}</b></span>
+          <div class="text-[10px] text-slate-300 font-mono mt-0.5">
+            Power: <b>${move.power || '--'}</b> | Prio: <b>${move.priority > 0 ? '+' + move.priority : move.priority}</b>
           </div>
         `;
         container.appendChild(btn);
@@ -842,21 +694,20 @@
       state.p1Team.forEach((mon, idx) => {
         const isCurrent = idx === state.p1ActiveIndex;
         const btn = document.createElement('button');
-        btn.className = `p-1.5 rounded-xl border text-center transition-all ${isCurrent ? 'bg-blue-600/20 border-blue-500 opacity-60 cursor-default' : mon.fainted ? 'bg-red-950/40 border-red-900 opacity-40 cursor-not-allowed' : 'bg-slate-900 border-slate-800 hover:border-slate-600'}`;
+        btn.className = `btn-switch p-1 rounded text-center transition-all ${isCurrent ? 'opacity-50 cursor-default' : mon.fainted ? 'opacity-30 cursor-not-allowed' : ''}`;
         btn.disabled = isCurrent || mon.fainted || state.isLocked;
 
         btn.onclick = () => handlePlayerAction({ type: 'SWITCH', targetIndex: idx });
 
         btn.innerHTML = `
-          <img src="${mon.sprite}" class="w-8 h-8 mx-auto object-contain" />
-          <div class="text-[9px] font-bold truncate text-slate-300 mt-1">${mon.name}</div>
-          <div class="text-[8px] font-mono text-slate-500">${Math.round((mon.currentHp/mon.maxHp)*100)}%</div>
+          <img src="${mon.sprite}" class="w-7 h-7 mx-auto object-contain" />
+          <div class="text-[9px] font-bold truncate text-slate-200 mt-0.5">${mon.name}</div>
+          <div class="text-[8px] font-mono text-slate-400">${Math.round((mon.currentHp/mon.maxHp)*100)}%</div>
         `;
         switchContainer.appendChild(btn);
       });
     }
 
-    /* TURN ACTIONS WITH MULTI-HIT MOVES SUPPORT */
     function handlePlayerAction(action) {
       if (state.isLocked) return;
       state.p1Action = action;
@@ -866,7 +717,7 @@
         resolveTurnActions();
       } else if (state.mode === 'online') {
         state.isLocked = true;
-        document.getElementById('lock-indicator').classList.remove('hidden');
+        document.getElementById('turn-cooldown-label').classList.remove('hidden');
         state.peerConn.send({ type: 'P2_ACTION', action: action });
         if (state.p2Action) resolveTurnActions();
       }
@@ -879,14 +730,14 @@
 
     function resolveTurnActions() {
       state.isLocked = true;
-      document.getElementById('turn-cooldown-overlay').classList.remove('hidden');
+      document.getElementById('turn-cooldown-label').classList.remove('hidden');
 
       let act1 = state.p1Action;
       let act2 = state.p2Action;
 
       executeActionSequence(act1, 'p1', () => {
         executeActionSequence(act2, 'p2', () => {
-          document.getElementById('turn-cooldown-overlay').classList.add('hidden');
+          document.getElementById('turn-cooldown-label').classList.add('hidden');
           state.isLocked = false;
           state.turn++;
           renderBattleUI();
@@ -908,8 +759,9 @@
         if (isP1) state.p1ActiveIndex = action.targetIndex;
         else state.p2ActiveIndex = action.targetIndex;
         const switchedMon = isP1 ? state.p1Team[state.p1ActiveIndex] : state.p2Team[state.p2ActiveIndex];
-        logBattle(`${isP1 ? state.userName : 'Opponent'} switched out to ${switchedMon.name}!`);
-        triggerSpriteFX(isP1 ? 'p1-sprite' : 'p2-sprite', 'fx-switch');
+        logBattle(`${isP1 ? state.userName : 'Opponent'} withdrew ${attacker.name}!`);
+        logBattle(`${isP1 ? state.userName : 'Opponent'} sent out ${switchedMon.name}!`);
+        triggerSpriteFX(isP1 ? 'p1-sprite' : 'p2-sprite', 'anim-lunge-p1');
         if (callback) callback();
         return;
       }
@@ -930,7 +782,7 @@
         }
 
         hitCount++;
-        triggerSpriteFX(isP1 ? 'p1-sprite' : 'p2-sprite', isP1 ? 'fx-lunge-p1' : 'fx-lunge-p2');
+        triggerSpriteFX(isP1 ? 'p1-sprite' : 'p2-sprite', isP1 ? 'anim-lunge-p1' : 'anim-lunge-p2');
         playAttackParticleFX(move.fx, isP1, hitCount);
 
         const typeMult = getTypeMultiplier(move.type, defender.types);
@@ -939,16 +791,19 @@
         let finalDamage = Math.floor(baseDamage * stab * typeMult);
 
         defender.currentHp = Math.max(0, defender.currentHp - finalDamage);
-        triggerSpriteFX(isP1 ? 'p2-sprite' : 'p1-sprite', 'fx-hit');
+        triggerSpriteFX(isP1 ? 'p2-sprite' : 'p1-sprite', 'anim-hit');
+
+        if (typeMult > 1) logBattle(`It's super effective!`);
+        if (typeMult < 1 && typeMult > 0) logBattle(`It's not very effective...`);
 
         if (defender.currentHp === 0) {
           defender.fainted = true;
           logBattle(`${defender.name} fainted!`);
-          triggerSpriteFX(isP1 ? 'p2-sprite' : 'p1-sprite', 'fx-faint');
+          triggerSpriteFX(isP1 ? 'p2-sprite' : 'p1-sprite', 'anim-faint');
         }
 
         renderBattleUI();
-        setTimeout(processHit, 600);
+        setTimeout(processHit, 550);
       }
 
       processHit();
@@ -958,43 +813,29 @@
       const modal = document.getElementById('results-modal');
       const title = document.getElementById('result-title');
       const subtext = document.getElementById('result-subtext');
-      const eloChange = document.getElementById('result-elo-change');
 
       if (victory) {
         title.innerText = "VICTORY!";
-        title.className = "font-black text-3xl tracking-tight text-emerald-400";
-        subtext.innerText = "You completely swept your opponent's roster!";
-        eloChange.innerText = "+24 ELO";
-        eloChange.className = "text-emerald-400 font-bold";
+        title.className = "font-extrabold text-2xl text-emerald-400";
+        subtext.innerText = "You defeated your opponent!";
         state.userElo += 24;
       } else {
         title.innerText = "DEFEAT";
-        title.className = "font-black text-3xl tracking-tight text-red-400";
-        subtext.innerText = "All your Pokémon fainted in battle.";
-        eloChange.innerText = "-18 ELO";
-        eloChange.className = "text-red-400 font-bold";
+        title.className = "font-extrabold text-2xl text-red-400";
+        subtext.innerText = "All your Pokémon fainted.";
         state.userElo = Math.max(1000, state.userElo - 18);
       }
 
       document.getElementById('user-elo-display').innerText = state.userElo;
-      document.getElementById('result-turns-count').innerText = `${state.turn} Turns`;
       modal.classList.remove('hidden');
     }
 
-    function closeResultsModal() {
-      document.getElementById('results-modal').classList.add('hidden');
-    }
-
-    function forfeitBattle() {
-      if (confirm("Are you sure you want to forfeit this match?")) {
-        showResultsModal(false);
-      }
-    }
+    function closeResultsModal() { document.getElementById('results-modal').classList.add('hidden'); }
 
     function logBattle(msg) {
       const log = document.getElementById('battle-log');
       const item = document.createElement('div');
-      item.className = "border-l-2 border-indigo-500/50 pl-2 py-0.5 text-slate-300";
+      item.className = "text-slate-300 py-0.5 border-b border-slate-800/50";
       item.innerText = msg;
       log.appendChild(item);
       log.scrollTop = log.scrollHeight;
@@ -1003,12 +844,12 @@
     function triggerSpriteFX(elementId, fxClass) {
       const el = document.getElementById(elementId);
       if (!el) return;
-      el.classList.remove('fx-lunge-p1', 'fx-lunge-p2', 'fx-hit', 'fx-miss', 'fx-faint', 'fx-switch');
+      el.classList.remove('anim-lunge-p1', 'anim-lunge-p2', 'anim-hit', 'anim-faint');
       void el.offsetWidth;
       el.classList.add(fxClass);
     }
 
-    /* ENHANCED CANVAS ATTACK PARTICLE ENGINE */
+    /* CANVAS PARTICLES */
     let canvas, ctx;
     function initCanvas() {
       canvas = document.getElementById('attack-fx-canvas');
@@ -1040,11 +881,11 @@
           ctx.beginPath();
           ctx.arc(targetX, targetY, radius, 0, Math.PI * 2);
           ctx.strokeStyle = '#38bdf8';
-          ctx.lineWidth = 6;
+          ctx.lineWidth = 5;
           ctx.stroke();
 
-          radius += 8;
-          if (radius < 70) requestAnimationFrame(drawPulse);
+          radius += 6;
+          if (radius < 60) requestAnimationFrame(drawPulse);
           else ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
         drawPulse();
@@ -1052,40 +893,38 @@
       }
 
       if (type === 'dragondarts') {
-        const offsetY = hitIndex === 1 ? -25 : 25;
-        for (let i = 0; i < 20; i++) {
+        const offsetY = hitIndex === 1 ? -20 : 20;
+        for (let i = 0; i < 18; i++) {
           particles.push({
             x: startX,
             y: startY + offsetY,
             vx: (targetX - startX) / 12 + (Math.random() - 0.5) * 4,
             vy: (targetY - startY + offsetY) / 12 + (Math.random() - 0.5) * 4,
-            radius: Math.random() * 5 + 3,
+            radius: Math.random() * 4 + 2,
             color: i % 2 === 0 ? '#a855f7' : '#06b6d4',
-            alpha: 1,
             life: 15
           });
         }
       } else {
         const colors = {
-          fire: ['#f97316', '#ef4444', '#f59e0b'],
-          lightning: ['#facc15', '#eab308', '#ffffff'],
-          water: ['#3b82f6', '#06b6d4', '#60a5fa'],
-          ice: ['#a5f3fc', '#e0f2fe', '#38bdf8'],
-          fist: ['#dc2626', '#b91c1c', '#f87171'],
-          slash: ['#f87171', '#ffffff', '#ef4444']
+          fire: ['#f97316', '#ef4444'],
+          lightning: ['#facc15', '#ffffff'],
+          water: ['#3b82f6', '#06b6d4'],
+          ice: ['#a5f3fc', '#38bdf8'],
+          fist: ['#dc2626', '#f87171'],
+          slash: ['#f87171', '#ffffff']
         };
         const palette = colors[type] || ['#6366f1', '#a855f7'];
 
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 25; i++) {
           particles.push({
             x: startX,
             y: startY,
-            vx: (targetX - startX) / 20 + (Math.random() - 0.5) * 8,
-            vy: (targetY - startY) / 20 + (Math.random() - 0.5) * 8,
-            radius: Math.random() * 6 + 2,
+            vx: (targetX - startX) / 18 + (Math.random() - 0.5) * 6,
+            vy: (targetY - startY) / 18 + (Math.random() - 0.5) * 6,
+            radius: Math.random() * 5 + 2,
             color: palette[Math.floor(Math.random() * palette.length)],
-            alpha: 1,
-            life: 20
+            life: 18
           });
         }
       }
@@ -1099,13 +938,11 @@
             alive = true;
             p.x += p.vx;
             p.y += p.vy;
-            p.alpha -= 0.05;
             p.life--;
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, Math.max(0, p.radius), 0, Math.PI * 2);
             ctx.fillStyle = p.color;
-            ctx.globalAlpha = Math.max(0, p.alpha);
             ctx.fill();
           }
         });
