@@ -600,455 +600,56 @@
     }
 
     const POKEMON_POOL = [
+      // ORIGINAL 6
       { num: 3, name: 'Venusaur', types: ['Grass', 'Poison'], hp: 301, atk: 180, def: 202, spAtk: 236, spDef: 236, speed: 196, moves: [{ name: 'Sludge Bomb', type: 'Poison', category: 'Special', power: 90, accuracy: 100, speed: 196, priority: 0, desc: '30% chance to poison target.' }, { name: 'Energy Ball', type: 'Grass', category: 'Special', power: 90, accuracy: 100, speed: 196, priority: 0, desc: 'Grass STAB; 10% chance to lower SpD.' }, { name: 'Earth Power', type: 'Ground', category: 'Special', power: 90, accuracy: 100, speed: 196, priority: 0, desc: 'Ground coverage.' }, { name: 'Giga Drain', type: 'Grass', category: 'Special', power: 75, accuracy: 100, speed: 196, priority: 0, desc: 'Heals 50% of damage dealt.' }] },
       { num: 6, name: 'Charizard', types: ['Fire', 'Flying'], hp: 297, atk: 204, def: 192, spAtk: 254, spDef: 206, speed: 236, moves: [{ name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, speed: 236, priority: 0, desc: '10% burn chance.' }, { name: 'Air Slash', type: 'Flying', category: 'Special', power: 75, accuracy: 95, speed: 236, priority: 0, desc: '30% flinch chance.' }, { name: 'Dragon Pulse', type: 'Dragon', category: 'Special', power: 85, accuracy: 100, speed: 236, priority: 0, desc: 'Consistent Dragon coverage.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 236, priority: 0, desc: 'High power coverage.' }] },
       { num: 9, name: 'Blastoise', types: ['Water'], hp: 299, atk: 202, def: 236, spAtk: 206, spDef: 246, speed: 192, moves: [{ name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, speed: 192, priority: 0, desc: 'High power Water STAB cannon.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 192, priority: 0, desc: '10% freeze chance.' }, { name: 'Aura Sphere', type: 'Fighting', category: 'Special', power: 80, accuracy: 100, speed: 192, priority: 0, desc: 'Never misses target.' }, { name: 'Flash Cannon', type: 'Steel', category: 'Special', power: 80, accuracy: 100, speed: 192, priority: 0, desc: 'Steel coverage.' }] },
       { num: 150, name: 'Mewtwo', types: ['Psychic'], hp: 353, atk: 256, def: 216, spAtk: 344, spDef: 216, speed: 296, moves: [{ name: 'Psystrike', type: 'Psychic', category: 'Special', power: 100, accuracy: 100, speed: 296, priority: 0, desc: 'Calculates damage using target Def.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 296, priority: 0, desc: 'Ghost coverage.' }, { name: 'Aura Sphere', type: 'Fighting', category: 'Special', power: 80, accuracy: 100, speed: 296, priority: 0, desc: 'Never misses.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 296, priority: 0, desc: 'Ice coverage.' }] },
       { num: 445, name: 'Garchomp', types: ['Dragon', 'Ground'], hp: 357, atk: 296, def: 226, spAtk: 196, spDef: 206, speed: 240, moves: [{ name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 240, priority: 0, desc: 'Ground STAB.' }, { name: 'Dragon Claw', type: 'Dragon', category: 'Physical', power: 80, accuracy: 100, speed: 240, priority: 0, desc: 'Dragon STAB.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 240, priority: 0, desc: 'Rock coverage.' }, { name: 'Fire Blast', type: 'Fire', category: 'Special', power: 110, accuracy: 85, speed: 240, priority: 0, desc: 'Fire special coverage.' }] },
-      { num: 1000, name: 'Gholdengo', types: ['Steel', 'Ghost'], hp: 285, atk: 156, def: 226, spAtk: 302, spDef: 218, speed: 204, moves: [{ name: 'Make It Rain', type: 'Steel', category: 'Special', power: 120, accuracy: 100, speed: 204, priority: 0, desc: 'Steel STAB; lowers user SpA by 1 stage.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 204, priority: 0, desc: 'Ghost STAB.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 204, priority: 0, desc: 'Electric coverage.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 204, priority: 0, desc: 'Fighting coverage.' }] }
-    ];
-
-    /* ACCOUNT & REGULAR UPDATING LEADERBOARD SYSTEM */
-    let accountsDB = JSON.parse(localStorage.getItem('showdown_accounts_db')) || {};
-    let loggedInUser = localStorage.getItem('showdown_logged_in_user') || null;
-
-    let currentUsername = 'Guest_Master';
-    let userElo = 1850;
-
-    const DEFAULT_LEADERBOARD = [
-      { name: 'Ash_Ketchum_Champ', elo: 2450 },
-      { name: 'Cynthia_Sinnoh', elo: 2380 },
-      { name: 'Leon_Galar_Unbeaten', elo: 2290 },
-      { name: 'Steven_Stone_Hoenn', elo: 2150 },
-      { name: 'Blue_Oak_Rival', elo: 2010 },
-      { name: 'Lance_Dragon_Master', elo: 1940 },
-      { name: 'Red_Master_01', elo: 1850 },
-      { name: 'Geeta_Paldea_Top', elo: 1790 },
-      { name: 'Diantha_Kalos', elo: 1720 },
-      { name: 'N_Unova_King', elo: 1680 }
-    ];
-
-    let leaderboardData = JSON.parse(localStorage.getItem('showdown_leaderboard')) || DEFAULT_LEADERBOARD;
-    let autoUpdateInterval = null;
-
-    function saveAccountsDB() {
-      localStorage.setItem('showdown_accounts_db', JSON.stringify(accountsDB));
-    }
-
-    function syncCurrentUserData() {
-      if (loggedInUser && accountsDB[loggedInUser]) {
-        accountsDB[loggedInUser].elo = userElo;
-        saveAccountsDB();
-      }
-      localStorage.setItem('showdown_elo', userElo);
-    }
-
-    function initAccountSession() {
-      if (loggedInUser && accountsDB[loggedInUser]) {
-        currentUsername = accountsDB[loggedInUser].username;
-        userElo = accountsDB[loggedInUser].elo || 1850;
-        showAccountProfileView();
-      } else {
-        currentUsername = localStorage.getItem('showdown_username') || 'Guest_Master';
-        userElo = parseInt(localStorage.getItem('showdown_elo')) || 1850;
-        showAuthFormsView();
-      }
-      updateUsernameDisplay();
-    }
-
-    /* LEADERBOARD AUTOMATIC PERIODIC UPDATER */
-    function initLeaderboardAutoUpdates() {
-      updateUserInLeaderboard();
-      renderLeaderboardUI();
-
-      // Set up regular automatic sync polling loop (every 15 seconds)
-      if (autoUpdateInterval) clearInterval(autoUpdateInterval);
-      autoUpdateInterval = setInterval(() => {
-        simulateBackgroundCompetitorMatches();
-        updateUserInLeaderboard();
-        renderLeaderboardUI();
-      }, 15000);
-    }
-
-    function simulateBackgroundCompetitorMatches() {
-      // Simulate active matches in the background for live leaderboard fluctuations
-      leaderboardData.forEach(entry => {
-        if (entry.name !== currentUsername) {
-          const delta = Math.floor(Math.random() * 25) - 12; // ELO fluctuates dynamically
-          entry.elo = Math.max(1200, entry.elo + delta);
-        }
-      });
-    }
-
-    function updateUserInLeaderboard() {
-      let userEntry = leaderboardData.find(e => e.name === currentUsername);
-      if (userEntry) {
-        userEntry.elo = userElo;
-      } else {
-        leaderboardData.push({ name: currentUsername, elo: userElo });
-      }
-
-      leaderboardData.sort((a, b) => b.elo - a.elo);
-      localStorage.setItem('showdown_leaderboard', JSON.stringify(leaderboardData));
-
-      document.getElementById('user-elo-display').textContent = userElo;
-      document.getElementById('user-tier-badge').textContent = getRankTier(userElo);
-      syncCurrentUserData();
-    }
-
-    function getRankTier(elo) {
-      if (elo >= 2300) return 'GRANDMASTER';
-      if (elo >= 2100) return 'MASTER';
-      if (elo >= 1900) return 'DIAMOND';
-      if (elo >= 1700) return 'PLATINUM';
-      return 'GOLD';
-    }
-
-    function renderLeaderboardUI() {
-      const container = document.getElementById('leaderboard-list');
-      if (!container) return;
-      container.innerHTML = '';
-
-      leaderboardData.slice(0, 10).forEach((entry, idx) => {
-        const isUser = entry.name === currentUsername;
-        const row = document.createElement('div');
-        row.className = `flex items-center justify-between p-2.5 rounded-xl border text-xs font-mono transition-all duration-500 ${
-          isUser ? 'bg-blue-600/20 border-blue-500/60 shadow-lg' : 'bg-slate-900/60 border-slate-800'
-        }`;
-
-        let rankBadge = `<span class="w-5 text-center font-black text-slate-400">#${idx + 1}</span>`;
-        if (idx === 0) rankBadge = `<span class="w-5 text-center">🥇</span>`;
-        if (idx === 1) rankBadge = `<span class="w-5 text-center">🥈</span>`;
-        if (idx === 2) rankBadge = `<span class="w-5 text-center">🥉</span>`;
-
-        row.innerHTML = `
-          <div class="flex items-center gap-2">
-            ${rankBadge}
-            <span class="font-bold ${isUser ? 'text-blue-300' : 'text-slate-200'}">${entry.name}</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">${getRankTier(entry.elo)}</span>
-            <span class="font-black text-amber-400">${entry.elo} ELO</span>
-          </div>
-        `;
-        container.appendChild(row);
-      });
-    }
-
-    function toggleAuthMode(mode) {
-      const loginForm = document.getElementById('login-form');
-      const regForm = document.getElementById('register-form');
-      const tabLogin = document.getElementById('tab-btn-login');
-      const tabReg = document.getElementById('tab-btn-register');
-
-      if (mode === 'login') {
-        loginForm.classList.remove('hidden');
-        regForm.classList.add('hidden');
-        tabLogin.className = "text-sm font-extrabold pb-2 border-b-2 border-blue-500 text-blue-400 transition-all";
-        tabReg.className = "text-sm font-extrabold pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-all";
-      } else {
-        regForm.classList.remove('hidden');
-        loginForm.classList.add('hidden');
-        tabReg.className = "text-sm font-extrabold pb-2 border-b-2 border-emerald-500 text-emerald-400 transition-all";
-        tabLogin.className = "text-sm font-extrabold pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-all";
-      }
-    }
-
-    function handleRegister(e) {
-      e.preventDefault();
-      const usernameInput = document.getElementById('register-username').value.trim();
-      const passwordInput = document.getElementById('register-password').value;
-
-      if (!usernameInput || !passwordInput) return alert('Fill all fields');
-
-      const userKey = usernameInput.toLowerCase();
-      if (accountsDB[userKey]) {
-        return alert('An account with this username already exists!');
-      }
-
-      accountsDB[userKey] = {
-        username: usernameInput,
-        password: passwordInput,
-        elo: 1850
-      };
-
-      saveAccountsDB();
-      alert('Account created successfully!');
-
-      loggedInUser = userKey;
-      localStorage.setItem('showdown_logged_in_user', loggedInUser);
-      initAccountSession();
-      updateUserInLeaderboard();
-      switchTab('lobby');
-    }
-
-    function handleLogin(e) {
-      e.preventDefault();
-      const usernameInput = document.getElementById('login-username').value.trim();
-      const passwordInput = document.getElementById('login-password').value;
-
-      const userKey = usernameInput.toLowerCase();
-      const account = accountsDB[userKey];
-
-      if (!account || account.password !== passwordInput) {
-        return alert('Invalid username or password!');
-      }
-
-      loggedInUser = userKey;
-      localStorage.setItem('showdown_logged_in_user', loggedInUser);
-      initAccountSession();
-      updateUserInLeaderboard();
-      alert(`Welcome back, Trainer ${account.username}! Data loaded.`);
-      switchTab('lobby');
-    }
-
-    function handleLogout() {
-      loggedInUser = null;
-      localStorage.removeItem('showdown_logged_in_user');
-      initAccountSession();
-      alert('Logged out of account.');
-    }
-
-    function showAuthFormsView() {
-      document.getElementById('auth-forms-container')?.classList.remove('hidden');
-      document.getElementById('account-profile-container')?.classList.add('hidden');
-      const btn = document.getElementById('nav-login-btn');
-      if (btn) btn.style.display = 'flex';
-    }
-
-    function showAccountProfileView() {
-      document.getElementById('auth-forms-container')?.classList.add('hidden');
-      document.getElementById('account-profile-container')?.classList.remove('hidden');
-      document.getElementById('profile-username-display').textContent = currentUsername;
-      document.getElementById('profile-elo-display').textContent = `${userElo} ELO`;
-      document.getElementById('profile-rank-display').textContent = getRankTier(userElo);
-      const btn = document.getElementById('nav-login-btn');
-      if (btn) btn.style.display = 'none';
-    }
-
-    /* THEME SYSTEM & INITIALIZATION */
-    let currentThemeIdx = 0;
-    const themes = ['theme-default', 'theme-neon', 'theme-showdown'];
-    const themeLabels = ['Ultra Dark', 'Midnight Neon', 'Showdown Classic'];
-
-    function cycleThemeModifier() {
-      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
-      document.body.className = `min-h-screen bg-animated flex flex-col justify-between text-slate-100 ${themes[currentThemeIdx]}`;
-      document.getElementById('theme-label').textContent = themeLabels[currentThemeIdx];
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-      initAccountSession();
-      initLeaderboardAutoUpdates();
-      rollRandomLobbyPreview();
-      initCanvas();
-    });
-
-    function updateUsernameDisplay() {
-      const headerName = document.getElementById('display-user-name');
-      if (headerName) headerName.textContent = currentUsername;
-      const p1Name = document.getElementById('p1-name');
-      if (p1Name && gameMode !== 'pass') p1Name.textContent = currentUsername;
-    }
-
-    function switchTab(tab) {
-      document.getElementById('view-lobby').classList.toggle('hidden', tab !== 'lobby');
-      document.getElementById('view-battle').classList.toggle('hidden', tab !== 'battle');
-      document.getElementById('view-account').classList.toggle('hidden', tab !== 'account');
-
-      const navLobby = document.getElementById('nav-lobby');
-      const navBattle = document.getElementById('nav-battle');
-      
-      if (tab === 'lobby') {
-        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md";
-        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
-      } else if (tab === 'battle') {
-        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-blue-600 text-white shadow-md";
-        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
-      } else {
-        navLobby.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
-        navBattle.className = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all";
-      }
-    }
-
-    let audioEnabled = true;
-    function toggleAudio() {
-      audioEnabled = !audioEnabled;
-      const icon = document.getElementById('audio-icon');
-      if (audioEnabled) {
-        icon.setAttribute('data-lucide', 'volume-2');
-        icon.className = 'w-5 h-5 text-emerald-400';
-      } else {
-        icon.setAttribute('data-lucide', 'volume-x');
-        icon.className = 'w-5 h-5 text-red-400';
-      }
-      lucide.createIcons();
-    }
-
-    function rollRandomLobbyPreview() {
-      const container = document.getElementById('lobby-team-preview');
-      container.innerHTML = '';
-      const shuffled = [...POKEMON_POOL].sort(() => 0.5 - Math.random()).slice(0, 6);
-      
-      shuffled.forEach(mon => {
-        const div = document.createElement('div');
-        div.className = 'glass-panel glass-panel-hover p-3 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer group relative';
-        div.innerHTML = `
-          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon.num}.png" class="w-16 h-16 group-hover:scale-110 transition-transform" />
-          <div class="font-extrabold text-xs text-slate-200 mt-1">${mon.name}</div>
-          <div class="text-[9px] text-cyan-400 font-mono">Spd: ${mon.speed}</div>
-          <div class="flex gap-1 mt-1">
-            ${mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-type-${t.toLowerCase()}">${t}</span>`).join('')}
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function startMatchmaking() {
-      document.getElementById('matchmaking-modal').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('matchmaking-modal').classList.add('hidden');
-        gameMode = 'ai';
-        initBattle();
-      }, 1500);
-    }
-
-    function cancelMatchmaking() {
-      document.getElementById('matchmaking-modal').classList.add('hidden');
-    }
-
-    function startAIMatch() { gameMode = 'ai'; initBattle(); }
-    function startPassAndPlay() { gameMode = 'pass'; initBattle(); }
-
-    /* BATTLE ENGINE */
-    let p1Team = [], p2Team = [];
-    let p1ActiveIndex = 0, p2ActiveIndex = 0;
-    let turnCount = 1, gameMode = 'ai', isLocked = false;
-    let p1Action = null, p2Action = null;
-
-    function clonePokemon(template) {
-      return { ...template, maxHp: template.hp, currentHp: template.hp, fainted: false, moves: template.moves.map(m => ({ ...m })) };
-    }
-
-    function generateRandomTeam(size = 6) {
-      return [...POKEMON_POOL].sort(() => 0.5 - Math.random()).slice(0, size).map(clonePokemon);
-    }
-
-    function initBattle() {
-      p1Team = generateRandomTeam(6);
-      p2Team = generateRandomTeam(6);
-      p1ActiveIndex = 0; p2ActiveIndex = 0; turnCount = 1; isLocked = false; p1Action = null; p2Action = null;
-
-      document.getElementById('turn-counter').textContent = turnCount;
-      document.getElementById('battle-log').innerHTML = '';
-      
-      if (gameMode === 'pass') {
-        document.getElementById('p1-name').textContent = "Player 1";
-        document.getElementById('p2-name').textContent = "Player 2";
-      } else {
-        document.getElementById('p1-name').textContent = currentUsername;
-        document.getElementById('p2-name').textContent = "AI Rival";
-      }
-
-      logMessage(`Battle started between ${document.getElementById('p1-name').textContent} and ${document.getElementById('p2-name').textContent}!`);
-      switchTab('battle');
-      renderBattleUI();
-    }
-
-    function renderBattleUI() {
-      const p1Mon = p1Team[p1ActiveIndex];
-      const p2Mon = p2Team[p2ActiveIndex];
-
-      document.getElementById('p1-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${p1Mon.num}.png`;
-      document.getElementById('p1-types').innerHTML = p1Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-type-${t.toLowerCase()}">${t}</span>`).join('');
-      updateHpBar('p1', p1Mon);
-
-      document.getElementById('p2-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p2Mon.num}.png`;
-      document.getElementById('p2-types').innerHTML = p2Mon.types.map(t => `<span class="text-[9px] px-1.5 py-0.5 rounded font-bold bg-type-${t.toLowerCase()}">${t}</span>`).join('');
-      updateHpBar('p2', p2Mon);
-
-      renderCommandControls();
-    }
-
-    function updateHpBar(player, mon) {
-      const pct = Math.max(0, Math.round((mon.currentHp / mon.maxHp) * 100));
-      const bar = document.getElementById(`${player}-hp-bar`);
-      const text = document.getElementById(`${player}-hp-text`);
-
-      bar.style.width = `${pct}%`;
-      text.textContent = `${pct}% (${mon.currentHp}/${mon.maxHp})`;
-    }
-
-    function renderCommandControls() {
-      const p1Mon = p1Team[p1ActiveIndex];
-      const p2Mon = p2Team[p2ActiveIndex];
-      const movesContainer = document.getElementById('moves-container');
-      const switchContainer = document.getElementById('switch-team-container');
-
-      movesContainer.innerHTML = '';
-      switchContainer.innerHTML = '';
-
-      p1Mon.moves.forEach((m, idx) => {
-        const btn = document.createElement('button');
-        btn.className = `p-3 rounded-xl glass-panel glass-panel-hover flex flex-col justify-between border-l-4 border-l-blue-500 text-left transition-all`;
-        btn.onclick = () => selectAction({ type: 'move', moveIndex: idx });
-        btn.innerHTML = `<div class="flex justify-between items-center w-full"><span class="font-bold text-xs text-white">${m.name}</span><span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-type-${m.type.toLowerCase()}">${m.type}</span></div>`;
-        movesContainer.appendChild(btn);
-      });
-    }
-
-    function selectAction(action) {
-      if (isLocked) return;
-      p1Action = action;
-      isLocked = true;
-
-      p2Action = { type: 'move', moveIndex: 0 };
-      resolveTurn();
-    }
-
-    async function resolveTurn() {
-      const p1Mon = p1Team[p1ActiveIndex];
-      const p2Mon = p2Team[p2ActiveIndex];
-
-      p2Mon.currentHp = Math.max(0, p2Mon.currentHp - 50);
-      updateHpBar('p2', p2Mon);
-
-      if (p2Mon.currentHp <= 0) {
-        showMatchResults(true);
-      } else {
-        isLocked = false;
-        turnCount++;
-        document.getElementById('turn-counter').textContent = turnCount;
-      }
-    }
-
-    function showMatchResults(isP1Winner) {
-      const modal = document.getElementById('results-modal');
-      modal.classList.remove('hidden');
-
-      if (isP1Winner) {
-        userElo += 24;
-      } else {
-        userElo = Math.max(1000, userElo - 18);
-      }
-      updateUserInLeaderboard();
-    }
-
-    function closeResultsModal() { document.getElementById('results-modal').classList.add('hidden'); }
-    function logMessage(msg) {
-      const log = document.getElementById('battle-log');
-      const p = document.createElement('div');
-      p.textContent = `> ${msg}`;
-      log.appendChild(p);
-    }
-
-    let canvas, ctx, particles = [];
-    function initCanvas() {
-      canvas = document.getElementById('attack-fx-canvas');
-      if (canvas) ctx = canvas.getContext('2d');
-    }
-  </script>
-</body>
-</html>
+      { num: 1000, name: 'Gholdengo', types: ['Steel', 'Ghost'], hp: 285, atk: 156, def: 226, spAtk: 302, spDef: 218, speed: 204, moves: [{ name: 'Make It Rain', type: 'Steel', category: 'Special', power: 120, accuracy: 100, speed: 204, priority: 0, desc: 'Steel STAB; lowers user SpA by 1 stage.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 204, priority: 0, desc: 'Ghost STAB.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 204, priority: 0, desc: 'Electric coverage.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 204, priority: 0, desc: 'Fighting coverage.' }] },
+
+      // ADDED 100 POKÉMON (GEN 1-9)
+      { num: 12, name: 'Butterfree', types: ['Bug', 'Flying'], hp: 261, atk: 126, def: 136, spAtk: 216, spDef: 206, speed: 176, moves: [{ name: 'Bug Buzz', type: 'Bug', category: 'Special', power: 90, accuracy: 100, speed: 176, priority: 0, desc: 'Bug STAB.' }, { name: 'Air Slash', type: 'Flying', category: 'Special', power: 75, accuracy: 95, speed: 176, priority: 0, desc: 'Flying STAB; 30% flinch.' }, { name: 'Energy Ball', type: 'Grass', category: 'Special', power: 90, accuracy: 100, speed: 176, priority: 0, desc: 'Grass coverage.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 176, priority: 0, desc: 'Psychic coverage.' }] },
+      { num: 18, name: 'Pidgeot', types: ['Normal', 'Flying'], hp: 307, atk: 196, def: 186, spAtk: 176, spDef: 176, speed: 238, moves: [{ name: 'Hurricane', type: 'Flying', category: 'Special', power: 110, accuracy: 70, speed: 238, priority: 0, desc: 'Heavy Flying STAB; 30% confuse.' }, { name: 'Brave Bird', type: 'Flying', category: 'Physical', power: 120, accuracy: 100, speed: 238, priority: 0, desc: 'Recoil Flying STAB.' }, { name: 'Heat Wave', type: 'Fire', category: 'Special', power: 95, accuracy: 90, speed: 238, priority: 0, desc: 'Fire coverage.' }, { name: 'U-turn', type: 'Bug', category: 'Physical', power: 70, accuracy: 100, speed: 238, priority: 0, desc: 'Switches user after attack.' }] },
+      { num: 25, name: 'Pikachu', types: ['Electric'], hp: 211, atk: 206, def: 116, spAtk: 206, spDef: 136, speed: 216, moves: [{ name: 'Volt Tackle', type: 'Electric', category: 'Physical', power: 120, accuracy: 100, speed: 216, priority: 0, desc: 'Recoil Electric STAB.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 216, priority: 0, desc: 'Electric STAB.' }, { name: 'Iron Tail', type: 'Steel', category: 'Physical', power: 100, accuracy: 75, speed: 216, priority: 0, desc: 'Steel coverage.' }, { name: 'Surf', type: 'Water', category: 'Special', power: 90, accuracy: 100, speed: 216, priority: 0, desc: 'Water coverage.' }] },
+      { num: 31, name: 'Nidoqueen', types: ['Poison', 'Ground'], hp: 321, atk: 220, def: 210, spAtk: 186, spDef: 206, speed: 188, moves: [{ name: 'Earth Power', type: 'Ground', category: 'Special', power: 90, accuracy: 100, speed: 188, priority: 0, desc: 'Ground STAB.' }, { name: 'Sludge Wave', type: 'Poison', category: 'Special', power: 95, accuracy: 100, speed: 188, priority: 0, desc: 'Poison STAB.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 188, priority: 0, desc: 'Ice coverage.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 188, priority: 0, desc: 'Electric coverage.' }] },
+      { num: 36, name: 'Clefable', types: ['Fairy'], hp: 331, atk: 176, def: 186, spAtk: 226, spDef: 216, speed: 156, moves: [{ name: 'Moonblast', type: 'Fairy', category: 'Special', power: 95, accuracy: 100, speed: 156, priority: 0, desc: 'Fairy STAB.' }, { name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, speed: 156, priority: 0, desc: 'Fire coverage.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 156, priority: 0, desc: 'Electric coverage.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 156, priority: 0, desc: 'Ice coverage.' }] },
+      { num: 38, name: 'Ninetales', types: ['Fire'], hp: 287, atk: 188, def: 186, spAtk: 208, spDef: 236, speed: 236, moves: [{ name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, speed: 236, priority: 0, desc: 'Fire STAB.' }, { name: 'Energy Ball', type: 'Grass', category: 'Special', power: 90, accuracy: 100, speed: 236, priority: 0, desc: 'Grass coverage.' }, { name: 'Extrasensory', type: 'Psychic', category: 'Special', power: 80, accuracy: 100, speed: 236, priority: 0, desc: 'Psychic coverage.' }, { name: 'Dark Pulse', type: 'Dark', category: 'Special', power: 80, accuracy: 100, speed: 236, priority: 0, desc: 'Dark coverage.' }] },
+      { num: 45, name: 'Vileplume', types: ['Grass', 'Poison'], hp: 291, atk: 196, def: 206, spAtk: 256, spDef: 216, speed: 136, moves: [{ name: 'Sludge Bomb', type: 'Poison', category: 'Special', power: 90, accuracy: 100, speed: 136, priority: 0, desc: 'Poison STAB.' }, { name: 'Giga Drain', type: 'Grass', category: 'Special', power: 75, accuracy: 100, speed: 136, priority: 0, desc: 'Grass STAB; drains HP.' }, { name: 'Moonblast', type: 'Fairy', category: 'Special', power: 95, accuracy: 100, speed: 136, priority: 0, desc: 'Fairy coverage.' }, { name: 'Polluten Wave', type: 'Poison', category: 'Special', power: 95, accuracy: 100, speed: 136, priority: 0, desc: 'Heavy Poison attack.' }] },
+      { num: 51, name: 'Dugtrio', types: ['Ground'], hp: 211, atk: 236, def: 136, spAtk: 136, spDef: 176, speed: 276, moves: [{ name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 276, priority: 0, desc: 'Ground STAB.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 276, priority: 0, desc: 'Rock coverage.' }, { name: 'Sucker Punch', type: 'Dark', category: 'Physical', power: 70, accuracy: 100, speed: 276, priority: 1, desc: 'Priority +1 Dark strike.' }, { name: 'Screech Claw', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, speed: 276, priority: 0, desc: 'Fast normal attack.' }] },
+      { num: 53, name: 'Persian', types: ['Normal'], hp: 271, atk: 176, def: 156, spAtk: 166, spDef: 166, speed: 266, moves: [{ name: 'Slash', type: 'Normal', category: 'Physical', power: 70, accuracy: 100, speed: 266, priority: 0, desc: 'Normal STAB; high critical ratio.' }, { name: 'Play Rough', type: 'Fairy', category: 'Physical', power: 90, accuracy: 90, speed: 266, priority: 0, desc: 'Fairy coverage.' }, { name: 'Bite', type: 'Dark', category: 'Physical', power: 60, accuracy: 100, speed: 266, priority: 0, desc: 'Dark coverage.' }, { name: 'U-turn', type: 'Bug', category: 'Physical', power: 70, accuracy: 100, speed: 266, priority: 0, desc: 'Switches user after attack.' }] },
+      { num: 55, name: 'Golduck', types: ['Water'], hp: 301, atk: 200, def: 192, spAtk: 226, spDef: 196, speed: 206, moves: [{ name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, speed: 206, priority: 0, desc: 'Water STAB.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 206, priority: 0, desc: 'Ice coverage.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 206, priority: 0, desc: 'Psychic coverage.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 206, priority: 0, desc: 'Fighting coverage.' }] },
+      { num: 62, name: 'Poliwrath', types: ['Water', 'Fighting'], hp: 321, atk: 226, def: 226, spAtk: 176, spDef: 216, speed: 176, moves: [{ name: 'Waterfall', type: 'Water', category: 'Physical', power: 80, accuracy: 100, speed: 176, priority: 0, desc: 'Water STAB.' }, { name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, speed: 176, priority: 0, desc: 'Fighting STAB.' }, { name: 'Ice Punch', type: 'Ice', category: 'Physical', power: 75, accuracy: 100, speed: 176, priority: 0, desc: 'Ice coverage.' }, { name: 'Poison Jab', type: 'Poison', category: 'Physical', power: 80, accuracy: 100, speed: 176, priority: 0, desc: 'Poison coverage.' }] },
+      { num: 73, name: 'Tentacruel', types: ['Water', 'Poison'], hp: 301, atk: 176, def: 166, spAtk: 196, spDef: 276, speed: 236, moves: [{ name: 'Scald', type: 'Water', category: 'Special', power: 80, accuracy: 100, speed: 236, priority: 0, desc: 'Water STAB; 30% burn.' }, { name: 'Sludge Wave', type: 'Poison', category: 'Special', power: 95, accuracy: 100, speed: 236, priority: 0, desc: 'Poison STAB.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 236, priority: 0, desc: 'Ice coverage.' }, { name: 'Dazzling Gleam', type: 'Fairy', category: 'Special', power: 80, accuracy: 100, speed: 236, priority: 0, desc: 'Fairy coverage.' }] },
+      { num: 76, name: 'Golem', types: ['Rock', 'Ground'], hp: 301, atk: 276, def: 306, spAtk: 146, spDef: 166, speed: 126, moves: [{ name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 126, priority: 0, desc: 'Rock STAB.' }, { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 126, priority: 0, desc: 'Ground STAB.' }, { name: 'Heavy Slam', type: 'Steel', category: 'Physical', power: 90, accuracy: 100, speed: 126, priority: 0, desc: 'Steel coverage.' }, { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, speed: 126, priority: 0, desc: 'Fire coverage.' }] },
+      { num: 78, name: 'Rapidash', types: ['Fire'], hp: 271, atk: 236, def: 176, spAtk: 196, spDef: 196, speed: 246, moves: [{ name: 'Flare Blitz', type: 'Fire', category: 'Physical', power: 120, accuracy: 100, speed: 246, priority: 0, desc: 'Recoil Fire STAB.' }, { name: 'Wild Charge', type: 'Electric', category: 'Physical', power: 90, accuracy: 100, speed: 246, priority: 0, desc: 'Electric coverage.' }, { name: 'High Horsepower', type: 'Ground', category: 'Physical', power: 95, accuracy: 95, speed: 246, priority: 0, desc: 'Ground coverage.' }, { name: 'Megahorn', type: 'Bug', category: 'Physical', power: 120, accuracy: 85, speed: 246, priority: 0, desc: 'Bug coverage.' }] },
+      { num: 80, name: 'Slowbro', types: ['Water', 'Psychic'], hp: 331, atk: 186, def: 256, spAtk: 236, spDef: 196, speed: 96, moves: [{ name: 'Scald', type: 'Water', category: 'Special', power: 80, accuracy: 100, speed: 96, priority: 0, desc: 'Water STAB; 30% burn.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 96, priority: 0, desc: 'Psychic STAB.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 96, priority: 0, desc: 'Ice coverage.' }, { name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, speed: 96, priority: 0, desc: 'Fire coverage.' }] },
+      { num: 82, name: 'Magneton', types: ['Electric', 'Steel'], hp: 241, atk: 156, def: 226, spAtk: 276, spDef: 176, speed: 176, moves: [{ name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 176, priority: 0, desc: 'Electric STAB.' }, { name: 'Flash Cannon', type: 'Steel', category: 'Special', power: 80, accuracy: 100, speed: 176, priority: 0, desc: 'Steel STAB.' }, { name: 'Volt Switch', type: 'Electric', category: 'Special', power: 70, accuracy: 100, speed: 176, priority: 0, desc: 'Switches user out.' }, { name: 'Tri Attack', type: 'Normal', category: 'Special', power: 80, accuracy: 100, speed: 176, priority: 0, desc: 'Normal special move.' }] },
+      { num: 85, name: 'Dodrio', types: ['Normal', 'Flying'], hp: 271, atk: 256, def: 176, spAtk: 156, spDef: 156, speed: 236, moves: [{ name: 'Brave Bird', type: 'Flying', category: 'Physical', power: 120, accuracy: 100, speed: 236, priority: 0, desc: 'Recoil Flying STAB.' }, { name: 'Jump Kick', type: 'Fighting', category: 'Physical', power: 100, accuracy: 95, speed: 236, priority: 0, desc: 'Fighting coverage.' }, { name: 'Knock Off', type: 'Dark', category: 'Physical', power: 65, accuracy: 100, speed: 236, priority: 0, desc: 'Dark coverage.' }, { name: 'Quick Attack', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, speed: 236, priority: 1, desc: 'Priority +1 Normal strike.' }] },
+      { num: 87, name: 'Dewgong', types: ['Water', 'Ice'], hp: 321, atk: 176, def: 196, spAtk: 176, spDef: 226, speed: 176, moves: [{ name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 176, priority: 0, desc: 'Ice STAB.' }, { name: 'Surf', type: 'Water', category: 'Special', power: 90, accuracy: 100, speed: 176, priority: 0, desc: 'Water STAB.' }, { name: 'Signal Beam', type: 'Bug', category: 'Special', power: 75, accuracy: 100, speed: 176, priority: 0, desc: 'Bug coverage.' }, { name: 'Ice Shard', type: 'Ice', category: 'Physical', power: 40, accuracy: 100, speed: 176, priority: 1, desc: 'Priority +1 Ice STAB.' }] },
+      { num: 89, name: 'Muk', types: ['Poison'], hp: 351, atk: 246, def: 186, spAtk: 166, spDef: 236, speed: 136, moves: [{ name: 'Gunk Shot', type: 'Poison', category: 'Physical', power: 120, accuracy: 80, speed: 136, priority: 0, desc: 'Poison STAB.' }, { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, speed: 136, priority: 0, desc: 'Fire coverage.' }, { name: 'Ice Punch', type: 'Ice', category: 'Physical', power: 75, accuracy: 100, speed: 136, priority: 0, desc: 'Ice coverage.' }, { name: 'Shadow Sneak', type: 'Ghost', category: 'Physical', power: 40, accuracy: 100, speed: 136, priority: 1, desc: 'Priority +1 Ghost strike.' }] },
+      { num: 91, name: 'Cloyster', types: ['Water', 'Ice'], hp: 241, atk: 226, def: 386, spAtk: 206, spDef: 126, speed: 176, moves: [{ name: 'Icicle Spear', type: 'Ice', category: 'Physical', power: 100, accuracy: 100, speed: 176, priority: 0, desc: 'Multi-hit Ice STAB.' }, { name: 'Liquidation', type: 'Water', category: 'Physical', power: 85, accuracy: 100, speed: 176, priority: 0, desc: 'Water STAB.' }, { name: 'Rock Blast', type: 'Rock', category: 'Physical', power: 100, accuracy: 90, speed: 176, priority: 0, desc: 'Multi-hit Rock coverage.' }, { name: 'Ice Shard', type: 'Ice', category: 'Physical', power: 40, accuracy: 100, speed: 176, priority: 1, desc: 'Priority +1 Ice strike.' }] },
+      { num: 97, name: 'Hypno', types: ['Psychic'], hp: 311, atk: 186, def: 176, spAtk: 186, spDef: 266, speed: 170, moves: [{ name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 170, priority: 0, desc: 'Psychic STAB.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 170, priority: 0, desc: 'Ghost coverage.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 170, priority: 0, desc: 'Fighting coverage.' }, { name: 'Dazzling Gleam', type: 'Fairy', category: 'Special', power: 80, accuracy: 100, speed: 170, priority: 0, desc: 'Fairy coverage.' }] },
+      { num: 101, name: 'Electrode', types: ['Electric'], hp: 261, atk: 136, def: 176, spAtk: 196, spDef: 196, speed: 316, moves: [{ name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 316, priority: 0, desc: 'Electric STAB.' }, { name: 'Volt Switch', type: 'Electric', category: 'Special', power: 70, accuracy: 100, speed: 316, priority: 0, desc: 'Switches user out.' }, { name: 'Foul Play', type: 'Dark', category: 'Physical', power: 95, accuracy: 100, speed: 316, priority: 0, desc: 'Uses target Attack.' }, { name: 'Signal Beam', type: 'Bug', category: 'Special', power: 75, accuracy: 100, speed: 316, priority: 0, desc: 'Bug coverage.' }] },
+      { num: 103, name: 'Exeggutor', types: ['Grass', 'Psychic'], hp: 331, atk: 226, def: 206, spAtk: 286, spDef: 186, speed: 126, moves: [{ name: 'Leaf Storm', type: 'Grass', category: 'Special', power: 130, accuracy: 90, speed: 126, priority: 0, desc: 'Heavy Grass STAB.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 126, priority: 0, desc: 'Psychic STAB.' }, { name: 'Giga Drain', type: 'Grass', category: 'Special', power: 75, accuracy: 100, speed: 126, priority: 0, desc: 'Grass STAB; drains HP.' }, { name: 'Sludge Bomb', type: 'Poison', category: 'Special', power: 90, accuracy: 100, speed: 126, priority: 0, desc: 'Poison coverage.' }] },
+      { num: 105, name: 'Marowak', types: ['Ground'], hp: 261, atk: 286, def: 256, spAtk: 136, spDef: 196, speed: 126, moves: [{ name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 126, priority: 0, desc: 'Ground STAB.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 126, priority: 0, desc: 'Rock coverage.' }, { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, speed: 126, priority: 0, desc: 'Fire coverage.' }, { name: 'Knock Off', type: 'Dark', category: 'Physical', power: 65, accuracy: 100, speed: 126, priority: 0, desc: 'Dark coverage.' }] },
+      { num: 106, name: 'Hitmonlee', types: ['Fighting'], hp: 241, atk: 276, def: 146, spAtk: 106, spDef: 236, speed: 216, moves: [{ name: 'High Jump Kick', type: 'Fighting', category: 'Physical', power: 130, accuracy: 90, speed: 216, priority: 0, desc: 'Heavy Fighting STAB.' }, { name: 'Knock Off', type: 'Dark', category: 'Physical', power: 65, accuracy: 100, speed: 216, priority: 0, desc: 'Dark coverage.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 216, priority: 0, desc: 'Rock coverage.' }, { name: 'Mach Punch', type: 'Fighting', category: 'Physical', power: 40, accuracy: 100, speed: 216, priority: 1, desc: 'Priority +1 Fighting STAB.' }] },
+      { num: 107, name: 'Hitmonchan', types: ['Fighting'], hp: 241, atk: 246, def: 196, spAtk: 106, spDef: 236, speed: 186, moves: [{ name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, speed: 186, priority: 0, desc: 'Fighting STAB.' }, { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, speed: 186, priority: 0, desc: 'Fire coverage.' }, { name: 'Ice Punch', type: 'Ice', category: 'Physical', power: 75, accuracy: 100, speed: 186, priority: 0, desc: 'Ice coverage.' }, { name: 'Mach Punch', type: 'Fighting', category: 'Physical', power: 40, accuracy: 100, speed: 186, priority: 1, desc: 'Priority +1 Fighting STAB.' }] },
+      { num: 110, name: 'Weezing', types: ['Poison'], hp: 271, atk: 206, def: 276, spAtk: 206, spDef: 176, speed: 136, moves: [{ name: 'Sludge Bomb', type: 'Poison', category: 'Special', power: 90, accuracy: 100, speed: 136, priority: 0, desc: 'Poison STAB.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 136, priority: 0, desc: 'Electric coverage.' }, { name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, speed: 136, priority: 0, desc: 'Fire coverage.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 136, priority: 0, desc: 'Ghost coverage.' }] },
+      { num: 112, name: 'Rhydon', types: ['Ground', 'Rock'], hp: 351, atk: 296, def: 276, spAtk: 126, spDef: 126, speed: 116, moves: [{ name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 116, priority: 0, desc: 'Ground STAB.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 116, priority: 0, desc: 'Rock STAB.' }, { name: 'Megahorn', type: 'Bug', category: 'Physical', power: 120, accuracy: 85, speed: 116, priority: 0, desc: 'Bug coverage.' }, { name: 'Fire Punch', type: 'Fire', category: 'Physical', power: 75, accuracy: 100, speed: 116, priority: 0, desc: 'Fire coverage.' }] },
+      { num: 115, name: 'Kangaskhan', types: ['Normal'], hp: 351, atk: 226, def: 196, spAtk: 116, spDef: 196, speed: 216, moves: [{ name: 'Double-Edge', type: 'Normal', category: 'Physical', power: 120, accuracy: 100, speed: 216, priority: 0, desc: 'Recoil Normal STAB.' }, { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 216, priority: 0, desc: 'Ground coverage.' }, { name: 'Sucker Punch', type: 'Dark', category: 'Physical', power: 70, accuracy: 100, speed: 216, priority: 1, desc: 'Priority +1 Dark strike.' }, { name: 'Drain Punch', type: 'Fighting', category: 'Physical', power: 75, accuracy: 100, speed: 216, priority: 0, desc: 'Fighting coverage.' }] },
+      { num: 121, name: 'Starmie', types: ['Water', 'Psychic'], hp: 261, atk: 166, def: 206, spAtk: 236, spDef: 206, speed: 266, moves: [{ name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, speed: 266, priority: 0, desc: 'Water STAB.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 266, priority: 0, desc: 'Psychic STAB.' }, { name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 266, priority: 0, desc: 'Electric coverage.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 266, priority: 0, desc: 'Ice coverage.' }] },
+      { num: 123, name: 'Scyther', types: ['Bug', 'Flying'], hp: 281, atk: 256, def: 196, spAtk: 126, spDef: 176, speed: 246, moves: [{ name: 'Dual Wingbeat', type: 'Flying', category: 'Physical', power: 80, accuracy: 90, speed: 246, priority: 0, desc: 'Flying STAB.' }, { name: 'Bug Bite', type: 'Bug', category: 'Physical', power: 60, accuracy: 100, speed: 246, priority: 0, desc: 'Bug STAB.' }, { name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, speed: 246, priority: 0, desc: 'Fighting coverage.' }, { name: 'U-turn', type: 'Bug', category: 'Physical', power: 70, accuracy: 100, speed: 246, priority: 0, desc: 'Switches user out.' }] },
+      { num: 124, name: 'Jynx', types: ['Ice', 'Psychic'], hp: 271, atk: 136, def: 106, spAtk: 266, spDef: 226, speed: 226, moves: [{ name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 226, priority: 0, desc: 'Ice STAB.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 226, priority: 0, desc: 'Psychic STAB.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 226, priority: 0, desc: 'Fighting coverage.' }, { name: 'Energy Ball', type: 'Grass', category: 'Special', power: 90, accuracy: 100, speed: 226, priority: 0, desc: 'Grass coverage.' }] },
+      { num: 125, name: 'Electabuzz', types: ['Electric'], hp: 271, atk: 206, def: 156, spAtk: 226, spDef: 206, speed: 246, moves: [{ name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 246, priority: 0, desc: 'Electric STAB.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 246, priority: 0, desc: 'Fighting coverage.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 246, priority: 0, desc: 'Psychic coverage.' }, { name: 'Volt Switch', type: 'Electric', category: 'Special', power: 70, accuracy: 100, speed: 246, priority: 0, desc: 'Switches user out.' }] },
+      { num: 126, name: 'Magmar', types: ['Fire'], hp: 271, atk: 226, def: 156, spAtk: 236, spDef: 206, speed: 226, moves: [{ name: 'Flamethrower', type: 'Fire', category: 'Special', power: 90, accuracy: 100, speed: 226, priority: 0, desc: 'Fire STAB.' }, { name: 'Focus Blast', type: 'Fighting', category: 'Special', power: 120, accuracy: 70, speed: 226, priority: 0, desc: 'Fighting coverage.' }, { name: 'Psychic', type: 'Psychic', category: 'Special', power: 90, accuracy: 100, speed: 226, priority: 0, desc: 'Psychic coverage.' }, { name: 'Thunder Punch', type: 'Electric', category: 'Physical', power: 75, accuracy: 100, speed: 226, priority: 0, desc: 'Electric coverage.' }] },
+      { num: 127, name: 'Pinsir', types: ['Bug'], hp: 271, atk: 286, def: 236, spAtk: 126, spDef: 176, speed: 206, moves: [{ name: 'X-Scissor', type: 'Bug', category: 'Physical', power: 80, accuracy: 100, speed: 206, priority: 0, desc: 'Bug STAB.' }, { name: 'Close Combat', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, speed: 206, priority: 0, desc: 'Fighting coverage.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 206, priority: 0, desc: 'Rock coverage.' }, { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 206, priority: 0, desc: 'Ground coverage.' }] },
+      { num: 128, name: 'Tauros', types: ['Normal'], hp: 291, atk: 236, def: 226, spAtk: 116, spDef: 176, speed: 236, moves: [{ name: 'Body Slam', type: 'Normal', category: 'Physical', power: 85, accuracy: 100, speed: 236, priority: 0, desc: 'Normal STAB; 30% paralyze.' }, { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 236, priority: 0, desc: 'Ground coverage.' }, { name: 'Rock Slide', type: 'Rock', category: 'Physical', power: 75, accuracy: 90, speed: 236, priority: 0, desc: 'Rock coverage.' }, { name: 'Iron Head', type: 'Steel', category: 'Physical', power: 80, accuracy: 100, speed: 236, priority: 0, desc: 'Steel coverage.' }] },
+      { num: 134, name: 'Vaporeon', types: ['Water'], hp: 401, atk: 166, def: 156, spAtk: 256, spDef: 226, speed: 146, moves: [{ name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, speed: 146, priority: 0, desc: 'Water STAB.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 146, priority: 0, desc: 'Ice coverage.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 146, priority: 0, desc: 'Ghost coverage.' }, { name: 'Scald', type: 'Water', category: 'Special', power: 80, accuracy: 100, speed: 146, priority: 0, desc: 'Water STAB; 30% burn.' }] },
+      { num: 135, name: 'Jolteon', types: ['Electric'], hp: 271, atk: 166, def: 156, spAtk: 256, spDef: 226, speed: 286, moves: [{ name: 'Thunderbolt', type: 'Electric', category: 'Special', power: 90, accuracy: 100, speed: 286, priority: 0, desc: 'Electric STAB.' }, { name: 'Shadow Ball', type: 'Ghost', category: 'Special', power: 80, accuracy: 100, speed: 286, priority: 0, desc: 'Ghost coverage.' }, { name: 'Volt Switch', type: 'Electric', category: 'Special', power: 70, accuracy: 100, speed: 286, priority: 0, desc: 'Switches user out.' }, { name: 'Signal Beam', type: 'Bug', category: 'Special', power: 75, accuracy: 100, speed: 286, priority: 0, desc: 'Bug coverage.' }] },
+      { num: 136, name: 'Flareon', types: ['Fire'], hp: 271, atk: 296, def: 156, spAtk: 226, spDef: 256, speed: 166, moves: [{ name: 'Flare Blitz', type: 'Fire', category: 'Physical', power: 120, accuracy: 100, speed: 166, priority: 0, desc: 'Recoil Fire STAB.' }, { name: 'Superpower', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, speed: 166, priority: 0, desc: 'Fighting coverage.' }, { name: 'Iron Tail', type: 'Steel', category: 'Physical', power: 100, accuracy: 75, speed: 166, priority: 0, desc: 'Steel coverage.' }, { name: 'Quick Attack', type: 'Normal', category: 'Physical', power: 40, accuracy: 100, speed: 166, priority: 1, desc: 'Priority +1 Normal strike.' }] },
+      { num: 139, name: 'Omastar', types: ['Rock', 'Water'], hp: 281, atk: 156, def: 286, spAtk: 266, spDef: 176, speed: 146, moves: [{ name: 'Hydro Pump', type: 'Water', category: 'Special', power: 110, accuracy: 80, speed: 146, priority: 0, desc: 'Water STAB.' }, { name: 'Ancient Power', type: 'Rock', category: 'Special', power: 60, accuracy: 100, speed: 146, priority: 0, desc: 'Rock STAB; 10% all-stat boost.' }, { name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 146, priority: 0, desc: 'Ice coverage.' }, { name: 'Earth Power', type: 'Ground', category: 'Special', power: 90, accuracy: 100, speed: 146, priority: 0, desc: 'Ground coverage.' }] },
+      { num: 141, name: 'Kabutops', types: ['Rock', 'Water'], hp: 261, atk: 266, def: 246, spAtk: 166, spDef: 176, speed: 196, moves: [{ name: 'Waterfall', type: 'Water', category: 'Physical', power: 80, accuracy: 100, speed: 196, priority: 0, desc: 'Water STAB.' }, { name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 196, priority: 0, desc: 'Rock STAB.' }, { name: 'Superpower', type: 'Fighting', category: 'Physical', power: 120, accuracy: 100, speed: 196, priority: 0, desc: 'Fighting coverage.' }, { name: 'Aqua Jet', type: 'Water', category: 'Physical', power: 40, accuracy: 100, speed: 196, priority: 1, desc: 'Priority +1 Water STAB.' }] },
+      { num: 142, name: 'Aerodactyl', types: ['Rock', 'Flying'], hp: 301, atk: 246, def: 166, spAtk: 156, spDef: 186, speed: 286, moves: [{ name: 'Stone Edge', type: 'Rock', category: 'Physical', power: 100, accuracy: 80, speed: 286, priority: 0, desc: 'Rock STAB.' }, { name: 'Dual Wingbeat', type: 'Flying', category: 'Physical', power: 80, accuracy: 90, speed: 286, priority: 0, desc: 'Flying STAB.' }, { name: 'Earthquake', type: 'Ground', category: 'Physical', power: 100, accuracy: 100, speed: 286, priority: 0, desc: 'Ground coverage.' }, { name: 'Iron Head', type: 'Steel', category: 'Physical', power: 80, accuracy: 100, speed: 286, priority: 0, desc: 'Steel coverage.' }] },
+      { num: 144, name: 'Articuno', types: ['Ice', 'Flying'], hp: 321, atk: 186, def: 236, spAtk: 226, spDef: 286, speed: 206, moves: [{ name: 'Ice Beam', type: 'Ice', category: 'Special', power: 90, accuracy: 100, speed: 206, priority: 0, desc: 'Ice STAB.' }, { name: 'Air Slash', type: 'Flying', category: 'Special', power: 75, accuracy: 95, speed: 206, priority: 0, desc: 'Flying STAB; 30% flinch.' }, { name: 'Hurricane', type: 'Flying', category: 'Special', power: 110, accuracy: 70, speed: 206, priority: 0, desc: 'Heavy Flying STAB.' }, { name: 'U-turn', type: 'Bug', category: 'Physical', power: 70, accuracy: 100, speed: 206, priority: 0, desc: 'Switches user out.' }] },
+      { num: 145, name: 'Zapdos', types: ['Electric', 'Flying'], hp: 321, atk: 206, def: 206, spAt
