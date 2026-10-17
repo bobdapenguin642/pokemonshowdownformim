@@ -1907,7 +1907,379 @@
         hookAdminPanelVisibility();
       };
     })();
-      
+
+    /* =========================================================
+       ULTIMATE DISCORD-STYLE AVATAR SHOP, CRATE & COIN SYSTEM
+       ========================================================= */
+    (function setupUltimateShopSystem() {
+      // 1. Core State Initialization
+      window.userCoins = parseInt(localStorage.getItem('showdown_coins')) || 500;
+      window.currentAvatar = localStorage.getItem('showdown_avatar') || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+      window.ownedAvatars = JSON.parse(localStorage.getItem('showdown_owned_avatars')) || [
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png',
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png',
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png'
+      ];
+
+      // 2. Comprehensive 20 Item Catalog Across 5 Rarities
+      const SHOP_CATALOG = [
+        // Common (White / Slate)
+        { id: 'av_1', name: 'Master Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
+        { id: 'av_2', name: 'Premier Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
+        { id: 'av_3', name: 'Heal Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-ball.png' },
+        { id: 'av_4', name: 'Net Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/net-ball.png' },
+        // Rare (Blue)
+        { id: 'av_5', name: 'Nest Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nest-ball.png' },
+        { id: 'av_6', name: 'Quick Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png' },
+        { id: 'av_7', name: 'Dusk Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dusk-ball.png' },
+        { id: 'av_8', name: 'Timer Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/timer-ball.png' },
+        // Epic (Purple)
+        { id: 'av_9', name: 'Luxury Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
+        { id: 'av_10', name: 'Cherish Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' },
+        { id: 'av_11', name: 'Safari Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png' },
+        { id: 'av_12', name: 'Park Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/park-ball.png' },
+        // Mythic (Pink)
+        { id: 'av_13', name: 'Beast Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
+        { id: 'av_14', name: 'Dream Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-ball.png' },
+        { id: 'av_15', name: 'Lure Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lure-ball.png' },
+        { id: 'av_16', name: 'Moon Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/moon-ball.png' },
+        // Ultra (Gold / Legendary)
+        { id: 'av_17', name: 'Friend Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/friend-ball.png' },
+        { id: 'av_18', name: 'Love Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/love-ball.png' },
+        { id: 'av_19', name: 'Heavy Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heavy-ball.png' },
+        { id: 'av_20', name: 'Fast Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fast-ball.png' }
+      ];
+
+      // 3. Crates Probability Engine
+      const CRATES_CONFIG = {
+        standard: {
+          name: 'Standard Crate',
+          price: 150,
+          color: 'from-slate-600 to-slate-800 border-slate-500 text-slate-300',
+          icon: '📦',
+          weights: { common: 0.60, rare: 0.25, epic: 0.10, mythic: 0.04, ultra: 0.01 }
+        },
+        mega: {
+          name: 'Mega Crate',
+          price: 450,
+          color: 'from-purple-600 to-indigo-900 border-purple-500 text-purple-300',
+          icon: '🎁',
+          weights: { common: 0.20, rare: 0.40, epic: 0.25, mythic: 0.10, ultra: 0.05 }
+        },
+        ultra: {
+          name: 'Ultra Crate',
+          price: 1000,
+          color: 'from-amber-500 to-orange-700 border-amber-400 text-amber-200',
+          icon: '👑',
+          weights: { common: 0.05, rare: 0.15, epic: 0.35, mythic: 0.30, ultra: 0.15 }
+        }
+      };
+
+      const RARITY_STYLES = {
+        common: { label: 'Common', border: 'border-slate-500', bg: 'bg-slate-500/10', text: 'text-slate-300', glow: 'shadow-slate-500/20' },
+        rare: { label: 'Rare', border: 'border-blue-500', bg: 'bg-blue-500/10', text: 'text-blue-400', glow: 'shadow-blue-500/30' },
+        epic: { label: 'Epic', border: 'border-purple-500', bg: 'bg-purple-500/10', text: 'text-purple-400', glow: 'shadow-purple-500/40' },
+        mythic: { label: 'Mythic', border: 'border-pink-500', bg: 'bg-pink-500/10', text: 'text-pink-400', glow: 'shadow-pink-500/50' },
+        ultra: { label: 'Ultra', border: 'border-amber-400', bg: 'bg-amber-400/10', text: 'text-amber-300', glow: 'shadow-amber-400/60' }
+      };
+
+      // State Persistence
+      window.saveAvatarSystemData = function() {
+        localStorage.setItem('showdown_coins', window.userCoins);
+        localStorage.setItem('showdown_avatar', window.currentAvatar);
+        localStorage.setItem('showdown_owned_avatars', JSON.stringify(window.ownedAvatars));
+        updateCoinDisplays();
+        updateProfileAvatarDisplays();
+      };
+
+      // 4. Inject High-Quality Modals & CSS Animations
+      const modalStyles = `
+        <style>
+          @keyframes unboxSpin {
+            0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.15) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+          }
+          .animate-unbox { animation: unboxSpin 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+          .glow-ultra { box-shadow: 0 0 25px rgba(251, 191, 36, 0.4); }
+        </style>
+      `;
+
+      const uiHTML = `
+        ${modalStyles}
+        <!-- Profile Customization Modal -->
+        <div id="profile-modal" class="fixed inset-0 bg-black/85 backdrop-blur-lg z-[110] hidden flex items-center justify-center p-4">
+          <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h3 class="text-lg font-black text-white tracking-wide flex items-center gap-2">
+                <span>🖼️</span> Profile Avatar
+              </h3>
+              <button id="close-profile-modal" class="text-slate-400 hover:text-white font-bold text-xl transition">&times;</button>
+            </div>
+            
+            <div class="flex items-center gap-4 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+              <img id="modal-preview-avatar" src="${window.currentAvatar}" class="w-16 h-16 rounded-full border-2 border-indigo-500 bg-slate-900 object-contain p-1 shadow-lg" />
+              <div>
+                <div class="text-xs font-bold uppercase text-indigo-400">Current Selection</div>
+                <div class="text-sm font-semibold text-slate-200">Equipped PFP</div>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Your Collection</span>
+              <div id="owned-avatars-grid" class="grid grid-cols-4 gap-2.5 max-h-52 overflow-y-auto p-2.5 bg-slate-950/80 rounded-xl border border-slate-800/80 custom-scrollbar"></div>
+            </div>
+
+            <button id="open-shop-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 uppercase tracking-wide">
+              🛒 Marketplace & Crates
+            </button>
+          </div>
+        </div>
+
+        <!-- Marketplace & Crates Modal -->
+        <div id="shop-modal" class="fixed inset-0 bg-black/85 backdrop-blur-lg z-[120] hidden flex items-center justify-center p-4">
+          <div class="bg-slate-900 border border-indigo-500/30 rounded-2xl p-6 max-w-3xl w-full space-y-5 max-h-[90vh] flex flex-col shadow-2xl">
+            <!-- Header -->
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+              <div class="flex items-center gap-3">
+                <h3 class="text-xl font-black text-white tracking-wide">🛍️ Shop & Crates</h3>
+                <div class="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 font-extrabold text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-inner">
+                  🪙 <span id="shop-modal-coins">0</span>
+                </div>
+              </div>
+              <button id="close-shop-modal" class="text-slate-400 hover:text-white font-bold text-xl transition">&times;</button>
+            </div>
+
+            <div class="overflow-y-auto space-y-6 pr-2 custom-scrollbar">
+              <!-- Crate Section -->
+              <div>
+                <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">📦 Mystery Crates</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                  ${Object.entries(CRATES_CONFIG).map(([key, crate]) => `
+                    <div class="bg-gradient-to-b ${crate.color} border rounded-xl p-4 text-center space-y-3 flex flex-col justify-between shadow-lg relative overflow-hidden group">
+                      <div class="text-4xl group-hover:scale-110 transition duration-300">${crate.icon}</div>
+                      <div>
+                        <div class="font-extrabold text-sm text-white">${crate.name}</div>
+                        <div class="text-[10px] text-slate-300/80 uppercase font-semibold">Random Cosmetic</div>
+                      </div>
+                      <button onclick="buyCrate('${key}')" class="w-full bg-slate-950/80 hover:bg-black text-amber-300 text-xs font-black py-2 rounded-lg border border-amber-500/30 transition shadow">
+                        🪙 ${crate.price}
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Catalog Section -->
+              <div>
+                <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">🖼️ Direct Purchase Catalog</h4>
+                <div id="shop-items-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unbox Reward Animation Overlay Modal -->
+        <div id="unbox-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[130] hidden flex items-center justify-center p-4">
+          <div id="unbox-card" class="bg-slate-900 border-2 rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative">
+            <div class="text-xs font-black uppercase tracking-widest text-slate-400">UNBOXED ITEM</div>
+            <div class="relative py-4 flex justify-center">
+              <img id="unbox-item-img" src="" class="w-24 h-24 object-contain animate-unbox drop-shadow-2xl" />
+            </div>
+            <div>
+              <div id="unbox-item-rarity" class="text-xs font-black uppercase tracking-wider mb-1">COMMON</div>
+              <div id="unbox-item-name" class="text-lg font-bold text-white">Item Name</div>
+            </div>
+            <button id="close-unbox-modal" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-sm transition">
+              Claim & Equip
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', uiHTML);
+
+      // 5. Navigation Bar Header Hook
+      const initHeaderUI = () => {
+        const userNav = document.getElementById('display-user-name')?.parentElement;
+        if (userNav && !document.getElementById('user-profile-pic')) {
+          const profileWrapper = document.createElement('div');
+          profileWrapper.className = 'flex items-center gap-2.5 cursor-pointer bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 px-2.5 py-1 rounded-full transition shadow-md';
+          profileWrapper.onclick = () => window.openProfileModal();
+
+          profileWrapper.innerHTML = `
+            <img id="user-profile-pic" src="${window.currentAvatar}" class="w-7 h-7 rounded-full border border-indigo-500/80 bg-slate-950 object-contain p-0.5" />
+            <div class="flex items-center gap-1 font-black text-xs text-amber-300">
+              🪙 <span id="header-coin-count">0</span>
+            </div>
+          `;
+          userNav.insertBefore(profileWrapper, userNav.firstChild);
+        }
+        updateCoinDisplays();
+      };
+
+      function updateCoinDisplays() {
+        const headerCoins = document.getElementById('header-coin-count');
+        const shopCoins = document.getElementById('shop-modal-coins');
+        if (headerCoins) headerCoins.textContent = window.userCoins.toLocaleString();
+        if (shopCoins) shopCoins.textContent = window.userCoins.toLocaleString();
+      }
+
+      function updateProfileAvatarDisplays() {
+        const headerPic = document.getElementById('user-profile-pic');
+        const previewPic = document.getElementById('modal-preview-avatar');
+        if (headerPic) headerPic.src = window.currentAvatar;
+        if (previewPic) previewPic.src = window.currentAvatar;
+      }
+
+      // 6. Modal Interactions
+      window.openProfileModal = function() {
+        renderOwnedAvatars();
+        document.getElementById('profile-modal').classList.remove('hidden');
+      };
+
+      document.getElementById('close-profile-modal').onclick = () => {
+        document.getElementById('profile-modal').classList.add('hidden');
+      };
+
+      document.getElementById('open-shop-btn').onclick = () => {
+        document.getElementById('profile-modal').classList.add('hidden');
+        renderShopItems();
+        document.getElementById('shop-modal').classList.remove('hidden');
+      };
+
+      document.getElementById('close-shop-modal').onclick = () => {
+        document.getElementById('shop-modal').classList.add('hidden');
+      };
+
+      document.getElementById('close-unbox-modal').onclick = () => {
+        document.getElementById('unbox-modal').classList.add('hidden');
+      };
+
+      // 7. Grid Renderers
+      function renderOwnedAvatars() {
+        const grid = document.getElementById('owned-avatars-grid');
+        grid.innerHTML = '';
+        window.ownedAvatars.forEach(url => {
+          const isSelected = window.currentAvatar === url;
+          const activeStyle = isSelected ? 'ring-2 ring-indigo-500 scale-105 bg-indigo-500/20 border-indigo-500' : 'opacity-70 hover:opacity-100 border-slate-800 bg-slate-900';
+          const card = document.createElement('div');
+          card.className = `p-1.5 rounded-xl border cursor-pointer transition-all flex items-center justify-center ${activeStyle}`;
+          card.onclick = () => {
+            window.currentAvatar = url;
+            window.saveAvatarSystemData();
+            renderOwnedAvatars();
+          };
+          card.innerHTML = `<img src="${url}" class="w-10 h-10 object-contain" />`;
+          grid.appendChild(card);
+        });
+      }
+
+      function renderShopItems() {
+        const grid = document.getElementById('shop-items-grid');
+        grid.innerHTML = '';
+        SHOP_CATALOG.forEach(item => {
+          const isOwned = window.ownedAvatars.includes(item.url);
+          const style = RARITY_STYLES[item.rarity] || RARITY_STYLES.common;
+          const card = document.createElement('div');
+          card.className = `bg-slate-950/60 border ${style.border} ${style.bg} rounded-xl p-3 flex flex-col items-center text-center space-y-2 shadow-lg transition hover:scale-[1.02]`;
+          
+          card.innerHTML = `
+            <img src="${item.url}" class="w-11 h-11 object-contain drop-shadow" />
+            <div class="text-[9px] font-black uppercase tracking-wider ${style.text}">${style.label}</div>
+            <div class="text-xs font-bold text-white truncate w-full">${item.name}</div>
+            ${isOwned 
+              ? `<span class="w-full text-[10px] bg-slate-800 text-slate-400 font-bold py-1 rounded-lg uppercase">Owned</span>`
+              : `<button onclick="buyShopItem('${item.id}')" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-extrabold py-1 rounded-lg transition">🪙 ${item.price}</button>`
+            }
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      // 8. Purchases & Openings
+      window.buyShopItem = function(id) {
+        const item = SHOP_CATALOG.find(i => i.id === id);
+        if (!item) return;
+        if (window.userCoins < item.price) {
+          alert('Insufficient Coins!');
+          return;
+        }
+        window.userCoins -= item.price;
+        window.ownedAvatars.push(item.url);
+        window.saveAvatarSystemData();
+        renderShopItems();
+      };
+
+      window.buyCrate = function(type) {
+        const crate = CRATES_CONFIG[type];
+        if (!crate) return;
+        if (window.userCoins < crate.price) {
+          alert('Insufficient Coins!');
+          return;
+        }
+
+        window.userCoins -= crate.price;
+
+        // Weighted Roll
+        const rand = Math.random();
+        let cumulative = 0;
+        let selectedRarity = 'common';
+        for (const [rarity, weight] of Object.entries(crate.weights)) {
+          cumulative += weight;
+          if (rand <= cumulative) {
+            selectedRarity = rarity;
+            break;
+          }
+        }
+
+        const pool = SHOP_CATALOG.filter(i => i.rarity === selectedRarity);
+        const reward = pool[Math.floor(Math.random() * pool.length)];
+
+        if (!window.ownedAvatars.includes(reward.url)) {
+          window.ownedAvatars.push(reward.url);
+        }
+
+        window.saveAvatarSystemData();
+        renderShopItems();
+        
+        // Trigger Animated Unbox Modal
+        const style = RARITY_STYLES[reward.rarity];
+        const unboxCard = document.getElementById('unbox-card');
+        unboxCard.className = `bg-slate-900 border-2 ${style.border} ${style.glow} rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative`;
+        
+        document.getElementById('unbox-item-img').src = reward.url;
+        document.getElementById('unbox-item-rarity').textContent = style.label;
+        document.getElementById('unbox-item-rarity').className = `text-xs font-black uppercase tracking-widest ${style.text}`;
+        document.getElementById('unbox-item-name').textContent = reward.name;
+
+        window.currentAvatar = reward.url;
+        window.saveAvatarSystemData();
+
+        document.getElementById('unbox-modal').classList.remove('hidden');
+      };
+
+      // 9. Match Victory Reward Hook
+      const hookMatchWins = () => {
+        if (typeof window.endGame === 'function') {
+          const originalEndGame = window.endGame;
+          window.endGame = function(winner) {
+            originalEndGame(winner);
+            if (winner === 'player' || winner === 1) {
+              window.userCoins += 100;
+              window.saveAvatarSystemData();
+            }
+          };
+        }
+      };
+
+      // Execution Hook
+      document.addEventListener('DOMContentLoaded', () => {
+        initHeaderUI();
+        hookMatchWins();
+      });
+    })();
+    
   </script>
 </body>
 </html>
