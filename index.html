@@ -2040,7 +2040,7 @@
       };
     })();
 
- /* =========================================================
+/* =========================================================
        ULTIMATE SHOP, COIN SYSTEM & TRAINER CUSTOMIZATION BAR
        ========================================================= */
     (function setupUltimateShopSystem() {
@@ -2059,7 +2059,7 @@
       window.ownedTitles = JSON.parse(localStorage.getItem('showdown_owned_titles')) || ['Rookie Trainer', 'Novice Challenger'];
       window.ownedFrames = JSON.parse(localStorage.getItem('showdown_owned_frames')) || ['border-slate-700', 'border-blue-500'];
 
-      // 2. Comprehensive 30 Item Pokémon Catalog
+      // 2. Comprehensive Pokémon Item Catalog Across 5 Rarities
       const SHOP_CATALOG = [
         // Common (White / Slate) - 100 Coins
         { id: 'av_1', name: 'Master Ball', price: 100, rarity: 'common', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
@@ -2092,7 +2092,6 @@
         { id: 'av_20', name: 'Tera Orb', price: 2500, rarity: 'ultra', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tera-orb.png' }
       ];
 
-      // Custom Titles & Border Frames
       const TITLE_CATALOG = [
         { id: 't_1', title: 'Ace Trainer', price: 300 },
         { id: 't_2', title: 'Gym Leader', price: 600 },
@@ -2106,7 +2105,7 @@
         { id: 'f_3', frameClass: 'border-amber-400 shadow-amber-400/80 animate-pulse', name: 'Legendary Gold', price: 2000 }
       ];
 
-      // 3. Crates Engine
+      // 3. Crates Probability Engine
       const CRATES_CONFIG = {
         standard: {
           name: 'Standard Crate',
@@ -2152,7 +2151,7 @@
         updateProfileAvatarDisplays();
       };
 
-      // 4. Inject Modals & Trainer Customization Bar
+      // 4. Inject Modals & Customization UI
       const uiHTML = `
         <!-- Profile & Trainer Customization Modal -->
         <div id="profile-modal" class="fixed inset-0 bg-black/85 backdrop-blur-lg z-[110] hidden flex items-center justify-center p-4">
@@ -2178,28 +2177,25 @@
               </div>
             </div>
 
-            <!-- Customization Bar Tabs -->
+            <!-- Customization Selectors -->
             <div class="space-y-4">
-              <!-- Title Selector -->
               <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipped Trainer Title</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Trainer Title</label>
                 <select id="title-selector" onchange="equipTitle(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-indigo-300 focus:outline-none"></select>
               </div>
 
-              <!-- Frame Selector -->
               <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipped Card Frame</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Card Frame Border</label>
                 <select id="frame-selector" onchange="equipFrame(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-emerald-400 focus:outline-none"></select>
               </div>
 
-              <!-- Avatars Grid -->
               <div class="space-y-2">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avatars Collection</span>
                 <div id="owned-avatars-grid" class="grid grid-cols-5 gap-2 max-h-40 overflow-y-auto p-2 bg-slate-950/80 rounded-xl border border-slate-800 custom-scrollbar"></div>
               </div>
             </div>
 
-            <!-- Claim Daily Coins Button -->
+            <!-- Claim Daily Coins -->
             <button id="daily-claim-btn" onclick="claimDailyCoins()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 uppercase">
               🎁 Claim Daily Bonus (+250 Coins)
             </button>
@@ -2243,13 +2239,13 @@
                 </div>
               </div>
 
-              <!-- Titles & Frames Direct Purchase -->
+              <!-- Titles & Borders -->
               <div>
                 <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">🎗️ Trainer Titles & Borders</h4>
                 <div id="titles-shop-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4"></div>
               </div>
 
-              <!-- Catalog Section -->
+              <!-- Catalog -->
               <div>
                 <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">🖼️ Avatars Catalog</h4>
                 <div id="shop-items-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
@@ -2278,7 +2274,7 @@
 
       document.body.insertAdjacentHTML('beforeend', uiHTML);
 
-      // Header UI Hook & Avatar Sync
+      // Header Sync
       function initHeaderUI() {
         const userNav = document.getElementById('display-user-name')?.parentElement;
         if (userNav && !document.getElementById('user-profile-pic')) {
@@ -2325,7 +2321,7 @@
         if (previewName) previewName.textContent = currentUsername || 'Trainer';
       }
 
-      // Daily Bonus System
+      // Daily Bonus
       window.claimDailyCoins = function() {
         const now = Date.now();
         const cooldown = 24 * 60 * 60 * 1000;
@@ -2341,7 +2337,7 @@
         }
       };
 
-      // Customization Equipment Logic
+      // Customization Logic
       window.equipTitle = function(title) {
         window.currentTitle = title;
         window.saveAvatarSystemData();
@@ -2352,7 +2348,7 @@
         window.saveAvatarSystemData();
       };
 
-      // Modal Triggers
+      // Modal Controls
       window.openProfileModal = function() {
         renderCustomizationSelectors();
         renderOwnedAvatars();
@@ -2447,7 +2443,7 @@
         });
       }
 
-      // Purchases
+      // Item & Crate Purchasing
       window.buyShopItem = function(id) {
         const item = SHOP_CATALOG.find(i => i.id === id);
         if (!item || window.userCoins < item.price) return alert('Insufficient Coins!');
@@ -2507,12 +2503,12 @@
         document.getElementById('unbox-modal').classList.remove('hidden');
       };
 
-      // Initialize
+      // Initialization Hook
       document.addEventListener('DOMContentLoaded', () => {
         initHeaderUI();
       });
     })();
-
+    
     /* =========================================================
        4) THEME MANAGER ENGINE & SELECTOR UI
        ========================================================= */
