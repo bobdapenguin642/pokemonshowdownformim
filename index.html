@@ -2279,6 +2279,146 @@
         hookMatchWins();
       });
     })();
+
+    /* =========================================================
+       4) THEME MANAGER ENGINE & SELECTOR UI
+       ========================================================= */
+    (function setupThemeEngine() {
+      // 1. Theme Configurations
+      const THEMES = {
+        default: {
+          name: 'Ultra Dark',
+          bodyBg: '#070a12',
+          panelBg: 'rgba(15, 23, 42, 0.85)',
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          textColor: '#f1f5f9'
+        },
+        neon: {
+          name: 'Midnight Neon',
+          bodyBg: '#020617',
+          panelBg: 'rgba(15, 23, 42, 0.92)',
+          borderColor: 'rgba(168, 85, 247, 0.3)',
+          textColor: '#f8fafc'
+        },
+        showdown: {
+          name: 'Showdown Classic',
+          bodyBg: '#18212e',
+          panelBg: '#222d3d',
+          borderColor: '#334155',
+          textColor: '#e2e8f0'
+        },
+        cyberpunk: {
+          name: 'Cyberpunk 2077',
+          bodyBg: '#0f051d',
+          panelBg: 'rgba(24, 9, 43, 0.9)',
+          borderColor: 'rgba(236, 72, 153, 0.4)',
+          textColor: '#f472b6'
+        },
+        emerald: {
+          name: 'Rayquaza Emerald',
+          bodyBg: '#022c22',
+          panelBg: 'rgba(6, 78, 59, 0.85)',
+          borderColor: 'rgba(16, 185, 129, 0.3)',
+          textColor: '#ecfdf5'
+        }
+      };
+
+      // 2. State & Style Persistence
+      let currentThemeKey = localStorage.getItem('showdown_theme') || 'default';
+
+      function applyTheme(themeKey) {
+        if (!THEMES[themeKey]) themeKey = 'default';
+        currentThemeKey = themeKey;
+        localStorage.setItem('showdown_theme', themeKey);
+
+        const theme = THEMES[themeKey];
+        document.body.className = `min-h-screen bg-animated flex flex-col justify-between theme-${themeKey}`;
+        
+        let dynamicStyle = document.getElementById('dynamic-theme-overrides');
+        if (!dynamicStyle) {
+          dynamicStyle = document.createElement('style');
+          dynamicStyle.id = 'dynamic-theme-overrides';
+          document.head.appendChild(dynamicStyle);
+        }
+
+        dynamicStyle.innerHTML = `
+          body.theme-${themeKey} {
+            background-color: ${theme.bodyBg} !important;
+            color: ${theme.textColor} !important;
+          }
+          body.theme-${themeKey} .glass-panel {
+            background: ${theme.panelBg} !important;
+            border-color: ${theme.borderColor} !important;
+          }
+        `;
+
+        const themeLabel = document.getElementById('theme-label');
+        if (themeLabel) themeLabel.textContent = theme.name;
+
+        renderThemeOptions();
+      }
+
+      // 3. Theme Selector Modal UI Injection
+      const themeModalHTML = `
+        <div id="theme-selector-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-[115] hidden flex items-center justify-center p-4">
+          <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                🎨 Theme Customizer
+              </h3>
+              <button id="close-theme-modal" class="text-slate-400 hover:text-white font-bold text-lg">&times;</button>
+            </div>
+            <div id="theme-options-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      `;
+
+      document.body.insertAdjacentHTML('beforeend', themeModalHTML);
+
+      function renderThemeOptions() {
+        const container = document.getElementById('theme-options-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        Object.entries(THEMES).forEach(([key, theme]) => {
+          const isActive = currentThemeKey === key;
+          const btn = document.createElement('button');
+          btn.className = `w-full p-3 rounded-xl border flex items-center justify-between text-xs font-bold transition-all ${
+            isActive 
+              ? 'border-indigo-500 bg-indigo-500/20 text-white shadow-lg' 
+              : 'border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+          }`;
+          btn.onclick = () => {
+            applyTheme(key);
+            document.getElementById('theme-selector-modal').classList.add('hidden');
+          };
+
+          btn.innerHTML = `
+            <div class="flex items-center gap-2.5">
+              <span class="w-4 h-4 rounded-full border border-white/20" style="background:${theme.bodyBg}"></span>
+              <span>${theme.name}</span>
+            </div>
+            ${isActive ? '<span class="text-indigo-400 font-extrabold">✓ Active</span>' : ''}
+          `;
+          container.appendChild(btn);
+        });
+      }
+
+      // 4. Global Cycle Override & Modal Hook
+      window.cycleThemeModifier = function() {
+        document.getElementById('theme-selector-modal').classList.remove('hidden');
+      };
+
+      document.getElementById('close-theme-modal').onclick = () => {
+        document.getElementById('theme-selector-modal').classList.add('hidden');
+      };
+
+      // 5. Initialize Theme
+      document.addEventListener('DOMContentLoaded', () => {
+        applyTheme(currentThemeKey);
+      });
+    })();
+
     
   </script>
 </body>
