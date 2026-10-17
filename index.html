@@ -2648,6 +2648,113 @@
       });
     })();
 
+    <!-- MARKETPLACE TRAINER AVATAR CUSTOMIZATION INJECTOR -->
+<script>
+  (function injectMarketplaceAvatarStudio() {
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize State
+      window.userCoins = parseInt(localStorage.getItem('showdown_coins')) || 1000;
+      window.currentAvatar = localStorage.getItem('showdown_avatar') || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+      window.currentTitle = localStorage.getItem('showdown_title') || 'Ace Trainer';
+      window.currentFrame = localStorage.getItem('showdown_frame') || 'border-indigo-500';
+      window.ownedAvatars = JSON.parse(localStorage.getItem('showdown_owned_avatars')) || [window.currentAvatar];
+
+      window.trainerStudioState = JSON.parse(localStorage.getItem('showdown_trainer_studio')) || {
+        baseSprite: '101',
+        badgeFrame: window.currentFrame
+      };
+
+      // 2. Inject Avatar Studio directly into Marketplace Modal/Tab
+      function embedStudioInMarketplace() {
+        const shopModalContent = document.querySelector('#shop-modal .overflow-y-auto') || document.getElementById('shop-modal');
+        if (!shopModalContent || document.getElementById('marketplace-avatar-section')) return;
+
+        const studioSection = document.createElement('div');
+        studioSection.id = 'marketplace-avatar-section';
+        studioSection.className = 'bg-slate-950 border border-indigo-500/30 rounded-2xl p-4 space-y-4 mb-6 shadow-xl';
+
+        studioSection.innerHTML = `
+          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <h4 class="text-xs font-black uppercase text-indigo-400 tracking-widest flex items-center gap-2">
+              <span>🧢</span> Trainer Avatar Studio
+            </h4>
+            <button onclick="saveMarketplaceAvatarConfig()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-[10px] px-3 py-1 rounded-lg transition uppercase">
+              Save Outfit
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            <!-- LIVE PREVIEW CARD -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center relative min-h-[180px]">
+              <div id="mkt-preview-frame" class="w-20 h-28 relative flex items-center justify-center bg-slate-950 rounded-xl border-2 ${window.trainerStudioState.badgeFrame} p-1 shadow-lg">
+                <img id="mkt-trainer-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${window.trainerStudioState.baseSprite}.png" class="w-full h-full object-contain filter drop-shadow" />
+                <img id="mkt-accessory-img" src="${window.currentAvatar}" class="absolute -top-1.5 -right-1.5 w-6 h-6 object-contain bg-slate-950 border border-amber-400 rounded-full p-0.5 shadow" />
+              </div>
+              <span id="mkt-title-badge" class="text-[9px] font-black uppercase text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded border border-indigo-500/30 mt-2">
+                ${window.currentTitle}
+              </span>
+            </div>
+
+            <!-- CONTROLS -->
+            <div class="md:col-span-2 space-y-3">
+              <!-- Trainer Model Picker -->
+              <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Trainer Model</label>
+                <div class="grid grid-cols-6 gap-1.5">
+                  ${['101', '102', '1', '2', '170', '235'].map(id => `
+                    <button onclick="selectMktTrainerSprite('${id}')" class="p-1 rounded-lg border border-slate-800 bg-slate-900 hover:border-indigo-500 transition flex items-center justify-center h-12">
+                      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${id}.png" class="h-full object-contain" />
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Border Frame Aura Picker -->
+              <div>
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Aura Border</label>
+                <div class="grid grid-cols-3 gap-1.5">
+                  <button onclick="selectMktFrame('border-indigo-500')" class="p-1 bg-slate-900 border-2 border-indigo-500 rounded-lg text-[10px] font-bold text-indigo-300">Indigo</button>
+                  <button onclick="selectMktFrame('border-emerald-500')" class="p-1 bg-slate-900 border-2 border-emerald-500 rounded-lg text-[10px] font-bold text-emerald-300">Emerald</button>
+                  <button onclick="selectMktFrame('border-amber-400 animate-pulse')" class="p-1 bg-slate-900 border-2 border-amber-400 rounded-lg text-[10px] font-bold text-amber-300">Gold</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        shopModalContent.prepend(studioSection);
+      }
+
+      // 3. Studio Actions
+      window.selectMktTrainerSprite = function(id) {
+        window.trainerStudioState.baseSprite = id;
+        document.getElementById('mkt-trainer-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${id}.png`;
+      };
+
+      window.selectMktFrame = function(frameClass) {
+        window.trainerStudioState.badgeFrame = frameClass;
+        window.currentFrame = frameClass;
+        document.getElementById('mkt-preview-frame').className = `w-20 h-28 relative flex items-center justify-center bg-slate-950 rounded-xl border-2 ${frameClass} p-1 shadow-lg`;
+      };
+
+      window.saveMarketplaceAvatarConfig = function() {
+        localStorage.setItem('showdown_trainer_studio', JSON.stringify(window.trainerStudioState));
+        localStorage.setItem('showdown_frame', window.currentFrame);
+        alert('✅ Trainer Avatar updated!');
+      };
+
+      // 4. Trigger on Marketplace Open
+      const originalOpenShop = window.openShopModal || function() {};
+      window.openShopModal = function() {
+        originalOpenShop();
+        embedStudioInMarketplace();
+      };
+
+      // Auto-mount check
+      setInterval(embedStudioInMarketplace, 1000);
+    });
+  })();
+
   </script>
 </body>
 </html>
