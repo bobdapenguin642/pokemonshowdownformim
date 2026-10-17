@@ -2647,6 +2647,127 @@
         applyTheme(currentThemeKey);
       });
     })();
+
+    /* =========================================================
+   TRAINER AVATAR BATTLE STAGE CONTROLLER
+   ========================================================= */
+window.TrainerBattleEngine = {
+  // Update Trainer Sprite visuals based on equipped cosmetics
+  syncTrainerVisuals: function() {
+    const trainerSprite = document.getElementById('player-trainer-sprite');
+    const accessoryImg = document.getElementById('player-trainer-accessory');
+    const frameContainer = document.getElementById('player-trainer-frame');
+    const titleBadge = document.getElementById('battle-player-title');
+
+    if (trainerSprite) {
+      // Sync Equipped Key Item/Avatar
+      if (accessoryImg) {
+        accessoryImg.src = window.currentAvatar || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+      }
+      
+      // Sync Border Frame
+      if (frameContainer) {
+        frameContainer.className = `w-20 h-28 relative flex items-center justify-center bg-slate-900/60 rounded-xl border-2 ${window.currentFrame || 'border-indigo-500'} backdrop-blur-md p-1 shadow-lg transition-all duration-300`;
+      }
+
+      // Sync Trainer Title
+      if (titleBadge) {
+        titleBadge.textContent = window.currentTitle || 'Ace Trainer';
+      }
+    }
+  },
+
+  // Trigger Commanding Animation during moves
+  triggerCommandAnimation: function(actionType) {
+    const trainerSprite = document.getElementById('player-trainer-sprite');
+    if (!trainerSprite) return;
+
+    if (actionType === 'attack') {
+      // Commanding Pose: Lunge forward and scale
+      trainerSprite.classList.add('-translate-y-2', 'scale-110', 'brightness-125');
+      setTimeout(() => {
+        trainerSprite.classList.remove('-translate-y-2', 'scale-110', 'brightness-125');
+      }, 400);
+    } else if (actionType === 'damage') {
+      // Hit Reaction: Shake and flash red
+      trainerSprite.classList.add('translate-x-2', 'hue-rotate-180');
+      setTimeout(() => {
+        trainerSprite.classList.remove('translate-x-2', 'hue-rotate-180');
+      }, 300);
+    } else if (actionType === 'win') {
+      // Victory Pose: Continuous bounce
+      trainerSprite.classList.add('animate-bounce');
+    }
+  }
+};
+
+// Hook animation hooks into core battle render cycles
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.TrainerBattleEngine) {
+    window.TrainerBattleEngine.syncTrainerVisuals();
+  }
+});
+    <script>
+  (function autoInjectTrainerBattleSystem() {
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inject Trainer Side-Stage into Battle Arena
+      const battleTab = document.getElementById('battle-tab');
+      if (battleTab && !document.getElementById('player-trainer-frame')) {
+        const stageOverlay = document.createElement('div');
+        stageOverlay.id = 'trainer-battle-stage';
+        stageOverlay.className = 'flex justify-between items-end p-2 bg-slate-900/40 rounded-xl border border-slate-800/80 my-2';
+        stageOverlay.innerHTML = `
+          <div class="flex flex-col items-center gap-1">
+            <div id="player-trainer-frame" class="w-16 h-24 relative flex items-center justify-center bg-slate-900/60 rounded-xl border-2 border-indigo-500 backdrop-blur-md p-1 shadow-lg">
+              <img id="player-trainer-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/2.png" class="w-full h-full object-contain filter drop-shadow-lg transition-transform duration-200" />
+              <img id="player-trainer-accessory" src="${window.currentAvatar || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'}" class="absolute -top-1.5 -right-1.5 w-6 h-6 object-contain bg-slate-950 border border-amber-400 rounded-full p-0.5 shadow-md" />
+            </div>
+            <span id="battle-player-title" class="text-[9px] font-black uppercase text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded border border-indigo-500/30">
+              ${window.currentTitle || 'Ace Trainer'}
+            </span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <div class="w-16 h-24 relative flex items-center justify-center bg-slate-900/60 rounded-xl border-2 border-rose-500/80 backdrop-blur-md p-1 shadow-lg">
+              <img id="p2-trainer-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/101.png" class="w-full h-full object-contain filter drop-shadow-lg" />
+            </div>
+            <span class="text-[9px] font-black uppercase text-rose-400 bg-rose-500/20 px-2 py-0.5 rounded border border-rose-500/30">Rival</span>
+          </div>
+        `;
+        battleTab.prepend(stageOverlay);
+      }
+
+      // 2. Global Trainer Reaction Engine
+      window.TrainerBattleEngine = {
+        sync: function() {
+          const sprite = document.getElementById('player-trainer-sprite');
+          const acc = document.getElementById('player-trainer-accessory');
+          const frame = document.getElementById('player-trainer-frame');
+          const title = document.getElementById('battle-player-title');
+
+          if (acc) acc.src = window.currentAvatar || '';
+          if (title) title.textContent = window.currentTitle || 'Ace Trainer';
+          if (frame) frame.className = `w-16 h-24 relative flex items-center justify-center bg-slate-900/60 rounded-xl border-2 ${window.currentFrame || 'border-indigo-500'} backdrop-blur-md p-1 shadow-lg`;
+        },
+        animateCommand: function(type) {
+          const sprite = document.getElementById('player-trainer-sprite');
+          if (!sprite) return;
+          if (type === 'attack') {
+            sprite.classList.add('-translate-y-2', 'scale-110');
+            setTimeout(() => sprite.classList.remove('-translate-y-2', 'scale-110'), 300);
+          } else if (type === 'hit') {
+            sprite.classList.add('translate-x-2', 'brightness-150');
+            setTimeout(() => sprite.classList.remove('translate-x-2', 'brightness-150'), 300);
+          }
+        }
+      };
+
+      // Periodic Sync
+      setInterval(() => {
+        if (window.TrainerBattleEngine) window.TrainerBattleEngine.sync();
+      }, 1000);
+    });
+  })();
   
   </script>
 </body>
