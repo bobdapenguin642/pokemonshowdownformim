@@ -1792,23 +1792,23 @@
       });
     }
 
-    /* =========================================================
-       3) ADMIN CONTROL PANEL IMPLEMENTATION
+   /* =========================================================
+       3) ENHANCED ADMIN CONTROL PANEL IMPLEMENTATION
        ========================================================= */
     (function setupAdminPanel() {
-      // Create and inject the Admin Panel UI
+      // Create and inject the Enhanced Admin Panel UI
       const adminModalHTML = `
         <div id="admin-panel-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden flex items-center justify-center p-4">
-          <div class="bg-slate-900 border border-purple-500/50 rounded-xl p-6 max-w-lg w-full shadow-2xl space-y-4">
+          <div class="bg-slate-900 border border-purple-500/50 rounded-xl p-6 max-w-lg w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-700 pb-3">
               <h3 class="text-xl font-bold text-purple-400 flex items-center gap-2">
-                ⚡ Admin Control Panel
+                ⚡ Ultimate Admin Control Panel
               </h3>
               <button id="close-admin-panel" class="text-slate-400 hover:text-white font-bold text-lg">&times;</button>
             </div>
             
             <div class="space-y-4">
-              <!-- ELO Modifier -->
+              <!-- Account ELO Modifier -->
               <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700">
                 <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Set Account ELO</label>
                 <div class="flex gap-2">
@@ -1817,19 +1817,51 @@
                 </div>
               </div>
 
+              <!-- Economy Hacks -->
+              <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700 space-y-2">
+                <label class="block text-xs font-semibold uppercase text-slate-400">Economy & Collection</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button id="admin-max-coins-btn" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-1.5 rounded text-xs uppercase transition">
+                    +1,000,000 Coins 🪙
+                  </button>
+                  <button id="admin-unlock-catalog-btn" class="bg-pink-600 hover:bg-pink-500 text-white font-bold py-1.5 rounded text-xs uppercase transition">
+                    Unlock All Avatars 🖼️
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Battle Modifiers -->
+              <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700 space-y-2">
+                <label class="block text-xs font-semibold uppercase text-slate-400">Live Battle Hacks</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <button id="admin-instant-win-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 rounded text-xs uppercase transition">
+                    Force Match Win 🏆
+                  </button>
+                  <button id="admin-instant-loss-btn" class="bg-red-600 hover:bg-red-500 text-white font-bold py-1.5 rounded text-xs uppercase transition">
+                    Force Match Defeat 💀
+                  </button>
+                  <button id="admin-ko-opp-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-bold py-1.5 rounded text-xs uppercase transition">
+                    KO Opponent Mon ⚡
+                  </button>
+                  <button id="admin-force-ai-switch-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-1.5 rounded text-xs uppercase transition">
+                    Force AI Switch 🔀
+                  </button>
+                </div>
+              </div>
+
               <!-- Quick Modifiers -->
               <div class="grid grid-cols-2 gap-2">
                 <button id="admin-max-elo-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded text-xs uppercase transition">
                   Max ELO (9999)
                 </button>
-                <button id="admin-unlock-all-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded text-xs uppercase transition">
-                  Unlock All Badges
+                <button id="admin-reset-data-btn" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 rounded text-xs uppercase transition">
+                  Reset Saved Data ⚠️
                 </button>
               </div>
 
               <!-- Console Output -->
-              <div class="bg-black/50 p-3 rounded-lg font-mono text-xs text-emerald-400 h-24 overflow-y-auto border border-slate-800" id="admin-console-log">
-                > Admin panel initialized for account: bobdapenguin
+              <div class="bg-black/50 p-3 rounded-lg font-mono text-xs text-emerald-400 h-28 overflow-y-auto border border-slate-800" id="admin-console-log">
+                > Enhanced Admin panel loaded. Registered user: bobdapenguin
               </div>
             </div>
           </div>
@@ -1847,7 +1879,7 @@
         triggerBtn.innerHTML = '⚙️ Admin Panel';
         triggerBtn.onclick = () => {
           document.getElementById('admin-panel-modal').classList.remove('hidden');
-          document.getElementById('admin-elo-input').value = userElo || 1200;
+          document.getElementById('admin-elo-input').value = userElo || 1850;
         };
 
         const navContainer = document.getElementById('display-user-name')?.parentElement;
@@ -1867,25 +1899,119 @@
         consoleEl.scrollTop = consoleEl.scrollHeight;
       };
 
+      // Apply Custom ELO
       document.getElementById('admin-set-elo-btn').onclick = () => {
         const val = parseInt(document.getElementById('admin-elo-input').value);
         if (!isNaN(val)) {
           userElo = val;
           localStorage.setItem('showdown_elo', userElo);
-          if (typeof updateUI === 'function') updateUI();
+          updateUserInLeaderboard();
           logAdminAction(`ELO updated to ${userElo}`);
         }
       };
 
+      // Max ELO
       document.getElementById('admin-max-elo-btn').onclick = () => {
         userElo = 9999;
         localStorage.setItem('showdown_elo', userElo);
-        if (typeof updateUI === 'function') updateUI();
+        updateUserInLeaderboard();
         logAdminAction('ELO set to MAX (9999)');
       };
 
-      document.getElementById('admin-unlock-all-btn').onclick = () => {
-        logAdminAction('All account features and badges unlocked');
+      // Add 1,000,000 Coins
+      document.getElementById('admin-max-coins-btn').onclick = () => {
+        window.userCoins = (window.userCoins || 0) + 1000000;
+        if (typeof window.saveAvatarSystemData === 'function') window.saveAvatarSystemData();
+        logAdminAction('Granted +1,000,000 Coins');
+      };
+
+      // Unlock Catalog
+      document.getElementById('admin-unlock-catalog-btn').onclick = () => {
+        const allUrls = [
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/net-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nest-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dusk-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/timer-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/park-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lure-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/moon-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/friend-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/love-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heavy-ball.png',
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fast-ball.png'
+        ];
+        window.ownedAvatars = Array.from(new Set([...(window.ownedAvatars || []), ...allUrls]));
+        if (typeof window.saveAvatarSystemData === 'function') window.saveAvatarSystemData();
+        logAdminAction('Unlocked all catalog items & avatars');
+      };
+
+      // Force Match Win
+      document.getElementById('admin-instant-win-btn').onclick = () => {
+        if (typeof showMatchResults === 'function') {
+          showMatchResults(true);
+          logAdminAction('Triggered match victory');
+        } else {
+          logAdminAction('No active match running');
+        }
+      };
+
+      // Force Match Defeat
+      document.getElementById('admin-instant-loss-btn').onclick = () => {
+        if (typeof showMatchResults === 'function') {
+          showMatchResults(false);
+          logAdminAction('Triggered match defeat');
+        } else {
+          logAdminAction('No active match running');
+        }
+      };
+
+      // Knock Out Active Opponent Pokémon
+      document.getElementById('admin-ko-opp-btn').onclick = () => {
+        if (p2Team && p2Team[p2ActiveIndex]) {
+          p2Team[p2ActiveIndex].currentHp = 0;
+          p2Team[p2ActiveIndex].fainted = true;
+          if (typeof renderBattleUI === 'function') renderBattleUI();
+          if (typeof checkFaintedAndSwitch === 'function') checkFaintedAndSwitch();
+          logAdminAction('Opponent active Pokémon knocked out');
+        } else {
+          logAdminAction('No active opponent Pokémon found');
+        }
+      };
+
+      // Force AI Switch
+      document.getElementById('admin-force-ai-switch-btn').onclick = () => {
+        if (p2Team) {
+          const nextIdx = p2Team.findIndex((mon, idx) => !mon.fainted && idx !== p2ActiveIndex);
+          if (nextIdx !== -1) {
+            p2ActiveIndex = nextIdx;
+            if (typeof renderBattleUI === 'function') renderBattleUI();
+            logAdminAction(`Forced AI switch to ${p2Team[p2ActiveIndex].name}`);
+          } else {
+            logAdminAction('No available bench Pokémon for AI');
+          }
+        } else {
+          logAdminAction('No battle in progress');
+        }
+      };
+
+      // Reset Local Data
+      document.getElementById('admin-reset-data-btn').onclick = () => {
+        if (confirm('Reset all localStorage data? This cannot be undone.')) {
+          localStorage.clear();
+          location.reload();
+        }
       };
 
       // Visibility Hook based on User Credentials
@@ -1914,70 +2040,94 @@
       };
     })();
 
-    /* =========================================================
-       ULTIMATE DISCORD-STYLE AVATAR SHOP, CRATE & COIN SYSTEM
+ /* =========================================================
+       ULTIMATE SHOP, COIN SYSTEM & TRAINER CUSTOMIZATION BAR
        ========================================================= */
     (function setupUltimateShopSystem() {
       // 1. Core State Initialization
-      window.userCoins = parseInt(localStorage.getItem('showdown_coins')) || 500;
+      window.userCoins = parseInt(localStorage.getItem('showdown_coins')) || 1000;
+      window.lastDailyClaim = parseInt(localStorage.getItem('showdown_daily_claim')) || 0;
       window.currentAvatar = localStorage.getItem('showdown_avatar') || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+      window.currentTitle = localStorage.getItem('showdown_title') || 'Rookie Trainer';
+      window.currentFrame = localStorage.getItem('showdown_frame') || 'border-slate-700';
+      
       window.ownedAvatars = JSON.parse(localStorage.getItem('showdown_owned_avatars')) || [
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png',
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png',
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png'
       ];
+      window.ownedTitles = JSON.parse(localStorage.getItem('showdown_owned_titles')) || ['Rookie Trainer', 'Novice Challenger'];
+      window.ownedFrames = JSON.parse(localStorage.getItem('showdown_owned_frames')) || ['border-slate-700', 'border-blue-500'];
 
-      // 2. Comprehensive 20 Item Catalog Across 5 Rarities
+      // 2. Comprehensive 30 Item Pokémon Catalog
       const SHOP_CATALOG = [
-        // Common (White / Slate)
-        { id: 'av_1', name: 'Master Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
-        { id: 'av_2', name: 'Premier Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
-        { id: 'av_3', name: 'Heal Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-ball.png' },
-        { id: 'av_4', name: 'Net Ball', price: 100, rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/net-ball.png' },
-        // Rare (Blue)
-        { id: 'av_5', name: 'Nest Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nest-ball.png' },
-        { id: 'av_6', name: 'Quick Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png' },
-        { id: 'av_7', name: 'Dusk Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dusk-ball.png' },
-        { id: 'av_8', name: 'Timer Ball', price: 250, rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/timer-ball.png' },
-        // Epic (Purple)
-        { id: 'av_9', name: 'Luxury Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
-        { id: 'av_10', name: 'Cherish Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' },
-        { id: 'av_11', name: 'Safari Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png' },
-        { id: 'av_12', name: 'Park Ball', price: 500, rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/park-ball.png' },
-        // Mythic (Pink)
-        { id: 'av_13', name: 'Beast Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
-        { id: 'av_14', name: 'Dream Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dream-ball.png' },
-        { id: 'av_15', name: 'Lure Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lure-ball.png' },
-        { id: 'av_16', name: 'Moon Ball', price: 1000, rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/moon-ball.png' },
-        // Ultra (Gold / Legendary)
-        { id: 'av_17', name: 'Friend Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/friend-ball.png' },
-        { id: 'av_18', name: 'Love Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/love-ball.png' },
-        { id: 'av_19', name: 'Heavy Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heavy-ball.png' },
-        { id: 'av_20', name: 'Fast Ball', price: 2500, rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fast-ball.png' }
+        // Common (White / Slate) - 100 Coins
+        { id: 'av_1', name: 'Master Ball', price: 100, rarity: 'common', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
+        { id: 'av_2', name: 'Premier Ball', price: 100, rarity: 'common', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
+        { id: 'av_3', name: 'Heal Ball', price: 100, rarity: 'common', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-ball.png' },
+        { id: 'av_4', name: 'Exp. Share', price: 100, rarity: 'common', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/exp-share.png' },
+
+        // Rare (Blue) - 250 Coins
+        { id: 'av_5', name: 'Quick Ball', price: 250, rarity: 'rare', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png' },
+        { id: 'av_6', name: 'Leftovers', price: 250, rarity: 'rare', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/leftovers.png' },
+        { id: 'av_7', name: 'Choice Scarf', price: 250, rarity: 'rare', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png' },
+        { id: 'av_8', name: 'Focus Sash', price: 250, rarity: 'rare', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png' },
+
+        // Epic (Purple) - 500 Coins
+        { id: 'av_9', name: 'Luxury Ball', price: 500, rarity: 'epic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
+        { id: 'av_10', name: 'Cherish Ball', price: 500, rarity: 'epic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' },
+        { id: 'av_11', name: 'Life Orb', price: 500, rarity: 'epic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/life-orb.png' },
+        { id: 'av_12', name: 'Assault Vest', price: 500, rarity: 'epic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/assault-vest.png' },
+
+        // Mythic (Pink) - 1000 Coins
+        { id: 'av_13', name: 'Beast Ball', price: 1000, rarity: 'mythic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
+        { id: 'av_14', name: 'Mega Ring', price: 1000, rarity: 'mythic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-ring.png' },
+        { id: 'av_15', name: 'Z-Ring', price: 1000, rarity: 'mythic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/z-ring.png' },
+        { id: 'av_16', name: 'Dynamax Band', price: 1000, rarity: 'mythic', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dynamax-band.png' },
+
+        // Ultra (Gold / Legendary) - 2500 Coins
+        { id: 'av_17', name: 'Charizardite X', price: 2500, rarity: 'ultra', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charizardite-x.png' },
+        { id: 'av_18', name: 'Lucarionite', price: 2500, rarity: 'ultra', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucarionite.png' },
+        { id: 'av_19', name: 'Gengarite', price: 2500, rarity: 'ultra', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gengarite.png' },
+        { id: 'av_20', name: 'Tera Orb', price: 2500, rarity: 'ultra', type: 'avatar', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tera-orb.png' }
       ];
 
-      // 3. Crates Probability Engine
+      // Custom Titles & Border Frames
+      const TITLE_CATALOG = [
+        { id: 't_1', title: 'Ace Trainer', price: 300 },
+        { id: 't_2', title: 'Gym Leader', price: 600 },
+        { id: 't_3', title: 'Elite Four Member', price: 1200 },
+        { id: 't_4', title: 'League Champion 🏆', price: 3000 }
+      ];
+
+      const FRAME_CATALOG = [
+        { id: 'f_1', frameClass: 'border-emerald-500 shadow-emerald-500/50', name: 'Emerald Aura', price: 400 },
+        { id: 'f_2', frameClass: 'border-purple-500 shadow-purple-500/50', name: 'Psychic Glow', price: 800 },
+        { id: 'f_3', frameClass: 'border-amber-400 shadow-amber-400/80 animate-pulse', name: 'Legendary Gold', price: 2000 }
+      ];
+
+      // 3. Crates Engine
       const CRATES_CONFIG = {
         standard: {
           name: 'Standard Crate',
           price: 150,
           color: 'from-slate-600 to-slate-800 border-slate-500 text-slate-300',
           icon: '📦',
-          weights: { common: 0.60, rare: 0.25, epic: 0.10, mythic: 0.04, ultra: 0.01 }
+          weights: { common: 0.55, rare: 0.30, epic: 0.10, mythic: 0.04, ultra: 0.01 }
         },
         mega: {
           name: 'Mega Crate',
           price: 450,
           color: 'from-purple-600 to-indigo-900 border-purple-500 text-purple-300',
           icon: '🎁',
-          weights: { common: 0.20, rare: 0.40, epic: 0.25, mythic: 0.10, ultra: 0.05 }
+          weights: { common: 0.15, rare: 0.35, epic: 0.30, mythic: 0.15, ultra: 0.05 }
         },
         ultra: {
           name: 'Ultra Crate',
           price: 1000,
           color: 'from-amber-500 to-orange-700 border-amber-400 text-amber-200',
           icon: '👑',
-          weights: { common: 0.05, rare: 0.15, epic: 0.35, mythic: 0.30, ultra: 0.15 }
+          weights: { common: 0.02, rare: 0.13, epic: 0.30, mythic: 0.35, ultra: 0.20 }
         }
       };
 
@@ -1993,63 +2143,80 @@
       window.saveAvatarSystemData = function() {
         localStorage.setItem('showdown_coins', window.userCoins);
         localStorage.setItem('showdown_avatar', window.currentAvatar);
+        localStorage.setItem('showdown_title', window.currentTitle);
+        localStorage.setItem('showdown_frame', window.currentFrame);
         localStorage.setItem('showdown_owned_avatars', JSON.stringify(window.ownedAvatars));
+        localStorage.setItem('showdown_owned_titles', JSON.stringify(window.ownedTitles));
+        localStorage.setItem('showdown_owned_frames', JSON.stringify(window.ownedFrames));
         updateCoinDisplays();
         updateProfileAvatarDisplays();
       };
 
-      // 4. Inject High-Quality Modals & CSS Animations
-      const modalStyles = `
-        <style>
-          @keyframes unboxSpin {
-            0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
-            50% { transform: scale(1.15) rotate(5deg); }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-          }
-          .animate-unbox { animation: unboxSpin 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-          .glow-ultra { box-shadow: 0 0 25px rgba(251, 191, 36, 0.4); }
-        </style>
-      `;
-
+      // 4. Inject Modals & Trainer Customization Bar
       const uiHTML = `
-        ${modalStyles}
-        <!-- Profile Customization Modal -->
+        <!-- Profile & Trainer Customization Modal -->
         <div id="profile-modal" class="fixed inset-0 bg-black/85 backdrop-blur-lg z-[110] hidden flex items-center justify-center p-4">
-          <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 max-w-md w-full space-y-5 shadow-2xl">
+          <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 max-w-lg w-full space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
               <h3 class="text-lg font-black text-white tracking-wide flex items-center gap-2">
-                <span>🖼️</span> Profile Avatar
+                <span>🧢</span> Trainer Customization Bar
               </h3>
               <button id="close-profile-modal" class="text-slate-400 hover:text-white font-bold text-xl transition">&times;</button>
             </div>
-            
-            <div class="flex items-center gap-4 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
-              <img id="modal-preview-avatar" src="${window.currentAvatar}" class="w-16 h-16 rounded-full border-2 border-indigo-500 bg-slate-900 object-contain p-1 shadow-lg" />
+
+            <!-- Trainer Card Preview -->
+            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 p-4 rounded-xl border border-slate-800 flex items-center gap-4 shadow-inner">
+              <img id="modal-preview-avatar" src="${window.currentAvatar}" class="w-16 h-16 rounded-full border-2 ${window.currentFrame} bg-slate-900 object-contain p-1 shadow-lg" />
               <div>
-                <div class="text-xs font-bold uppercase text-indigo-400">Current Selection</div>
-                <div class="text-sm font-semibold text-slate-200">Equipped PFP</div>
+                <span id="modal-preview-title" class="text-[10px] font-black px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase">
+                  ${window.currentTitle}
+                </span>
+                <div class="text-base font-extrabold text-white mt-1" id="modal-preview-name">Trainer</div>
+                <div class="text-xs text-amber-400 font-bold flex items-center gap-1 mt-0.5">
+                  🪙 <span id="modal-preview-coins">0</span> Coins
+                </div>
               </div>
             </div>
 
-            <div class="space-y-2">
-              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Your Collection</span>
-              <div id="owned-avatars-grid" class="grid grid-cols-4 gap-2.5 max-h-52 overflow-y-auto p-2.5 bg-slate-950/80 rounded-xl border border-slate-800/80 custom-scrollbar"></div>
+            <!-- Customization Bar Tabs -->
+            <div class="space-y-4">
+              <!-- Title Selector -->
+              <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipped Trainer Title</label>
+                <select id="title-selector" onchange="equipTitle(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-indigo-300 focus:outline-none"></select>
+              </div>
+
+              <!-- Frame Selector -->
+              <div>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Equipped Card Frame</label>
+                <select id="frame-selector" onchange="equipFrame(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-emerald-400 focus:outline-none"></select>
+              </div>
+
+              <!-- Avatars Grid -->
+              <div class="space-y-2">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avatars Collection</span>
+                <div id="owned-avatars-grid" class="grid grid-cols-5 gap-2 max-h-40 overflow-y-auto p-2 bg-slate-950/80 rounded-xl border border-slate-800 custom-scrollbar"></div>
+              </div>
             </div>
 
-            <button id="open-shop-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 uppercase tracking-wide">
-              🛒 Marketplace & Crates
+            <!-- Claim Daily Coins Button -->
+            <button id="daily-claim-btn" onclick="claimDailyCoins()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 uppercase">
+              🎁 Claim Daily Bonus (+250 Coins)
+            </button>
+
+            <button id="open-shop-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 uppercase tracking-wide">
+              🛒 Open Marketplace & Crates
             </button>
           </div>
         </div>
 
-        <!-- Marketplace & Crates Modal -->
+        <!-- Marketplace Modal -->
         <div id="shop-modal" class="fixed inset-0 bg-black/85 backdrop-blur-lg z-[120] hidden flex items-center justify-center p-4">
           <div class="bg-slate-900 border border-indigo-500/30 rounded-2xl p-6 max-w-3xl w-full space-y-5 max-h-[90vh] flex flex-col shadow-2xl">
-            <!-- Header -->
             <div class="flex justify-between items-center border-b border-slate-800 pb-4">
               <div class="flex items-center gap-3">
-                <h3 class="text-xl font-black text-white tracking-wide">🛍️ Shop & Crates</h3>
-                <div class="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 font-extrabold text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-inner">
+                <h3 class="text-xl font-black text-white tracking-wide">🛍️ Marketplace & Mystery Crates</h3>
+                <div class="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 font-extrabold text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
                   🪙 <span id="shop-modal-coins">0</span>
                 </div>
               </div>
@@ -2057,16 +2224,16 @@
             </div>
 
             <div class="overflow-y-auto space-y-6 pr-2 custom-scrollbar">
-              <!-- Crate Section -->
+              <!-- Crates Section -->
               <div>
                 <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">📦 Mystery Crates</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
                   ${Object.entries(CRATES_CONFIG).map(([key, crate]) => `
-                    <div class="bg-gradient-to-b ${crate.color} border rounded-xl p-4 text-center space-y-3 flex flex-col justify-between shadow-lg relative overflow-hidden group">
+                    <div class="bg-gradient-to-b ${crate.color} border rounded-xl p-4 text-center space-y-3 flex flex-col justify-between shadow-lg group">
                       <div class="text-4xl group-hover:scale-110 transition duration-300">${crate.icon}</div>
                       <div>
                         <div class="font-extrabold text-sm text-white">${crate.name}</div>
-                        <div class="text-[10px] text-slate-300/80 uppercase font-semibold">Random Cosmetic</div>
+                        <div class="text-[10px] text-slate-300/80 uppercase font-semibold">Random Item Pull</div>
                       </div>
                       <button onclick="buyCrate('${key}')" class="w-full bg-slate-950/80 hover:bg-black text-amber-300 text-xs font-black py-2 rounded-lg border border-amber-500/30 transition shadow">
                         🪙 ${crate.price}
@@ -2076,28 +2243,34 @@
                 </div>
               </div>
 
+              <!-- Titles & Frames Direct Purchase -->
+              <div>
+                <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">🎗️ Trainer Titles & Borders</h4>
+                <div id="titles-shop-grid" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4"></div>
+              </div>
+
               <!-- Catalog Section -->
               <div>
-                <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">🖼️ Direct Purchase Catalog</h4>
+                <h4 class="text-xs font-black uppercase text-indigo-400 mb-3 tracking-widest">🖼️ Avatars Catalog</h4>
                 <div id="shop-items-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Unbox Reward Animation Overlay Modal -->
+        <!-- Unbox Modal -->
         <div id="unbox-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[130] hidden flex items-center justify-center p-4">
           <div id="unbox-card" class="bg-slate-900 border-2 rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative">
             <div class="text-xs font-black uppercase tracking-widest text-slate-400">UNBOXED ITEM</div>
             <div class="relative py-4 flex justify-center">
-              <img id="unbox-item-img" src="" class="w-24 h-24 object-contain animate-unbox drop-shadow-2xl" />
+              <img id="unbox-item-img" src="" class="w-24 h-24 object-contain animate-bounce drop-shadow-2xl" />
             </div>
             <div>
               <div id="unbox-item-rarity" class="text-xs font-black uppercase tracking-wider mb-1">COMMON</div>
               <div id="unbox-item-name" class="text-lg font-bold text-white">Item Name</div>
             </div>
             <button id="close-unbox-modal" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-sm transition">
-              Claim & Equip
+              Equip & Continue
             </button>
           </div>
         </div>
@@ -2105,8 +2278,8 @@
 
       document.body.insertAdjacentHTML('beforeend', uiHTML);
 
-      // 5. Navigation Bar Header Hook
-     function initHeaderUI() {
+      // Header UI Hook & Avatar Sync
+      function initHeaderUI() {
         const userNav = document.getElementById('display-user-name')?.parentElement;
         if (userNav && !document.getElementById('user-profile-pic')) {
           const profileWrapper = document.createElement('div');
@@ -2115,7 +2288,7 @@
           profileWrapper.onclick = () => window.openProfileModal();
 
           profileWrapper.innerHTML = `
-            <img id="user-profile-pic" src="${window.currentAvatar}" class="w-5 h-5 rounded-full border border-indigo-500/80 bg-slate-950 object-contain" />
+            <img id="user-profile-pic" src="${window.currentAvatar}" class="w-6 h-6 rounded-full border ${window.currentFrame} bg-slate-950 object-contain" />
             <div class="flex items-center gap-0.5 font-black text-[11px] text-amber-300">
               🪙 <span id="header-coin-count">0</span>
             </div>
@@ -2128,63 +2301,133 @@
       function updateCoinDisplays() {
         const headerCoins = document.getElementById('header-coin-count');
         const shopCoins = document.getElementById('shop-modal-coins');
+        const previewCoins = document.getElementById('modal-preview-coins');
         if (headerCoins) headerCoins.textContent = window.userCoins.toLocaleString();
         if (shopCoins) shopCoins.textContent = window.userCoins.toLocaleString();
+        if (previewCoins) previewCoins.textContent = window.userCoins.toLocaleString();
       }
 
       function updateProfileAvatarDisplays() {
         const headerPic = document.getElementById('user-profile-pic');
         const previewPic = document.getElementById('modal-preview-avatar');
-        if (headerPic) headerPic.src = window.currentAvatar;
-        if (previewPic) previewPic.src = window.currentAvatar;
+        const previewTitle = document.getElementById('modal-preview-title');
+        const previewName = document.getElementById('modal-preview-name');
+
+        if (headerPic) {
+          headerPic.src = window.currentAvatar;
+          headerPic.className = `w-6 h-6 rounded-full border ${window.currentFrame} bg-slate-950 object-contain`;
+        }
+        if (previewPic) {
+          previewPic.src = window.currentAvatar;
+          previewPic.className = `w-16 h-16 rounded-full border-2 ${window.currentFrame} bg-slate-900 object-contain p-1 shadow-lg`;
+        }
+        if (previewTitle) previewTitle.textContent = window.currentTitle;
+        if (previewName) previewName.textContent = currentUsername || 'Trainer';
       }
 
-      // 6. Modal Interactions
+      // Daily Bonus System
+      window.claimDailyCoins = function() {
+        const now = Date.now();
+        const cooldown = 24 * 60 * 60 * 1000;
+        if (now - window.lastDailyClaim >= cooldown) {
+          window.userCoins += 250;
+          window.lastDailyClaim = now;
+          localStorage.setItem('showdown_daily_claim', now);
+          window.saveAvatarSystemData();
+          alert('🎁 Daily Bonus Claimed! +250 Coins added.');
+        } else {
+          const hoursLeft = Math.ceil((cooldown - (now - window.lastDailyClaim)) / (1000 * 60 * 60));
+          alert(`⏱️ Daily Bonus on cooldown! Next claim available in ${hoursLeft} hours.`);
+        }
+      };
+
+      // Customization Equipment Logic
+      window.equipTitle = function(title) {
+        window.currentTitle = title;
+        window.saveAvatarSystemData();
+      };
+
+      window.equipFrame = function(frameClass) {
+        window.currentFrame = frameClass;
+        window.saveAvatarSystemData();
+      };
+
+      // Modal Triggers
       window.openProfileModal = function() {
+        renderCustomizationSelectors();
         renderOwnedAvatars();
         document.getElementById('profile-modal').classList.remove('hidden');
       };
 
-      document.getElementById('close-profile-modal').onclick = () => {
-        document.getElementById('profile-modal').classList.add('hidden');
-      };
-
+      document.getElementById('close-profile-modal').onclick = () => document.getElementById('profile-modal').classList.add('hidden');
       document.getElementById('open-shop-btn').onclick = () => {
         document.getElementById('profile-modal').classList.add('hidden');
         renderShopItems();
         document.getElementById('shop-modal').classList.remove('hidden');
       };
+      document.getElementById('close-shop-modal').onclick = () => document.getElementById('shop-modal').classList.add('hidden');
+      document.getElementById('close-unbox-modal').onclick = () => document.getElementById('unbox-modal').classList.add('hidden');
 
-      document.getElementById('close-shop-modal').onclick = () => {
-        document.getElementById('shop-modal').classList.add('hidden');
-      };
+      // Grid Renderers
+      function renderCustomizationSelectors() {
+        const titleSel = document.getElementById('title-selector');
+        const frameSel = document.getElementById('frame-selector');
 
-      document.getElementById('close-unbox-modal').onclick = () => {
-        document.getElementById('unbox-modal').classList.add('hidden');
-      };
+        if (titleSel) {
+          titleSel.innerHTML = window.ownedTitles.map(t => `<option value="${t}" ${t === window.currentTitle ? 'selected' : ''}>${t}</option>`).join('');
+        }
+        if (frameSel) {
+          frameSel.innerHTML = window.ownedFrames.map(f => {
+            const match = FRAME_CATALOG.find(fc => fc.frameClass === f);
+            const label = match ? match.name : 'Default Border';
+            return `<option value="${f}" ${f === window.currentFrame ? 'selected' : ''}>${label}</option>`;
+          }).join('');
+        }
+      }
 
-      // 7. Grid Renderers
       function renderOwnedAvatars() {
         const grid = document.getElementById('owned-avatars-grid');
+        if (!grid) return;
         grid.innerHTML = '';
         window.ownedAvatars.forEach(url => {
           const isSelected = window.currentAvatar === url;
           const activeStyle = isSelected ? 'ring-2 ring-indigo-500 scale-105 bg-indigo-500/20 border-indigo-500' : 'opacity-70 hover:opacity-100 border-slate-800 bg-slate-900';
           const card = document.createElement('div');
-          card.className = `p-1.5 rounded-xl border cursor-pointer transition-all flex items-center justify-center ${activeStyle}`;
+          card.className = `p-1.5 rounded-xl border cursor-pointer transition flex items-center justify-center ${activeStyle}`;
           card.onclick = () => {
             window.currentAvatar = url;
             window.saveAvatarSystemData();
             renderOwnedAvatars();
           };
-          card.innerHTML = `<img src="${url}" class="w-10 h-10 object-contain" />`;
+          card.innerHTML = `<img src="${url}" class="w-8 h-8 object-contain" />`;
           grid.appendChild(card);
         });
       }
 
       function renderShopItems() {
         const grid = document.getElementById('shop-items-grid');
+        const titlesGrid = document.getElementById('titles-shop-grid');
+        if (!grid || !titlesGrid) return;
+
         grid.innerHTML = '';
+        titlesGrid.innerHTML = '';
+
+        // Render Titles Shop
+        TITLE_CATALOG.forEach(t => {
+          const isOwned = window.ownedTitles.includes(t.title);
+          const card = document.createElement('div');
+          card.className = 'bg-slate-950/60 border border-slate-800 rounded-xl p-2.5 flex flex-col justify-between text-center space-y-2';
+          card.innerHTML = `
+            <div class="text-xs font-bold text-indigo-300">${t.title}</div>
+            ${isOwned 
+              ? `<span class="text-[9px] bg-slate-800 text-slate-400 font-bold py-1 rounded-lg uppercase">Owned</span>`
+              : `<button onclick="buyTitle('${t.id}')" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-extrabold py-1 rounded-lg transition">🪙 ${t.price}</button>`
+            }
+          `;
+          titlesGrid.appendChild(card);
+        });
+
+        // Render Avatars Catalog
         SHOP_CATALOG.forEach(item => {
           const isOwned = window.ownedAvatars.includes(item.url);
           const style = RARITY_STYLES[item.rarity] || RARITY_STYLES.common;
@@ -2204,86 +2447,69 @@
         });
       }
 
-      // 8. Purchases & Openings
+      // Purchases
       window.buyShopItem = function(id) {
         const item = SHOP_CATALOG.find(i => i.id === id);
-        if (!item) return;
-        if (window.userCoins < item.price) {
-          alert('Insufficient Coins!');
-          return;
-        }
+        if (!item || window.userCoins < item.price) return alert('Insufficient Coins!');
         window.userCoins -= item.price;
         window.ownedAvatars.push(item.url);
         window.saveAvatarSystemData();
         renderShopItems();
       };
 
+      window.buyTitle = function(id) {
+        const t = TITLE_CATALOG.find(i => i.id === id);
+        if (!t || window.userCoins < t.price) return alert('Insufficient Coins!');
+        window.userCoins -= t.price;
+        window.ownedTitles.push(t.title);
+        window.saveAvatarSystemData();
+        renderShopItems();
+      };
+
       window.buyCrate = function(type) {
         const crate = CRATES_CONFIG[type];
-        if (!crate) return;
-        if (window.userCoins < crate.price) {
-          alert('Insufficient Coins!');
-          return;
-        }
+        if (!crate || window.userCoins < crate.price) return alert('Insufficient Coins!');
 
         window.userCoins -= crate.price;
-
-        // Weighted Roll
-        const rand = Math.random();
+        const seedRoll = Math.random();
         let cumulative = 0;
         let selectedRarity = 'common';
+
         for (const [rarity, weight] of Object.entries(crate.weights)) {
           cumulative += weight;
-          if (rand <= cumulative) {
+          if (seedRoll <= cumulative) {
             selectedRarity = rarity;
             break;
           }
         }
 
-        const pool = SHOP_CATALOG.filter(i => i.rarity === selectedRarity);
-        const reward = pool[Math.floor(Math.random() * pool.length)];
+        const matchingPool = SHOP_CATALOG.filter(i => i.rarity === selectedRarity);
+        const reward = matchingPool[Math.floor(Math.random() * matchingPool.length)];
 
+        let refundMsg = '';
         if (!window.ownedAvatars.includes(reward.url)) {
           window.ownedAvatars.push(reward.url);
+        } else {
+          const refund = Math.floor(reward.price * 0.5);
+          window.userCoins += refund;
+          refundMsg = ` (Duplicate! +${refund} 🪙)`;
         }
-
-        window.saveAvatarSystemData();
-        renderShopItems();
-        
-        // Trigger Animated Unbox Modal
-        const style = RARITY_STYLES[reward.rarity];
-        const unboxCard = document.getElementById('unbox-card');
-        unboxCard.className = `bg-slate-900 border-2 ${style.border} ${style.glow} rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative`;
-        
-        document.getElementById('unbox-item-img').src = reward.url;
-        document.getElementById('unbox-item-rarity').textContent = style.label;
-        document.getElementById('unbox-item-rarity').className = `text-xs font-black uppercase tracking-widest ${style.text}`;
-        document.getElementById('unbox-item-name').textContent = reward.name;
 
         window.currentAvatar = reward.url;
         window.saveAvatarSystemData();
+        renderShopItems();
 
+        const style = RARITY_STYLES[reward.rarity];
+        document.getElementById('unbox-item-img').src = reward.url;
+        document.getElementById('unbox-item-rarity').textContent = `${style.label}${refundMsg}`;
+        document.getElementById('unbox-item-rarity').className = `text-xs font-black uppercase tracking-widest ${style.text}`;
+        document.getElementById('unbox-item-name').textContent = reward.name;
         document.getElementById('unbox-modal').classList.remove('hidden');
       };
 
-      // 9. Match Victory Reward Hook
-      const hookMatchWins = () => {
-        if (typeof window.endGame === 'function') {
-          const originalEndGame = window.endGame;
-          window.endGame = function(winner) {
-            originalEndGame(winner);
-            if (winner === 'player' || winner === 1) {
-              window.userCoins += 100;
-              window.saveAvatarSystemData();
-            }
-          };
-        }
-      };
-
-      // Execution Hook
+      // Initialize
       document.addEventListener('DOMContentLoaded', () => {
         initHeaderUI();
-        hookMatchWins();
       });
     })();
 
