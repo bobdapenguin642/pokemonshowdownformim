@@ -2648,113 +2648,382 @@
       });
     })();
 
-    <!-- MARKETPLACE TRAINER AVATAR CUSTOMIZATION INJECTOR -->
-<script>
-  (function injectMarketplaceAvatarStudio() {
-    document.addEventListener('DOMContentLoaded', () => {
-      // 1. Initialize State
-      window.userCoins = parseInt(localStorage.getItem('showdown_coins')) || 1000;
-      window.currentAvatar = localStorage.getItem('showdown_avatar') || 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
-      window.currentTitle = localStorage.getItem('showdown_title') || 'Ace Trainer';
-      window.currentFrame = localStorage.getItem('showdown_frame') || 'border-indigo-500';
-      window.ownedAvatars = JSON.parse(localStorage.getItem('showdown_owned_avatars')) || [window.currentAvatar];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Showdown Ultra - Avatar Studio & CS2 Marketplace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #030712;
+      color: #f3f4f6;
+    }
 
-      window.trainerStudioState = JSON.parse(localStorage.getItem('showdown_trainer_studio')) || {
-        baseSprite: '101',
-        badgeFrame: window.currentFrame
-      };
+    .glass-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
 
-      // 2. Inject Avatar Studio directly into Marketplace Modal/Tab
-      function embedStudioInMarketplace() {
-        const shopModalContent = document.querySelector('#shop-modal .overflow-y-auto') || document.getElementById('shop-modal');
-        if (!shopModalContent || document.getElementById('marketplace-avatar-section')) return;
+    /* Podium Stage Display */
+    .stage-podium {
+      position: relative;
+      background: radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, rgba(2, 6, 23, 0.95) 70%);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
 
-        const studioSection = document.createElement('div');
-        studioSection.id = 'marketplace-avatar-section';
-        studioSection.className = 'bg-slate-950 border border-indigo-500/30 rounded-2xl p-4 space-y-4 mb-6 shadow-xl';
+    .podium-ring {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) rotateX(75deg);
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 3px solid rgba(99, 102, 241, 0.6);
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.5), inset 0 0 15px rgba(99, 102, 241, 0.3);
+    }
 
-        studioSection.innerHTML = `
-          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-            <h4 class="text-xs font-black uppercase text-indigo-400 tracking-widest flex items-center gap-2">
-              <span>🧢</span> Trainer Avatar Studio
-            </h4>
-            <button onclick="saveMarketplaceAvatarConfig()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-[10px] px-3 py-1 rounded-lg transition uppercase">
-              Save Outfit
-            </button>
+    /* CS2 Reel Styling */
+    .cs2-viewport {
+      position: relative;
+      width: 100%;
+      height: 140px;
+      background: #020617;
+      border: 2px solid #3b82f6;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+    }
+
+    .cs2-center-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      background: #f59e0b;
+      z-index: 40;
+      transform: translateX(-50%);
+      box-shadow: 0 0 14px #f59e0b;
+    }
+
+    .cs2-track {
+      display: flex;
+      position: absolute;
+      left: 0;
+      top: 15px;
+      height: 110px;
+      will-change: transform;
+    }
+
+    .cs2-card {
+      width: 110px;
+      height: 110px;
+      margin: 0 6px;
+      flex-shrink: 0;
+      background: #0f172a;
+      border-radius: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 5px solid #64748b;
+    }
+
+    .cs2-card.common { border-bottom-color: #94a3b8; }
+    .cs2-card.rare { border-bottom-color: #3b82f6; }
+    .cs2-card.epic { border-bottom-color: #a855f7; }
+    .cs2-card.mythic { border-bottom-color: #ec4899; }
+    .cs2-card.ultra { border-bottom-color: #f59e0b; }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-8">
+
+  <!-- HEADER NAVIGATION -->
+  <header class="max-w-6xl w-full mx-auto flex items-center justify-between pb-6 border-b border-slate-800">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">
+        🧢
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-white tracking-wide">STUDIO & MARKETPLACE</h1>
+        <p class="text-xs font-semibold text-slate-400">Trainer Avatar Customization & CS2 Crate System</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 flex items-center gap-2 shadow-inner">
+        <span class="text-lg">🪙</span>
+        <span id="coin-balance" class="font-extrabold text-sm text-amber-300">1,000</span>
+      </div>
+
+      <button onclick="addCoins()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-2 rounded-xl text-xs font-bold transition">
+        ⚡ +1,000 Coins
+      </button>
+
+      <a href="index.html" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30">
+        🎮 Battle Arena
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN APPLICATION CONTENT -->
+  <main class="max-w-6xl w-full mx-auto my-6 flex-grow space-y-6">
+    
+    <!-- SUB-TABS -->
+    <div class="flex items-center gap-3 border-b border-slate-800/80 pb-3">
+      <button id="btn-studio" onclick="switchTab('studio')" class="px-5 py-2.5 rounded-xl font-extrabold text-xs transition bg-indigo-600 text-white shadow-lg">
+        🧍 Avatar Studio
+      </button>
+      <button id="btn-crates" onclick="switchTab('crates')" class="px-5 py-2.5 rounded-xl font-extrabold text-xs transition text-slate-400 hover:text-white hover:bg-slate-900">
+        📦 CS2 Crates
+      </button>
+    </div>
+
+    <!-- AVATAR STUDIO SECTION -->
+    <section id="sec-studio" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- REAL-TIME TRAINER PREVIEW -->
+      <div class="stage-podium rounded-2xl p-6 flex flex-col items-center justify-between min-h-[420px] text-center relative overflow-hidden">
+        <div class="absolute top-3 left-3 text-[10px] font-black uppercase text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/20">
+          Battle Arena Model
+        </div>
+
+        <!-- 3D PODIUM STAGE -->
+        <div class="podium-ring"></div>
+
+        <!-- FULL TRAINER SPRITE -->
+        <div class="my-auto relative pt-4 z-10">
+          <div id="preview-frame" class="w-40 h-60 relative flex items-center justify-center bg-slate-950/60 rounded-2xl border-2 border-indigo-500 p-2 shadow-2xl backdrop-blur-sm transition-all duration-300">
+            <img id="preview-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/101.png" class="w-full h-full object-contain filter drop-shadow-2xl transition-all duration-200" />
+            <img id="preview-item" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="absolute -top-3 -right-3 w-10 h-10 object-contain bg-slate-950 border-2 border-amber-400 rounded-full p-1 shadow-lg" />
           </div>
+        </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-            <!-- LIVE PREVIEW CARD -->
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center relative min-h-[180px]">
-              <div id="mkt-preview-frame" class="w-20 h-28 relative flex items-center justify-center bg-slate-950 rounded-xl border-2 ${window.trainerStudioState.badgeFrame} p-1 shadow-lg">
-                <img id="mkt-trainer-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${window.trainerStudioState.baseSprite}.png" class="w-full h-full object-contain filter drop-shadow" />
-                <img id="mkt-accessory-img" src="${window.currentAvatar}" class="absolute -top-1.5 -right-1.5 w-6 h-6 object-contain bg-slate-950 border border-amber-400 rounded-full p-0.5 shadow" />
-              </div>
-              <span id="mkt-title-badge" class="text-[9px] font-black uppercase text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded border border-indigo-500/30 mt-2">
-                ${window.currentTitle}
-              </span>
-            </div>
-
-            <!-- CONTROLS -->
-            <div class="md:col-span-2 space-y-3">
-              <!-- Trainer Model Picker -->
-              <div>
-                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Trainer Model</label>
-                <div class="grid grid-cols-6 gap-1.5">
-                  ${['101', '102', '1', '2', '170', '235'].map(id => `
-                    <button onclick="selectMktTrainerSprite('${id}')" class="p-1 rounded-lg border border-slate-800 bg-slate-900 hover:border-indigo-500 transition flex items-center justify-center h-12">
-                      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${id}.png" class="h-full object-contain" />
-                    </button>
-                  `).join('')}
-                </div>
-              </div>
-
-              <!-- Border Frame Aura Picker -->
-              <div>
-                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Aura Border</label>
-                <div class="grid grid-cols-3 gap-1.5">
-                  <button onclick="selectMktFrame('border-indigo-500')" class="p-1 bg-slate-900 border-2 border-indigo-500 rounded-lg text-[10px] font-bold text-indigo-300">Indigo</button>
-                  <button onclick="selectMktFrame('border-emerald-500')" class="p-1 bg-slate-900 border-2 border-emerald-500 rounded-lg text-[10px] font-bold text-emerald-300">Emerald</button>
-                  <button onclick="selectMktFrame('border-amber-400 animate-pulse')" class="p-1 bg-slate-900 border-2 border-amber-400 rounded-lg text-[10px] font-bold text-amber-300">Gold</button>
-                </div>
-              </div>
-            </div>
+        <div class="w-full space-y-1.5 z-10">
+          <div id="preview-title" class="text-[10px] font-black uppercase text-indigo-300 bg-indigo-500/20 px-3 py-1 rounded-full border border-indigo-500/30 inline-block">
+            Ace Trainer
           </div>
-        `;
+          <div class="text-sm font-extrabold text-white">Red Master</div>
+        </div>
+      </div>
 
-        shopModalContent.prepend(studioSection);
+      <!-- CUSTOMIZATION CONTROLS -->
+      <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-6">
+        
+        <!-- MODEL SELECTOR -->
+        <div class="space-y-3">
+          <label class="block text-xs font-black uppercase tracking-wider text-slate-400">Trainer Character Model</label>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+            ${[
+              { id: '101', name: 'Red' },
+              { id: '102', name: 'Leaf' },
+              { id: '1', name: 'Ethan' },
+              { id: '2', name: 'Lyra' },
+              { id: '170', name: 'Cynthia' },
+              { id: '235', name: 'Steven' }
+            ].map(m => `
+              <button onclick="setModel('${m.id}')" class="p-2 rounded-xl border border-slate-800 bg-slate-950 hover:border-indigo-500 transition flex flex-col items-center justify-center h-20 group">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${m.id}.png" class="h-12 object-contain group-hover:scale-110 transition" />
+                <span class="text-[9px] font-bold text-slate-400 mt-1">${m.name}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- AURA BORDER SELECTOR -->
+        <div class="space-y-3">
+          <label class="block text-xs font-black uppercase tracking-wider text-slate-400">Card Aura Border</label>
+          <div class="grid grid-cols-3 gap-3">
+            <button onclick="setAura('border-indigo-500')" class="p-3 bg-slate-950 border-2 border-indigo-500 rounded-xl text-xs font-bold text-indigo-300 text-center hover:bg-indigo-500/10 transition">Indigo Aura</button>
+            <button onclick="setAura('border-emerald-500')" class="p-3 bg-slate-950 border-2 border-emerald-500 rounded-xl text-xs font-bold text-emerald-300 text-center hover:bg-emerald-500/10 transition">Emerald Aura</button>
+            <button onclick="setAura('border-amber-400 animate-pulse')" class="p-3 bg-slate-950 border-2 border-amber-400 rounded-xl text-xs font-bold text-amber-300 text-center hover:bg-amber-400/10 transition">Legendary Gold</button>
+          </div>
+        </div>
+
+        <!-- INVENTORY ACCESSORIES -->
+        <div class="space-y-3">
+          <label class="block text-xs font-black uppercase tracking-wider text-slate-400">Equipped Hand Accessory</label>
+          <div id="inventory-grid" class="flex gap-2.5 overflow-x-auto p-3 bg-slate-950/90 rounded-xl border border-slate-800 custom-scrollbar"></div>
+        </div>
+
+        <button onclick="saveConfig()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg">
+          💾 Save & Apply to Battle Stage
+        </button>
+      </div>
+    </section>
+
+    <!-- CS2 CRATES SECTION -->
+    <section id="sec-crates" class="hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass-card rounded-2xl p-5 text-center space-y-4 border-slate-700/80">
+          <div class="text-4xl">📦</div>
+          <div>
+            <h3 class="font-extrabold text-sm text-white">Trainer Crate</h3>
+            <p class="text-[10px] text-slate-400">Common & Rare Accessories</p>
+          </div>
+          <button onclick="unbox('standard', 150)" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-black py-2.5 rounded-xl transition">
+            🪙 150 Coins
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 text-center space-y-4 border-purple-800/80">
+          <div class="text-4xl">🎁</div>
+          <div>
+            <h3 class="font-extrabold text-sm text-purple-300">Mega Gear Crate</h3>
+            <p class="text-[10px] text-purple-400/80">Epic Items & Mega Stones</p>
+          </div>
+          <button onclick="unbox('mega', 450)" class="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 text-xs font-black py-2.5 rounded-xl transition">
+            🪙 450 Coins
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 text-center space-y-4 border-amber-500/80">
+          <div class="text-4xl">👑</div>
+          <div>
+            <h3 class="font-extrabold text-sm text-amber-300">Ultra Legend Crate</h3>
+            <p class="text-[10px] text-amber-400/80">Mythic & Ultra Collectibles</p>
+          </div>
+          <button onclick="unbox('ultra', 1000)" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-black py-2.5 rounded-xl transition">
+            🪙 1,000 Coins
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CS2 REEL MODAL -->
+  <div id="cs2-modal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-[100] hidden flex flex-col items-center justify-center p-4">
+    <div class="text-xs font-black uppercase tracking-widest text-amber-400 mb-4 animate-pulse">Unboxing Crate...</div>
+    <div class="cs2-viewport max-w-xl w-full">
+      <div class="cs2-center-line"></div>
+      <div id="cs2-track" class="cs2-track"></div>
+    </div>
+    <div id="cs2-win-panel" class="text-center mt-6 hidden space-y-3">
+      <div id="cs2-win-text" class="text-lg font-black text-white"></div>
+      <button onclick="closeModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider shadow-lg">
+        Equip Item
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const CATALOG = [
+      { id: 'c1', name: 'Poke Ball', rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png' },
+      { id: 'c2', name: 'Great Ball', rarity: 'common', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png' },
+      { id: 'r1', name: 'Ultra Ball', rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png' },
+      { id: 'r2', name: 'Quick Ball', rarity: 'rare', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png' },
+      { id: 'e1', name: 'Master Ball', rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
+      { id: 'e2', name: 'Leftovers', rarity: 'epic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/leftovers.png' },
+      { id: 'm1', name: 'Mega Ring', rarity: 'mythic', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-ring.png' },
+      { id: 'u1', name: 'Charizardite X', rarity: 'ultra', url: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charizardite-x.png' }
+    ];
+
+    window.userCoins = parseInt(localStorage.getItem('showdown_coins')) || 1000;
+    window.currentAvatar = localStorage.getItem('showdown_avatar') || CATALOG[0].url;
+    window.currentFrame = localStorage.getItem('showdown_frame') || 'border-indigo-500';
+    window.ownedAvatars = JSON.parse(localStorage.getItem('showdown_owned_avatars')) || [window.currentAvatar];
+    window.trainerStudioState = JSON.parse(localStorage.getItem('showdown_trainer_studio')) || { baseSprite: '101' };
+
+    function syncUI() {
+      document.getElementById('coin-balance').textContent = window.userCoins.toLocaleString();
+      document.getElementById('preview-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${window.trainerStudioState.baseSprite}.png`;
+      document.getElementById('preview-item').src = window.currentAvatar;
+      document.getElementById('preview-frame').className = `w-40 h-60 relative flex items-center justify-center bg-slate-950/60 rounded-2xl border-2 ${window.currentFrame} p-2 shadow-2xl backdrop-blur-sm transition-all duration-300`;
+
+      const grid = document.getElementById('inventory-grid');
+      grid.innerHTML = window.ownedAvatars.map(url => `
+        <button onclick="equip('${url}')" class="p-2 rounded-xl border ${window.currentAvatar === url ? 'border-amber-400 bg-amber-500/10' : 'border-slate-800 bg-slate-900'} hover:border-amber-400 shrink-0 transition">
+          <img src="${url}" class="w-8 h-8 object-contain" />
+        </button>
+      `).join('');
+    }
+
+    window.setModel = function(id) { window.trainerStudioState.baseSprite = id; syncUI(); };
+    window.setAura = function(frame) { window.currentFrame = frame; syncUI(); };
+    window.equip = function(url) { window.currentAvatar = url; syncUI(); };
+
+    window.saveConfig = function() {
+      localStorage.setItem('showdown_trainer_studio', JSON.stringify(window.trainerStudioState));
+      localStorage.setItem('showdown_avatar', window.currentAvatar);
+      localStorage.setItem('showdown_frame', window.currentFrame);
+      alert('Saved outfit!');
+    };
+
+    window.addCoins = function() {
+      window.userCoins += 1000;
+      localStorage.setItem('showdown_coins', window.userCoins);
+      syncUI();
+    };
+
+    window.switchTab = function(tab) {
+      document.getElementById('sec-studio').classList.toggle('hidden', tab !== 'studio');
+      document.getElementById('sec-crates').classList.toggle('hidden', tab !== 'crates');
+    };
+
+    window.unbox = function(type, cost) {
+      if (window.userCoins < cost) { alert('Not enough coins!'); return; }
+      window.userCoins -= cost;
+      localStorage.setItem('showdown_coins', window.userCoins);
+      syncUI();
+
+      const track = document.getElementById('cs2-track');
+      const winPanel = document.getElementById('cs2-win-panel');
+      const modal = document.getElementById('cs2-modal');
+
+      winPanel.classList.add('hidden');
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0px)';
+
+      const winningItem = CATALOG[Math.floor(Math.random() * CATALOG.length)];
+      let itemsHTML = '';
+
+      for (let i = 0; i < 45; i++) {
+        const item = (i === 36) ? winningItem : CATALOG[Math.floor(Math.random() * CATALOG.length)];
+        itemsHTML += `<div class="cs2-card ${item.rarity}"><img src="${item.url}" class="w-12 h-12 object-contain" /></div>`;
       }
 
-      // 3. Studio Actions
-      window.selectMktTrainerSprite = function(id) {
-        window.trainerStudioState.baseSprite = id;
-        document.getElementById('mkt-trainer-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/trainers/${id}.png`;
-      };
+      track.innerHTML = itemsHTML;
+      modal.classList.remove('hidden');
 
-      window.selectMktFrame = function(frameClass) {
-        window.trainerStudioState.badgeFrame = frameClass;
-        window.currentFrame = frameClass;
-        document.getElementById('mkt-preview-frame').className = `w-20 h-28 relative flex items-center justify-center bg-slate-950 rounded-xl border-2 ${frameClass} p-1 shadow-lg`;
-      };
+      setTimeout(() => {
+        track.style.transition = 'transform 5s cubic-bezier(0.1, 1, 0.1, 1)';
+        track.style.transform = `translateX(-${36 * 122 - 225}px)`;
+      }, 100);
 
-      window.saveMarketplaceAvatarConfig = function() {
-        localStorage.setItem('showdown_trainer_studio', JSON.stringify(window.trainerStudioState));
-        localStorage.setItem('showdown_frame', window.currentFrame);
-        alert('✅ Trainer Avatar updated!');
-      };
+      setTimeout(() => {
+        if (!window.ownedAvatars.includes(winningItem.url)) {
+          window.ownedAvatars.push(winningItem.url);
+          localStorage.setItem('showdown_owned_avatars', JSON.stringify(window.ownedAvatars));
+        }
+        window.currentAvatar = winningItem.url;
+        localStorage.setItem('showdown_avatar', winningItem.url);
 
-      // 4. Trigger on Marketplace Open
-      const originalOpenShop = window.openShopModal || function() {};
-      window.openShopModal = function() {
-        originalOpenShop();
-        embedStudioInMarketplace();
-      };
+        document.getElementById('cs2-win-text').textContent = `Unlocked: ${winningItem.name}!`;
+        winPanel.classList.remove('hidden');
+        syncUI();
+      }, 5200);
+    };
 
-      // Auto-mount check
-      setInterval(embedStudioInMarketplace, 1000);
-    });
-  })();
+    window.closeModal = function() { document.getElementById('cs2-modal').classList.add('hidden'); };
 
+    syncUI();
   </script>
 </body>
 </html>
